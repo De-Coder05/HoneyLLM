@@ -248,7 +248,7 @@ def build_technical_report():
     story.append(Spacer(1, 10))
     story.append(Paragraph("<b>Capstone Project Report</b>", cover_bold_style))
     story.append(Spacer(1, 4))
-    story.append(Paragraph("<b>MID SEMESTER EVALUATION</b>", cover_bold_style))
+    story.append(Paragraph("<b>MID SEMESTER EVALUATION (Phases 1–4 Progress)</b>", cover_bold_style))
     story.append(Spacer(1, 15))
     story.append(Paragraph("<b>Submitted by:</b>", cover_sub_style))
     story.append(Spacer(1, 6))
@@ -296,11 +296,11 @@ def build_technical_report():
         body_indent_style
     ))
     story.append(Paragraph(
-        "This capstone project introduces <b>Honey-LLM</b>, a proactive, self-hardening defense ecosystem designed to protect enterprise LLM architectures. Honey-LLM pioneers a three-tiered defense strategy: (1) an <i>Intent Sieve</i> binary classification layer combining a high-speed statistical fast-path with a custom-policy 8B moderation model to detect adversarial intent with sub-millisecond benign latency; (2) a high-interaction, containerized deceptive honeypot termed the <i>Mirror Maze</i>, which silently quarantines flagged attackers and serves a believable decoy persona that dynamic-hallucinates synthetic, non-functional secrets to prolong attacker dwell time; and (3) an <i>Autonomous Guardrail Synthesis</i> closed feedback loop that distills captured exploitation patterns into validated NVIDIA NeMo Colang rules, dynamically hot-patching production policies with zero system downtime.",
+        "This capstone project presents the mid-semester design, architecture, and working implementation of <b>Honey-LLM</b>, covering work completed across <b>Phases 1 through 4</b> of the academic engineering roadmap. Specifically, the project has engineered and verified: (1) an 8-class Adversarial Threat Taxonomy tailored to enterprise systems; (2) a multi-tier <i>Intent Sieve</i> combining a sub-millisecond Tier-1 statistical classifier with an authoritative 8B moderation model governed by a custom prompt injection policy, achieving a <b>98.3% detection rate</b> on in-the-wild jailbreaks at a <b>0.0% benign False Positive Rate (FPR)</b>; (3) a containerized, zero-trust deception sandbox termed the <i>Mirror Maze</i> running an LLM-driven 'Sarah' decoy that dynamic-hallucinates synthetic bait to absorb adversarial reconnaissance (verified <b>5/5 on isolation tests</b>); and (4) an <i>Autonomous Guardrail Synthesis</i> closed feedback loop that extracts exploit patterns and synthesizes verified <b>NVIDIA NeMo Colang</b> rules, hot-patching live gateway policies in <b>10.4 seconds</b> with zero system downtime.",
         body_indent_style
     ))
     story.append(Paragraph(
-        "Empirical evaluation on held-out adversarial benchmarks demonstrates that the Honey-LLM Intent Sieve achieves a <b>98.3% detection rate</b> against in-the-wild jailbreaks while maintaining a <b>0.0% False Positive Rate (FPR)</b> on benign domain queries. The self-healing loop synthesizes and hot-patches verified semantic rules within <b>10.4 seconds</b> of exploit capture. Network and container breakout audits confirm strict zero-escape isolation with zero lateral reachability to production data. The complete ecosystem is integrated with a sub-second Threat Intelligence SOC Dashboard, transforming opaque conversational attacks into quantifiable, actionable cyber defense intelligence.",
+        "The remaining project lifecycle—comprising Phase 5 (Forensic Telemetry and Live SOC Threat Intelligence Dashboard visualization) and Phase 6 (Empirical Red-Teaming at scale via multi-converter PyRIT campaigns and concurrency load audits)—is established as the structured future work plan for the end-semester milestone.",
         body_indent_style
     ))
     story.append(Spacer(1, 8))
@@ -314,7 +314,7 @@ def build_technical_report():
     story.append(Paragraph("<b>DECLARATION</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=14))
     story.append(Paragraph(
-        "We hereby declare that the design principles, experimental methodologies, system implementation, and working prototype model of the capstone project entitled <b>\"HONEY-LLM: AN INTERACTIVE, SELF-HEALING HONEYPOT DEFENSE ECOSYSTEM FOR AGENTIC AI\"</b> is an authentic record of our own work carried out in the Computer Science and Engineering Department, Thapar Institute of Engineering and Technology (TIET), Patiala, under the mentorship and guidance of <b>Dr. Rajesh Kumar</b> during the academic semester (August 2026).",
+        "We hereby declare that the design principles, experimental methodologies, system implementation, and working prototype model of the capstone project entitled <b>\"HONEY-LLM: AN INTERACTIVE, SELF-HEALING HONEYPOT DEFENSE ECOSYSTEM FOR AGENTIC AI\"</b> is an authentic record of our own work completed up to <b>Phase 4 (Autonomous Guardrail Synthesis & Policy Hardening)</b> in the Computer Science and Engineering Department, Thapar Institute of Engineering and Technology (TIET), Patiala, under the mentorship and guidance of <b>Dr. Rajesh Kumar</b> during the academic semester (August 2026).",
         body_indent_style
     ))
     story.append(Paragraph(
@@ -369,7 +369,7 @@ def build_technical_report():
     story.append(Paragraph("<b>ACKNOWLEDGEMENT</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=14))
     story.append(Paragraph(
-        "We would like to express our deepest gratitude and heartfelt thanks to our respected project mentor, <b>Dr. Rajesh Kumar</b>, Professor, Computer Science and Engineering Department, Thapar Institute of Engineering and Technology, Patiala. His profound domain expertise, constructive technical criticism, constant encouragement, and intellectual guidance throughout the formulation and implementation of <b>Honey-LLM</b> have been indispensable in steering this research to a successful milestone.",
+        "We would like to express our deepest gratitude and heartfelt thanks to our respected project mentor, <b>Dr. Rajesh Kumar</b>, Professor, Computer Science and Engineering Department, Thapar Institute of Engineering and Technology, Patiala. His profound domain expertise, constructive technical criticism, constant encouragement, and intellectual guidance throughout the formulation and implementation of the initial four phases of <b>Honey-LLM</b> have been indispensable in steering this research to a successful milestone.",
         body_indent_style
     ))
     story.append(Paragraph(
@@ -377,7 +377,7 @@ def build_technical_report():
         body_indent_style
     ))
     story.append(Paragraph(
-        "We also acknowledge the collective support of the faculty and technical staff of the Computer Science and Engineering Department at TIET, whose valuable academic perspectives helped refine our software architecture and evaluation methodologies. Furthermore, we are deeply grateful to our peers and student red-team testers who dedicated their time to stress-testing the Honey-LLM sandbox environment.",
+        "We also acknowledge the collective support of the faculty and technical staff of the Computer Science and Engineering Department at TIET, whose valuable academic perspectives helped refine our software architecture and evaluation methodologies. Furthermore, we are deeply grateful to our peers who dedicated their time to assisting with adversarial dataset curation.",
         body_indent_style
     ))
     story.append(Paragraph(
@@ -415,9 +415,9 @@ def build_technical_report():
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.4 Problem Definition and Scope", toc_line_style), Paragraph("4", toc_line_style)],
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.5 Assumptions and Constraints", toc_line_style), Paragraph("4", toc_line_style)],
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.6 Applicable Standards", toc_line_style), Paragraph("5", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.7 Approved Objectives", toc_line_style), Paragraph("5", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.8 Methodology Overview", toc_line_style), Paragraph("6", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.9 Project Outcomes and Deliverables", toc_line_style), Paragraph("6", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.7 Approved Objectives (Proposal Evaluation)", toc_line_style), Paragraph("5", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.8 Methodology Overview (Phases 1 to 4 Scope)", toc_line_style), Paragraph("6", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.9 Mid-Semester Outcomes and Deliverables", toc_line_style), Paragraph("6", toc_line_style)],
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.10 Novelty of Work", toc_line_style), Paragraph("7", toc_line_style)],
         [Spacer(1, 3), Spacer(1, 3)],
         [Paragraph("<b>CHAPTER 2: REQUIREMENT ANALYSIS</b>", toc_bold_style), Paragraph("<b>8</b>", toc_bold_style)],
@@ -454,20 +454,20 @@ def build_technical_report():
         [Paragraph("<b>CHAPTER 3: METHODOLOGY ADOPTED</b>", toc_bold_style), Paragraph("<b>14</b>", toc_bold_style)],
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.1 Investigative Techniques", toc_line_style), Paragraph("14", toc_line_style)],
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.2 Proposed Solution & Multi-Tier Architecture", toc_line_style), Paragraph("15", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.3 Work Breakdown Structure (WBS)", toc_line_style), Paragraph("16", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.3 Work Breakdown Structure (Phases 1–4 Completed, 5–6 Roadmap)", toc_line_style), Paragraph("16", toc_line_style)],
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.4 Hardware, Software, and Framework Stack", toc_line_style), Paragraph("17", toc_line_style)],
         [Spacer(1, 3), Spacer(1, 3)],
         [Paragraph("<b>CHAPTER 4: DESIGN SPECIFICATIONS</b>", toc_bold_style), Paragraph("<b>18</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.1 System Architecture & Data Flow", toc_line_style), Paragraph("18", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.2 Design Level Diagrams & State Machines", toc_line_style), Paragraph("19", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.3 User Interface Specifications", toc_line_style), Paragraph("20", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.4 Working Prototype Execution & Live Verification", toc_line_style), Paragraph("21", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.1 System Architecture & Sieve Gateway Flow", toc_line_style), Paragraph("18", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.2 Threat Taxonomy & Sticky Quarantine State Machine", toc_line_style), Paragraph("19", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.3 User Interface Specifications & Designed Surfaces", toc_line_style), Paragraph("20", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.4 Working Prototype Execution (Phases 1–4 Verified)", toc_line_style), Paragraph("21", toc_line_style)],
         [Spacer(1, 3), Spacer(1, 3)],
         [Paragraph("<b>CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE</b>", toc_bold_style), Paragraph("<b>23</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.1 Work Accomplished vs. Approved Objectives", toc_line_style), Paragraph("23", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.2 Conclusions", toc_line_style), Paragraph("24", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.1 Mid-Semester Accomplishments vs. Approved Objectives", toc_line_style), Paragraph("23", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.2 Mid-Semester Conclusions", toc_line_style), Paragraph("24", toc_line_style)],
         [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.3 Economic, Social, and Environmental Benefits", toc_line_style), Paragraph("24", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.4 Future Work Plan (Phase 6 Finalization)", toc_line_style), Paragraph("25", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.4 Future Work Plan (Phases 5 & 6 Execution Roadmap)", toc_line_style), Paragraph("25", toc_line_style)],
         [Spacer(1, 3), Spacer(1, 3)],
         [Paragraph("<b>APPENDIX A: REFERENCES (IEEE Style)</b>", toc_bold_style), Paragraph("<b>26</b>", toc_bold_style)],
         [Paragraph("<b>APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT</b>", toc_bold_style), Paragraph("<b>28</b>", toc_bold_style)]
@@ -499,7 +499,7 @@ def build_technical_report():
         [Paragraph("Table 3.2", table_text_style), Paragraph("Honey-LLM Technology and Framework Specifications", table_text_style), Paragraph("17", table_text_style)],
         [Paragraph("Table 4.1", table_text_style), Paragraph("Adversarial Threat Taxonomy Mappings and Categorical Palette", table_text_style), Paragraph("19", table_text_style)],
         [Paragraph("Table 4.2", table_text_style), Paragraph("Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", table_text_style), Paragraph("22", table_text_style)],
-        [Paragraph("Table 5.1", table_text_style), Paragraph("Mapping of Approved Project Objectives to Empirical Achievements", table_text_style), Paragraph("23", table_text_style)],
+        [Paragraph("Table 5.1", table_text_style), Paragraph("Mid-Semester Mapping of Approved Objectives to Implemented Progress", table_text_style), Paragraph("23", table_text_style)],
         [Paragraph("Table 5.2", table_text_style), Paragraph("Intent Sieve Scaled Benchmark Performance vs. Baseline Guards", table_text_style), Paragraph("24", table_text_style)]
     ]
     t_lot = Table(tables_list, colWidths=[65, 300, 50])
@@ -523,13 +523,13 @@ def build_technical_report():
     figures_list = [
         [Paragraph("<b>Figure No.</b>", table_header_style), Paragraph("<b>Caption</b>", table_header_style), Paragraph("<b>Page No.</b>", table_header_style)],
         [Paragraph("Figure 1.1", table_text_style), Paragraph("The 16-Minute Enterprise Failure Window vs. Human Incident Response", table_text_style), Paragraph("3", table_text_style)],
-        [Paragraph("Figure 3.1", table_text_style), Paragraph("Phase-wise Research and Engineering Methodology Roadmap", table_text_style), Paragraph("16", table_text_style)],
-        [Paragraph("Figure 3.2", table_text_style), Paragraph("Project Work Plan & Milestone Gantt Chart (January – December 2026)", table_text_style), Paragraph("17", table_text_style)],
+        [Paragraph("Figure 3.1", table_text_style), Paragraph("Phase-wise Research and Engineering Methodology Roadmap (Phases 1–6)", table_text_style), Paragraph("16", table_text_style)],
+        [Paragraph("Figure 3.2", table_text_style), Paragraph("Project Work Plan & Milestone Gantt Chart (Mid-Sem & End-Sem Split)", table_text_style), Paragraph("17", table_text_style)],
         [Paragraph("Figure 4.1", table_text_style), Paragraph("Honey-LLM Multi-Tier System Architecture & Routing Flow", table_text_style), Paragraph("18", table_text_style)],
         [Paragraph("Figure 4.2", table_text_style), Paragraph("Zero-Trust Docker Network Isolation Topology (Ingress/Egress Proxies)", table_text_style), Paragraph("19", table_text_style)],
         [Paragraph("Figure 4.3", table_text_style), Paragraph("Autonomous Self-Healing Loop: Capture, Distill, Validate & Hot-Patch", table_text_style), Paragraph("20", table_text_style)],
         [Paragraph("Figure 4.4", table_text_style), Paragraph("NexTel Production Customer Chat Interface vs. Quarantined Maze", table_text_style), Paragraph("21", table_text_style)],
-        [Paragraph("Figure 4.5", table_text_style), Paragraph("Real-Time Dark SOC Threat Intelligence Dashboard Surface", table_text_style), Paragraph("21", table_text_style)],
+        [Paragraph("Figure 4.5", table_text_style), Paragraph("Designed Threat Intelligence SOC Dashboard Telemetry Surface", table_text_style), Paragraph("21", table_text_style)],
         [Paragraph("Figure 4.6", table_text_style), Paragraph("Admin & Demo Control Panel Decision-Path Trace Visualization", table_text_style), Paragraph("22", table_text_style)]
     ]
     t_lof = Table(figures_list, colWidths=[65, 300, 50])
@@ -603,19 +603,23 @@ def build_technical_report():
         body_indent_style
     ))
     story.append(Paragraph(
-        "To decisively overcome these defensive limitations, this capstone project develops and demonstrates <b>Honey-LLM</b>: an interactive, self-hardening defense ecosystem for conversational AI architectures. Rather than simply rejecting malicious probes, Honey-LLM operates on a proactive deception philosophy. The system comprises three interconnected pillars:",
+        "To decisively overcome these defensive limitations, this capstone project develops and demonstrates <b>Honey-LLM</b>: an interactive, self-hardening defense ecosystem for conversational AI architectures. Rather than simply rejecting malicious probes, Honey-LLM operates on a proactive deception philosophy. For the <b>Mid-Semester Evaluation</b>, the project team has fully developed, integrated, and verified the first four engineering phases:",
         body_indent_style
     ))
     story.append(Paragraph(
-        "• <b>The Multi-Tier Semantic Intent Sieve:</b> An intelligent input-filtering pipeline that inspects incoming queries in real time. It pairs a sub-millisecond Tier-1 statistical classifier with an authoritative 8B moderation model governed by a custom prompt injection policy, achieving high-precision classification while adding negligible latency to legitimate users.",
+        "• <b>Phase 1 (Adversarial Profiling & Threat Taxonomy):</b> Formulated an 8-class threat taxonomy mapping prompt injections to specific enterprise manifestations and validated concurrent dual-model local inference on Apple Silicon hardware.",
         bullet_style
     ))
     story.append(Paragraph(
-        "• <b>The 'Mirror Maze' Deception Honeypot:</b> An isolated, zero-trust Docker container hosting a secondary LLM conditioned with a deceptive persona (codenamed 'Sarah'). When adversarial intent is detected, the session is silently quarantined into this sandbox. The decoy convincingly engages the attacker, leaking dynamically generated synthetic bait (fake credentials, simulated internal IPs, dummy system schemas) to prolong attacker dwell time and absorb adversarial reconnaissance.",
+        "• <b>Phase 2 (The Multi-Tier Semantic Intent Sieve):</b> Constructed an intelligent input-filtering pipeline that inspects queries in real time, pairing a sub-millisecond Tier-1 statistical classifier with an authoritative 8B moderation model governed by a custom prompt injection policy (achieving 98.3% detection @ 0.0% FPR).",
         bullet_style
     ))
     story.append(Paragraph(
-        "• <b>Autonomous Guardrail Synthesis:</b> An automated self-healing loop that analyzes forensic telemetry from the honeypot, extracts the reusable exploitation technique, programmatically generates formal Colang security rules validated via <b>NVIDIA NeMo Guardrails</b>, verifies them against a benign regression gate, and hot-patches the live gateway with zero downtime in seconds.",
+        "• <b>Phase 3 (The 'Mirror Maze' Deception Honeypot):</b> Deployed an isolated zero-trust Docker sandbox hosting the 'Sarah' decoy persona, which dynamic-hallucinates synthetic bait to absorb attacker reconnaissance without leaking real infrastructure.",
+        bullet_style
+    ))
+    story.append(Paragraph(
+        "• <b>Phase 4 (Autonomous Guardrail Synthesis):</b> Implemented a closed self-healing loop that distills captured exploits into validated NVIDIA NeMo Colang rules, hot-patching production gateway policies in 10.4 seconds with zero downtime.",
         bullet_style
     ))
 
@@ -680,7 +684,7 @@ def build_technical_report():
         body_indent_style
     ))
     story.append(Paragraph(
-        "<b>Project Scope:</b> The Honey-LLM architecture is implemented and demonstrated against a realistic telecommunications customer support enterprise application, <b>NexTel</b>. The system covers real-time intent classification across 8 adversarial taxonomy classes, containerized deception with synthetic bait, autonomous NeMo guardrail synthesis, and forensic telemetry visualization.",
+        "<b>Mid-Semester Project Scope:</b> Demonstrated on NexTel, a fictional enterprise telecommunications customer support platform. The completed mid-semester scope covers real-time intent classification across 8 adversarial taxonomy classes, containerized deception with synthetic bait, autonomous NeMo guardrail synthesis, and zero-downtime hot-patching (Phases 1–4).",
         body_indent_style
     ))
 
@@ -724,23 +728,23 @@ def build_technical_report():
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>1.7 Approved Objectives</b>", heading1_style))
     story.append(Paragraph("The following five core objectives were approved in the capstone proposal evaluation:", body_indent_style))
-    story.append(Paragraph("1. <b>Develop a High-Accuracy Intent Sieve Classifier:</b> Construct a multi-tier classifier achieving >95% detection on standard adversarial benchmarks with <1% False Positive Rate on benign queries.", bullet_style))
-    story.append(Paragraph("2. <b>Implement a High-Fidelity Generative Sandbox ('Mirror Maze'):</b> Deploy an isolated zero-trust decoy maintaining >5 minutes average attacker dwell time through coherent multi-turn deception.", bullet_style))
-    story.append(Paragraph("3. <b>Automate Self-Healing Security Guardrails:</b> Build a closed-loop pipeline that extracts attack patterns and synthesizes permanent, hot-patchable NeMo Colang rules with time-to-patch measured in seconds.", bullet_style))
-    story.append(Paragraph("4. <b>Validate Zero-Escape Sandbox Security:</b> Execute comprehensive container breakout penetration audits to guarantee complete network and host isolation.", bullet_style))
-    story.append(Paragraph("5. <b>Construct a Real-Time Threat Intelligence SOC Dashboard:</b> Provide security analysts with live visualization (<1s refresh) of attack taxonomies, detection tiers, and measured dwell times.", bullet_style))
+    story.append(Paragraph("1. <b>Develop a High-Accuracy Intent Sieve Classifier:</b> Construct a multi-tier classifier achieving >95% detection on standard adversarial benchmarks with <1% False Positive Rate on benign queries (Completed in Phase 2).", bullet_style))
+    story.append(Paragraph("2. <b>Implement a High-Fidelity Generative Sandbox ('Mirror Maze'):</b> Deploy an isolated zero-trust decoy maintaining >5 minutes average attacker dwell time through coherent multi-turn deception (Completed in Phase 3).", bullet_style))
+    story.append(Paragraph("3. <b>Automate Self-Healing Security Guardrails:</b> Build a closed-loop pipeline that extracts attack patterns and synthesizes permanent, hot-patchable NeMo Colang rules with time-to-patch measured in seconds (Completed in Phase 4).", bullet_style))
+    story.append(Paragraph("4. <b>Validate Zero-Escape Sandbox Security:</b> Execute comprehensive container breakout penetration audits to guarantee complete network and host isolation (Completed in Phase 3/4).", bullet_style))
+    story.append(Paragraph("5. <b>Construct a Real-Time Threat Intelligence SOC Dashboard:</b> Provide security analysts with live visualization (<1s refresh) of attack taxonomies, detection tiers, and measured dwell times (Phase 5 — In Progress for End-Sem).", bullet_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>1.8 Methodology Overview</b>", heading1_style))
     story.append(Paragraph(
-        "The project methodology is structured across six consecutive engineering phases: Phase 0 (Scaffolding & Baseline Setup), Phase 1 (Adversarial Profiling & Threat Taxonomy), Phase 2 (Semantic Intent Sieve Development & Calibration), Phase 3 (Mirror Maze Containerization & Decoy Persona Engineering), Phase 4 (Autonomous Guardrail Synthesis & Policy Hardening), Phase 5 (Forensic Telemetry & SOC Dashboard), and Phase 6 (Empirical Validation & Adversarial Red-Teaming).",
+        "The project methodology spans six distinct phases: Phase 0 (Scaffolding), Phase 1 (Adversarial Threat Profiling), Phase 2 (Intent Sieve Development), Phase 3 (Mirror Maze Sandbox), Phase 4 (Autonomous Guardrail Synthesis), Phase 5 (Forensic Telemetry & SOC Dashboard), and Phase 6 (Empirical Red-Teaming). Phases 0 through 4 represent the completed mid-semester scope, while Phases 5 and 6 form the planned end-semester roadmap.",
         body_indent_style
     ))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>1.9 Project Outcomes and Deliverables</b>", heading1_style))
     story.append(Paragraph(
-        "The deliverables produced in this capstone include: (1) an operational FastAPI gateway with multi-tier routing; (2) a calibrated TF-IDF + Llama-Guard 3 ensemble sieve; (3) a containerized Mirror Maze decoy running the 'Sarah' persona with synthetic bait; (4) an autonomous NeMo Guardrail synthesis engine; (5) a Next.js 15 SOC dashboard and Admin control panel; and (6) empirical validation benchmarks across 889 curated and in-the-wild prompt samples.",
+        "Mid-semester deliverables completed to date include: (1) an operational FastAPI gateway with multi-tier routing; (2) a calibrated TF-IDF + Llama-Guard 3 ensemble sieve; (3) a containerized Mirror Maze decoy running the 'Sarah' persona with synthetic bait; (4) an autonomous NeMo Guardrail synthesis engine; and (5) empirical validation benchmarks across 889 curated and in-the-wild prompt samples.",
         body_indent_style
     ))
 
@@ -786,7 +790,7 @@ def build_technical_report():
             Paragraph("LLM-driven Linux shell simulation", table_text_style),
             Paragraph("Dynamic handling of unseen attacker CLI commands; TNR ~0.90", table_text_style),
             Paragraph("No intent filtering; restricted to CLI; no feedback loop", table_text_style),
-            Paragraph("Adds pre-routing Intent Sieve for live conversational traffic", table_text_style)
+            Paragraph("Adds pre-routing Intent Sieve for live conversational traffic")
         ],
         [
             Paragraph("LLM Honeypot [8]<br/><i>(IEEE CNS '24)</i>", table_text_style),
@@ -913,19 +917,19 @@ def build_technical_report():
             Paragraph("1", table_text_style),
             Paragraph("Descriptive", table_text_style),
             Paragraph("Cataloging and characterizing scientific phenomena under structured observation.", table_text_style),
-            Paragraph("Formulated the 8-class Adversarial Threat Taxonomy (`threat_taxonomy.md`), classifying prompt injection vectors across telecom domains.", table_text_style)
+            Paragraph("Formulated the 8-class Adversarial Threat Taxonomy (`threat_taxonomy.md`), classifying prompt injection vectors across telecom domains (Phase 1).", table_text_style)
         ],
         [
             Paragraph("2", table_text_style),
             Paragraph("Comparative", table_text_style),
             Paragraph("Systematically evaluating alternative models and configurations against baseline metrics.", table_text_style),
-            Paragraph("Benchmarked Llama-Guard 3 1B vs. 8B across default and custom policies (`sieve_model_selection.md`), proving custom policy lifts detection from 37.5% to 95.8%.", table_text_style)
+            Paragraph("Benchmarked Llama-Guard 3 1B vs. 8B across default and custom policies (`sieve_model_selection.md`), proving custom policy lifts detection from 37.5% to 95.8% (Phase 2).", table_text_style)
         ],
         [
             Paragraph("3", table_text_style),
             Paragraph("Experimental", table_text_style),
             Paragraph("Hypothesis testing using controlled independent and dependent variables.", table_text_style),
-            Paragraph("Evaluated the two-tier OR-ensemble on 889 held-out prompts (`sieve_eval_at_scale.md`), measuring 98.3% in-the-wild detection at 0.0% benign FPR.", table_text_style)
+            Paragraph("Evaluated the two-tier OR-ensemble on 889 held-out prompts (`sieve_eval_at_scale.md`), measuring 98.3% in-the-wild detection at 0.0% benign FPR (Phase 2).", table_text_style)
         ]
     ]
     t_tech = Table(tech_data, colWidths=[30, 80, 140, 165])
@@ -941,30 +945,30 @@ def build_technical_report():
     story.append(Spacer(1, 6))
     story.append(Paragraph("<b>3.2 Proposed Solution & Multi-Tier Architecture</b>", heading1_style))
     story.append(Paragraph(
-        "Honey-LLM is engineered as an end-to-end security proxy with four functional operational tiers:",
+        "Honey-LLM is engineered as an end-to-end security proxy with four functional operational tiers completed in the mid-semester scope:",
         body_indent_style
     ))
     story.append(Paragraph(
-        "1. <b>Tier-0 Semantic Guardrail Cache:</b> Matches incoming prompts against compiled embedding vectors of previously synthesized Colang rules via `all-minilm` embeddings. Matches resolve in 10–20 ms, catching known techniques before invoking any LLM.",
+        "1. <b>Tier-0 Semantic Guardrail Cache:</b> Matches incoming prompts against compiled embedding vectors of previously synthesized Colang rules via `all-minilm` embeddings. Matches resolve in 10–20 ms, catching known techniques before invoking any LLM (Phase 4).",
         bullet_style
     ))
     story.append(Paragraph(
-        "2. <b>Tier-1 Statistical Fast-Path:</b> Employs a calibrated TF-IDF (word and character n-grams) + Logistic Regression classifier. Benign customer queries scoring below the calibrated safety threshold (`P(adversarial) < 0.15`) immediately bypass the moderation model, resolving in ~2 ms.",
+        "2. <b>Tier-1 Statistical Fast-Path:</b> Employs a calibrated TF-IDF (word and character n-grams) + Logistic Regression classifier. Benign customer queries scoring below the calibrated safety threshold (`P(adversarial) < 0.15`) immediately bypass the moderation model, resolving in ~2 ms (Phase 2).",
         bullet_style
     ))
     story.append(Paragraph(
-        "3. <b>Tier-2 Deep Moderation Sieve:</b> Ambiguous or high-threat prompts escalate to Llama-Guard 3 (8B) operating with a custom prompt injection policy. The sieve evaluates multi-turn conversational history and assigns taxonomy labels (`S1` to `S8`).",
+        "3. <b>Tier-2 Deep Moderation Sieve:</b> Ambiguous or high-threat prompts escalate to Llama-Guard 3 (8B) operating with a custom prompt injection policy. The sieve evaluates multi-turn conversational history and assigns taxonomy labels (`S1` to `S8`) (Phase 2).",
         bullet_style
     ))
     story.append(Paragraph(
-        "4. <b>Dynamic Quarantine & Sandbox Routing:</b> If flagged UNSAFE, the session ID is added to an in-memory sticky quarantine table. The attacker is seamlessly rerouted to the Mirror Maze decoy container.",
+        "4. <b>Dynamic Quarantine & Sandbox Routing:</b> If flagged UNSAFE, the session ID is added to an in-memory sticky quarantine table. The attacker is seamlessly rerouted to the Mirror Maze decoy container (Phase 3).",
         bullet_style
     ))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>3.3 Work Breakdown Structure (WBS)</b>", heading1_style))
     story.append(Paragraph(
-        "Figure 3.1 and Figure 3.2 illustrate the phase-wise engineering roadmap and chronological execution milestones from Phase 0 through Phase 6.",
+        "Figure 3.1 and Figure 3.2 illustrate the phase-wise engineering roadmap and chronological execution milestones. Phases 1 to 4 have been fully implemented for the mid-semester milestone, with Phases 5 and 6 scheduled for the final semester.",
         body_indent_style
     ))
 
@@ -979,7 +983,7 @@ def build_technical_report():
         [Paragraph("Guardrail Engine", table_text_style), Paragraph("NVIDIA NeMo Guardrails / Colang 2.0", table_text_style), Paragraph("Formal rule validation, pattern extraction, and hot-patching.", table_text_style)],
         [Paragraph("Containerization", table_text_style), Paragraph("Docker / Colima (arm64)", table_text_style), Paragraph("Zero-egress isolated decoy sandbox with socat proxy topology.", table_text_style)],
         [Paragraph("Frontend Surfaces", table_text_style), Paragraph("Next.js 15 / React 19 / TailwindCSS", table_text_style), Paragraph("NexTel customer chat UI, Dark SOC dashboard, Admin panel.", table_text_style)],
-        [Paragraph("Red-Teaming", table_text_style), Paragraph("Microsoft PyRIT / Custom Harnesses", table_text_style), Paragraph("12+ obfuscation converters, break-out audits, load stress tests.", table_text_style)]
+        [Paragraph("Red-Teaming (Future)", table_text_style), Paragraph("Microsoft PyRIT / Custom Harnesses", table_text_style), Paragraph("12+ obfuscation converters, break-out audits, load stress tests.", table_text_style)]
     ]
     t_stack = Table(stack_data, colWidths=[90, 150, 175])
     t_stack.setStyle(TableStyle([
@@ -1035,14 +1039,14 @@ def build_technical_report():
     story.append(Spacer(1, 6))
     story.append(Paragraph("<b>4.3 User Interface Specifications</b>", heading1_style))
     story.append(Paragraph(
-        "Honey-LLM implements three distinct visual surfaces: (1) <b>NexTel Customer Chat Widget</b> (`/chat`): Clean corporate telecom aesthetic with zero visual indicators of the security layer; (2) <b>Dark SOC Threat Intelligence Dashboard</b> (`/dashboard`): Sub-second polling monitor visualizing real-time attack frequency, taxonomy breakdown, detection tier ratios, and measured dwell times; and (3) <b>Admin & Demo Control Panel</b> (`/admin`): Authenticated control surface allowing evaluation panels to trigger benign and malicious scenarios live and trace the tier-by-tier decision path in real time.",
+        "Honey-LLM designs three user interface surfaces: (1) <b>NexTel Customer Chat Widget</b> (`/chat`): Clean corporate telecom aesthetic with zero visual indicators of the security layer; (2) <b>Dark SOC Threat Intelligence Dashboard</b> (`/dashboard`): Designed monitor for real-time attack frequency, taxonomy breakdown, detection tier ratios, and measured dwell times (Phase 5 implementation); and (3) <b>Admin & Demo Control Panel</b> (`/admin`): Authenticated control surface allowing evaluation panels to trigger benign and malicious scenarios live and trace the tier-by-tier decision path in real time.",
         body_indent_style
     ))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>4.4 Working Prototype Execution & Live Verification</b>", heading1_style))
     story.append(Paragraph(
-        "The working prototype was subjected to rigorous live verification across all modules. Table 4.2 details the results of the sandbox breakout audit (`sandbox/breakout_audit.sh 8000`), proving zero verified container escapes.",
+        "The working prototype was subjected to rigorous live verification across Phases 1–4. Table 4.2 details the results of the sandbox breakout audit (`sandbox/breakout_audit.sh 8000`), proving zero verified container escapes.",
         body_indent_style
     ))
 
@@ -1075,47 +1079,47 @@ def build_technical_report():
     story.append(Paragraph("<b>CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=12))
 
-    story.append(Paragraph("<b>5.1 Work Accomplished vs. Approved Objectives</b>", heading1_style))
+    story.append(Paragraph("<b>5.1 Mid-Semester Accomplishments vs. Approved Objectives</b>", heading1_style))
     story.append(Paragraph(
-        "All five core objectives approved during proposal evaluation have been fully achieved and validated against live hardware. Table 5.1 maps the approved targets against the measured empirical results.",
+        "Table 5.1 maps the approved proposal objectives to the empirical accomplishments completed during the mid-semester evaluation period (Phases 1–4).",
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 5.1: Mapping of Approved Project Objectives to Empirical Achievements", table_caption_style))
+    story.append(Paragraph("TABLE 5.1: Mid-Semester Mapping of Approved Objectives to Implemented Progress", table_caption_style))
     obj_eval_data = [
-        [Paragraph("<b>Approved Objective</b>", table_header_style), Paragraph("<b>Target Specification</b>", table_header_style), Paragraph("<b>Empirical Result Achieved</b>", table_header_style), Paragraph("<b>Status</b>", table_header_style)],
+        [Paragraph("<b>Approved Objective</b>", table_header_style), Paragraph("<b>Target Specification</b>", table_header_style), Paragraph("<b>Mid-Semester Implemented Progress</b>", table_header_style), Paragraph("<b>Phase / Status</b>", table_header_style)],
         [
             Paragraph("1. High-Accuracy Intent Sieve", table_text_style),
             Paragraph("Accuracy >95% on JailbreakBench, FPR <1%", table_text_style),
             Paragraph("<b>98.3% detection</b> on in-the-wild attacks; <b>0.0% benign FPR</b>; ~2 ms benign latency.", table_text_style),
-            Paragraph("MET", table_header_style)
+            Paragraph("Phase 2<br/>(COMPLETED)", table_header_style)
         ],
         [
             Paragraph("2. Mirror Maze Sandbox Deception", table_text_style),
             Paragraph("Believable decoy, dwell time >5 min, synthetic bait", table_text_style),
             Paragraph("LLM 'Sarah' decoy persona; leaks fake tokens (NT-CORE-01); verified dwell tracking.", table_text_style),
-            Paragraph("MET", table_header_style)
+            Paragraph("Phase 3<br/>(COMPLETED)", table_header_style)
         ],
         [
             Paragraph("3. Autonomous Guardrail Synthesis", table_text_style),
             Paragraph("Automated NeMo rule generation, zero manual triage", table_text_style),
             Paragraph("Distills attack pattern, validates Colang, passes regression gate; <b>time-to-patch 10.4 s</b>.", table_text_style),
-            Paragraph("MET", table_header_style)
+            Paragraph("Phase 4<br/>(COMPLETED)", table_header_style)
         ],
         [
             Paragraph("4. Zero-Escape Sandbox Security", table_text_style),
             Paragraph("Impenetrable isolation, zero network/host leak", table_text_style),
             Paragraph("Docker zero-egress network; <b>5/5 breakout audit PASS</b>; read-only rootfs; non-root user.", table_text_style),
-            Paragraph("MET", table_header_style)
+            Paragraph("Phase 3/4<br/>(COMPLETED)", table_header_style)
         ],
         [
             Paragraph("5. SOC Telemetry Dashboard", table_text_style),
             Paragraph("Real-time monitoring, <1s refresh, taxonomy stats", table_text_style),
-            Paragraph("Next.js 15 SOC dashboard (<1s poll); admin control panel with live decision-tree traces.", table_text_style),
-            Paragraph("MET", table_header_style)
+            Paragraph("Architecture designed; event schema & admin tracer specified; UI live ingestion in progress.", table_text_style),
+            Paragraph("Phase 5<br/>(IN PROGRESS)", table_header_style)
         ]
     ]
-    t_objeval = Table(obj_eval_data, colWidths=[100, 105, 160, 50])
+    t_objeval = Table(obj_eval_data, colWidths=[95, 100, 165, 55])
     t_objeval.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#F1F5F9")),
@@ -1126,9 +1130,9 @@ def build_technical_report():
     story.append(t_objeval)
 
     story.append(Spacer(1, 6))
-    story.append(Paragraph("<b>5.2 Conclusions</b>", heading1_style))
+    story.append(Paragraph("<b>5.2 Mid-Semester Conclusions</b>", heading1_style))
     story.append(Paragraph(
-        "Honey-LLM establishes that proactive deception combined with automated guardrail synthesis represents a paradigm shift in conversational AI cybersecurity. By replacing predictable blocking with high-interaction sandboxing, enterprise systems turn adversarial attacks into defensive intelligence. The two-tier ensemble successfully resolves the industry-wide latency barrier of moderation models, proving that robust semantic security can be deployed on localized hardware without compromising conversational user experience.",
+        "Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the system has successfully proven that: (1) adversarial intent can be intercepted with 98.3% accuracy without penalizing benign customer traffic; (2) generative honeypots running on zero-trust containerization effectively contain attacker reconnaissance; and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules within seconds.",
         body_indent_style
     ))
 
@@ -1146,11 +1150,13 @@ def build_technical_report():
         bullet_style
     ))
 
-    story.append(Paragraph("<b>5.4 Future Work Plan</b>", heading1_style))
+    story.append(Paragraph("<b>5.4 Future Work Plan (Phases 5 & 6 Execution Roadmap)</b>", heading1_style))
     story.append(Paragraph(
-        "Following the mid-semester evaluation, the project team will focus on Phase 6 execution: running scaled multi-converter PyRIT campaigns, conducting multi-user concurrency stress tests, and preparing the final thesis submission for end-semester review.",
+        "Following the mid-semester evaluation, the project team will execute the final two planned engineering phases leading to end-semester submission:",
         body_indent_style
     ))
+    story.append(Paragraph("• <b>Phase 5: Forensic Telemetry & Threat Intelligence Dashboard</b> — Finalize the sub-second polling Next.js 15 SOC dashboard, integrate live attacker dwell-time meters, and complete end-to-end visualization of attack taxonomy trends.", bullet_style))
+    story.append(Paragraph("• <b>Phase 6: Empirical Validation & Adversarial Red-Teaming</b> — Subject the deployed gateway to scaled Microsoft PyRIT adversarial stress campaigns across 12+ prompt obfuscation converters (Base64, ROT13, Leetspeak, Unicode confusables), conduct multi-user concurrency load profiling, and author the final capstone thesis.", bullet_style))
 
     story.append(PageBreak())
 
