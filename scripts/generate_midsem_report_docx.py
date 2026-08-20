@@ -153,7 +153,12 @@ def create_docx_report():
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.runs[0].font.size = Pt(12)
 
-    doc.add_paragraph()
+    logo_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/thapar_logo.png"
+    if os.path.exists(logo_path):
+        p_logo = doc.add_paragraph()
+        p_logo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_logo.add_run().add_picture(logo_path, width=Inches(1.8))
+
     p = doc.add_paragraph("Computer Science and Engineering Department\nThapar Institute of Engineering and Technology, Patiala\nAugust 2026")
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.runs[0].font.size = Pt(12)

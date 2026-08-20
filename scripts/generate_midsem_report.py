@@ -368,7 +368,14 @@ def build_technical_report():
     story.append(Spacer(1, 3))
     story.append(Paragraph("<b>Dr. Saif Nalband</b>", cover_bold_style))
     story.append(Paragraph("Assistant Professor, Computer Science and Engineering Department", cover_sub_style))
-    story.append(Spacer(1, 28))
+    story.append(Spacer(1, 14))
+
+    logo_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/thapar_logo.png"
+    if os.path.exists(logo_path):
+        story.append(RLImage(logo_path, width=125, height=60))
+        story.append(Spacer(1, 12))
+    else:
+        story.append(Spacer(1, 28))
 
     story.append(Paragraph("<b>Computer Science and Engineering Department</b>", cover_bold_style))
     story.append(Paragraph("<b>Thapar Institute of Engineering and Technology, Patiala</b>", cover_bold_style))
