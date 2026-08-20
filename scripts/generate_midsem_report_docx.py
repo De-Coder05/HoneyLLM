@@ -333,6 +333,8 @@ def create_docx_report():
     add_heading1("1.10 Novelty of Work")
     add_body("Honey-LLM introduces three key innovations over existing state of the art: (1) Proactive In-Flight Deception that routes malicious traffic without tipping off attackers; (2) Autonomous Hot-Patching Immunity reducing time-to-patch from days to 10.4 seconds without server restarts; and (3) Asymmetric Multi-Tier Inference solving the severe latency bottleneck of commercial moderation models.")
 
+    add_caption("FIGURE 1.1: Honey-LLM Multi-Tier Routing and Decision Gateway Architecture", is_table=False)
+
     doc.add_page_break()
 
     # --- CHAPTER 2: REQUIREMENT ANALYSIS ---
@@ -532,6 +534,8 @@ def create_docx_report():
             aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
             if c_idx == 3:
                 aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.bold = True
+
+    add_caption("FIGURE 4.1: Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", is_table=False)
 
     doc.add_page_break()
 

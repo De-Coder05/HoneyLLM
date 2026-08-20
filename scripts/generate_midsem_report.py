@@ -78,90 +78,108 @@ class AcademicNumberedCanvas(canvas.Canvas):
 
 
 def draw_architecture_diagram():
-    # Width: 415.27, Height: 100
-    d = Drawing(415, 100)
+    # Width: 415.27, Height: 112
+    d = Drawing(415, 112)
     
-    # Background card
-    d.add(Rect(0, 0, 415, 100, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=4, ry=4))
+    # Outer frame
+    d.add(Rect(0, 0, 415, 112, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=4, ry=4))
     
-    # User / Attacker Box
-    d.add(Rect(10, 32, 75, 40, fillColor=colors.HexColor("#E2E8F0"), strokeColor=colors.HexColor("#64748B"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(47, 55, "Client / User", fontName="Times-Bold", fontSize=8.5, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
-    d.add(String(47, 43, "Prompt Request", fontName="Times-Roman", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#334155")))
+    # 1. User/Attacker Box
+    d.add(Rect(8, 38, 68, 42, fillColor=colors.HexColor("#F1F5F9"), strokeColor=colors.HexColor("#475569"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(42, 63, "User / Attacker", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
+    d.add(String(42, 51, "Incoming Request", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#334155")))
+    d.add(String(42, 41, "(HTTP / REST)", fontName="Times-Italic", fontSize=6.2, textAnchor="middle", fillColor=colors.HexColor("#64748B")))
     
-    # Arrow 1
-    d.add(Line(85, 52, 105, 52, strokeColor=colors.HexColor("#64748B"), strokeWidth=1.2))
-    d.add(Polygon([105, 52, 100, 55, 100, 49], fillColor=colors.HexColor("#64748B"), strokeColor=colors.HexColor("#64748B")))
+    # Arrow to Gateway
+    d.add(Line(76, 59, 93, 59, strokeColor=colors.HexColor("#475569"), strokeWidth=1.2))
+    d.add(Polygon([93, 59, 88, 62, 88, 56], fillColor=colors.HexColor("#475569"), strokeColor=colors.HexColor("#475569")))
     
-    # Gateway & Intent Sieve Box
-    d.add(Rect(108, 12, 120, 76, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=1.2, rx=4, ry=4))
-    d.add(String(168, 74, "FastAPI Gateway", fontName="Times-Bold", fontSize=8.5, textAnchor="middle", fillColor=colors.HexColor("#1E3A8A")))
-    d.add(String(168, 60, "Tier-0: NeMo Guardrails", fontName="Times-Roman", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
-    d.add(String(168, 46, "Tier-1: Statistical Fast-Path", fontName="Times-Roman", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
-    d.add(String(168, 32, "Tier-2: Llama-Guard 3 Sieve", fontName="Times-Roman", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
-    d.add(String(168, 20, "(Dual-Tier Intent Filter)", fontName="Times-Italic", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#2563EB")))
+    # 2. Gateway Multi-Tier Sieve Container
+    d.add(Rect(96, 12, 138, 88, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#2563EB"), strokeWidth=1.2, rx=4, ry=4))
+    d.add(String(165, 89, "Honey-LLM FastAPI Gateway", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#1E3A8A")))
     
-    # Branch 1: Safe Path (Top)
-    d.add(Line(228, 62, 270, 77, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1.2))
-    d.add(Polygon([270, 77, 263, 78, 266, 72], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
-    d.add(String(246, 75, "SAFE", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#16A34A")))
+    # Tier-0 Sub-box
+    d.add(Rect(102, 65, 126, 18, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.7, rx=2, ry=2))
+    d.add(String(165, 71, "Tier-0: Semantic Guardrail Cache (10-20 ms)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
     
-    # Safe RAG Engine Box
-    d.add(Rect(272, 57, 133, 35, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#22C55E"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(338, 77, "Production RAG Service", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
-    d.add(String(338, 65, "Public Telecommunications Data", fontName="Times-Roman", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+    # Tier-1 Sub-box
+    d.add(Rect(102, 43, 126, 18, fillColor=colors.HexColor("#DBEAFE"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=0.7, rx=2, ry=2))
+    d.add(String(165, 49, "Tier-1: Statistical Fast-Path (~2 ms)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
     
-    # Branch 2: Malicious Path (Bottom)
-    d.add(Line(228, 42, 270, 25, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1.2))
-    d.add(Polygon([270, 25, 266, 30, 263, 24], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
-    d.add(String(242, 27, "UNSAFE", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#DC2626")))
+    # Tier-2 Sub-box
+    d.add(Rect(102, 21, 126, 18, fillColor=colors.HexColor("#FEF3C7"), strokeColor=colors.HexColor("#D97706"), strokeWidth=0.7, rx=2, ry=2))
+    d.add(String(165, 27, "Tier-2: Deep Moderation Sieve (Llama-Guard 3)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#78350F")))
+
+    # 3. Branch Top: SAFE -> Production RAG Engine
+    d.add(Line(234, 68, 270, 84, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1.2))
+    d.add(Polygon([270, 84, 263, 85, 266, 79], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
+    d.add(String(246, 81, "SAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#16A34A")))
     
-    # Decoy Honeypot Box
-    d.add(Rect(272, 8, 133, 38, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(338, 36, "Mirror Maze Honeypot", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
-    d.add(String(338, 25, "Zero-Trust Docker Sandbox", fontName="Times-Roman", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#B91C1C")))
-    d.add(String(338, 14, "Decoy Persona + Synthetic Bait", fontName="Times-Italic", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+    d.add(Rect(272, 66, 135, 34, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(339, 87, "Production RAG Engine", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
+    d.add(String(339, 77, "Enterprise Support Knowledge Base", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+    d.add(String(339, 68, "(Clean Authentic Responses)", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#166534")))
+    
+    # 4. Branch Bottom: UNSAFE -> Mirror Maze Sandbox
+    d.add(Line(234, 38, 270, 24, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1.2))
+    d.add(Polygon([270, 24, 266, 29, 263, 23], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
+    d.add(String(242, 27, "UNSAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#DC2626")))
+    
+    d.add(Rect(272, 8, 135, 38, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(339, 36, "Mirror Maze Deception Sandbox", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
+    d.add(String(339, 26, "Zero-Trust Docker Container (:9100)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+    d.add(String(339, 16, "'Sarah' Decoy Persona + Synthetic Bait", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#B91C1C")))
+
+    # 5. Feedback Loop from Sandbox to Gateway (Bottom dashed line)
+    d.add(Line(339, 8, 339, 2, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.9))
+    d.add(Line(339, 2, 165, 2, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.9))
+    d.add(Line(165, 2, 165, 12, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.9))
+    d.add(Polygon([165, 12, 163, 7, 167, 7], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
+    d.add(String(252, 4.5, "Autonomous NeMo Synthesis & Hot-Patch (10.4s)", fontName="Times-BoldItalic", fontSize=6.2, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
 
     return d
 
 
-def draw_self_healing_diagram():
-    # Width: 415.27, Height: 75
-    d = Drawing(415, 70)
-    d.add(Rect(0, 0, 415, 70, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=4, ry=4))
+def draw_sequence_and_state_diagram():
+    # Width: 415.27, Height: 115
+    d = Drawing(415, 115)
     
-    # Step 1: Capture
-    d.add(Rect(8, 12, 88, 46, fillColor=colors.HexColor("#FEF3C7"), strokeColor=colors.HexColor("#D97706"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(52, 44, "1. Exploit Capture", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#78350F")))
-    d.add(String(52, 32, "Mirror Maze logs", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#92400E")))
-    d.add(String(52, 22, "adversarial prompt", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#92400E")))
+    # Outer frame
+    d.add(Rect(0, 0, 415, 115, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=4, ry=4))
     
-    # Arrow 1->2
-    d.add(Line(96, 35, 108, 35, strokeColor=colors.HexColor("#64748B"), strokeWidth=1))
+    # Section Header Left: Dual-Path Request Sequence
+    d.add(String(110, 103, "A. End-to-End Dual-Path Request Sequence", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
     
-    # Step 2: Extraction
-    d.add(Rect(110, 12, 92, 46, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(156, 44, "2. Pattern Extraction", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
-    d.add(String(156, 32, "Distill attack intent", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#5B21B6")))
-    d.add(String(156, 22, "and structural core", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#5B21B6")))
+    # Path 1: Benign Trace (Green pill)
+    d.add(Rect(8, 62, 205, 34, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#22C55E"), strokeWidth=0.8, rx=3, ry=3))
+    d.add(String(14, 86, "1. Benign Request Path (SLA: ~2.1 ms)", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#14532D")))
+    d.add(String(14, 76, "User Query -> Tier-1 Fast-Path [SAFE] -> Direct RAG Engine", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#15803D")))
+    d.add(String(14, 66, "-> Instant Public Response (Zero Moderation Latency Added)", fontName="Times-Italic", fontSize=6.2, fillColor=colors.HexColor("#166534")))
     
-    # Arrow 2->3
-    d.add(Line(202, 35, 214, 35, strokeColor=colors.HexColor("#64748B"), strokeWidth=1))
+    # Path 2: Adversarial Trace (Red pill)
+    d.add(Rect(8, 22, 205, 36, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=0.8, rx=3, ry=3))
+    d.add(String(14, 48, "2. Adversarial Injection Path", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#7F1D1D")))
+    d.add(String(14, 38, "Attack Query -> Tier-2 Custom Sieve [UNSAFE] -> Sticky Quarantine", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#991B1B")))
+    d.add(String(14, 28, "-> Quarantined in Mirror Maze Decoy (Synthetic Bait Returned)", fontName="Times-Italic", fontSize=6.2, fillColor=colors.HexColor("#B91C1C")))
     
-    # Step 3: Synthesis
-    d.add(Rect(216, 12, 92, 46, fillColor=colors.HexColor("#E0E7FF"), strokeColor=colors.HexColor("#4F46E5"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(262, 44, "3. Colang Synthesis", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#312E81")))
-    d.add(String(262, 32, "Generate NeMo rail", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#3730A3")))
-    d.add(String(262, 22, "+ regression check", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#3730A3")))
+    # Divider line
+    d.add(Line(220, 10, 220, 105, strokeColor=colors.HexColor("#E2E8F0"), strokeWidth=1))
     
-    # Arrow 3->4
-    d.add(Line(308, 35, 320, 35, strokeColor=colors.HexColor("#64748B"), strokeWidth=1))
+    # Section Header Right: Sticky State & Self-Healing Loop
+    d.add(String(318, 103, "B. Sticky Quarantine & Self-Healing Loop", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
     
-    # Step 4: Hot-Patch
-    d.add(Rect(322, 12, 85, 46, fillColor=colors.HexColor("#DCFCE7"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(364, 44, "4. Live Hot-Patch", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
-    d.add(String(364, 32, "Zero-downtime rule", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#166534")))
-    d.add(String(364, 22, "update in 10.4s", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+    # Sticky State Machine Box
+    d.add(Rect(228, 62, 179, 34, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=0.8, rx=3, ry=3))
+    d.add(String(234, 86, "Session State Machine", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#1E3A8A")))
+    d.add(String(234, 76, "[Normal Session] -> Flagged -> [Sticky Quarantined]", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#1E40AF")))
+    d.add(String(234, 66, "Subsequent queries locked to decoy (Zero boundary probing)", fontName="Times-Italic", fontSize=6.2, fillColor=colors.HexColor("#2563EB")))
+    
+    # Self-Healing Pipeline Box
+    d.add(Rect(228, 14, 179, 44, fillColor=colors.HexColor("#FAF5FF"), strokeColor=colors.HexColor("#A855F7"), strokeWidth=0.8, rx=3, ry=3))
+    d.add(String(234, 48, "Autonomous Guardrail Feedback Loop", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#581C87")))
+    d.add(String(234, 38, "Capture Exploit -> Distill Pattern -> NeMo Colang Rule", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#6B21A8")))
+    d.add(String(234, 28, "-> Benign Regression Gate -> Hot-Patch in 10.4s", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#6B21A8")))
+    d.add(String(234, 18, "(Zero-Downtime Live Defense Adaptation)", fontName="Times-BoldItalic", fontSize=6.2, fillColor=colors.HexColor("#7E22CE")))
 
     return d
 
@@ -613,7 +631,7 @@ def build_technical_report():
     figures_list = [
         [Paragraph("<b>Figure No.</b>", table_header_style), Paragraph("<b>Caption</b>", table_header_style), Paragraph("<b>Page No.</b>", table_header_style)],
         [Paragraph("Figure 1.1", table_text_style), Paragraph("Honey-LLM Multi-Tier Routing and Decision Gateway Architecture", table_text_style), Paragraph("6", table_text_style)],
-        [Paragraph("Figure 4.1", table_text_style), Paragraph("Autonomous Self-Healing Loop: Capture, Distill, Validate, and Hot-Patch", table_text_style), Paragraph("17", table_text_style)]
+        [Paragraph("Figure 4.1", table_text_style), Paragraph("Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", table_text_style), Paragraph("17", table_text_style)]
     ]
     t_lof = Table(figures_list, colWidths=[65, 300, 50])
     t_lof.setStyle(TableStyle([
@@ -1166,8 +1184,8 @@ def build_technical_report():
     story.append(t_audit)
 
     story.append(Spacer(1, 4))
-    story.append(draw_self_healing_diagram())
-    story.append(Paragraph("FIGURE 4.1: Autonomous Self-Healing Loop: Capture, Distill, Validate, and Hot-Patch", figure_caption_style))
+    story.append(draw_sequence_and_state_diagram())
+    story.append(Paragraph("FIGURE 4.1: Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", figure_caption_style))
 
     story.append(PageBreak())
 
