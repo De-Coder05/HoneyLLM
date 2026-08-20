@@ -1,0 +1,11 @@
+.venv/
+.venv314-old/
+node_modules/
+.next/
+__pycache__/
+.git/
+*.pyc
+*.pyo
+.DS_Store
+.idea/
+.vscode/

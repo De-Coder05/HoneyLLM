@@ -1,0 +1,37 @@
+# Honey-LLM — Docker Compose (Phase 0 skeleton)
+#
+# NOTE: Docker is NOT yet installed on the current dev machine (see memory.md).
+# This file defines the intended topology so Phase 3 (Mirror Maze sandbox) has a
+# base to extend. The zero-trust, no-egress sandbox network for the decoy is
+# added in Phase 3 (Architecture.md §5) — it is deliberately NOT here yet, so no
+# one mistakes this skeleton for the isolation boundary.
+#
+# Ollama runs on the host (not containerized here) because on Apple silicon the
+# GPU is reached via the host Metal backend, not through Docker. Containers talk
+# to it via host.docker.internal.
+
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - CORS_ORIGINS=http://localhost:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+  # mirror_maze:  # Phase 3 — isolated decoy, no-egress network. Added later.
+  #   build: ./sandbox
+  #   networks: [sandbox_isolated]   # zero-trust: no route to backend/host

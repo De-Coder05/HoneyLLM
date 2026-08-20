@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-07-13T17:31:23.696748+00:00",
+  "ollama_url": "http://localhost:11434",
+  "sieve_model": "llama-guard3:latest",
+  "gen_model": "llama3:latest",
+  "warm_runs": 5,
+  "models_available": [
+    "qwen2.5:7b",
+    "qwen2.5:14b",
+    "llava:7b",
+    "llama-guard3:latest",
+    "llama3:latest"
+  ],
+  "sieve_present": true,
+  "gen_present": true,
+  "sieve": {
+    "model": "llama-guard3:latest",
+    "cold_ms": 6043.2,
+    "warm_p50_ms": 768.7,
+    "warm_p95_ms": 898.6,
+    "warm_mean_ms": 693.4,
+    "warm_samples": [
+      218.6,
+      756.8,
+      768.7,
+      799.6,
+      923.4
+    ]
+  },
+  "generation": {
+    "model": "llama3:latest",
+    "cold_ms": 10887.0,
+    "warm_p50_ms": 755.5,
+    "warm_p95_ms": 1441.5,
+    "warm_mean_ms": 948.6
+  },
+  "concurrent": {
+    "sieve_p50_ms": 932.3,
+    "sieve_p95_ms": 1084.4,
+    "gen_p50_ms": 1814.0,
+    "gen_p95_ms": 1976.2
+  },
+  "budget_ms": 250.0,
+  "sieve_within_budget": false
+}

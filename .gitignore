@@ -1,0 +1,57 @@
+# --- Secrets / env (rules.md §2, §4: never commit .env) ---
+.env
+.env.*
+!.env.example
+*.env
+*.env.local
+!frontend/.env.local.example
+
+# --- Virtual Environments (all locations) ---
+**/.venv/
+**/.venv*/
+**/venv/
+**/.venv314-old/
+
+# --- Python ---
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+
+# --- Node / Next.js ---
+**/node_modules/
+**/.next/
+out/
+npm-debug.log*
+yarn-error.log*
+
+# --- ML / data artifacts (rules.md §2: don't commit weights/embeddings) ---
+data/embeddings/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+*.joblib
+ml/checkpoints/
+ml/models/
+ml/datasets/cache/
+
+# --- Benchmark output is regenerable; keep the tracked summary .md, ignore transient runs ---
+docs/infra_validation_results*.local.json
+
+# --- Forensic log (runtime telemetry, regenerated) ---
+forensic_log.jsonl
+backend/forensic_log.jsonl
+
+# --- Guardrails: pending-review queue is transient; generated rules are runtime state ---
+guardrails/pending/
+
+# --- OS / editor ---
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/
+*.swp

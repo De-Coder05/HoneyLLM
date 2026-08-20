@@ -1,0 +1,25 @@
+# Honey-LLM backend — Phase 0/1 dependencies.
+# Pinned to compatible ranges; Phase 2+ adds ML/RAG deps (transformers, chromadb,
+# nemoguardrails, etc.) as those phases land — kept out here to keep the
+# skeleton install light.
+
+fastapi>=0.115,<0.116
+uvicorn[standard]>=0.32,<0.35
+pydantic>=2.9,<3
+pydantic-settings>=2.5,<3
+httpx>=0.27,<0.29
+
+# Fast-path sieve classifier (tier 1) — load & serve the trained model.
+scikit-learn>=1.5
+joblib>=1.4
+
+# Phase 4 — autonomous guardrail synthesis. Requires Python 3.12 (nemoguardrails
+# cannot import on 3.14). langchain-* are only needed by scripts/verify_nemo_runtime.py
+# (running the rules inside NeMo's engine); the runtime hot path does not need them.
+nemoguardrails>=0.17
+langchain-community>=0.3
+langchain-ollama>=0.2
+
+# Dev / test
+pytest>=8.3,<9
+pytest-asyncio>=0.24,<0.25

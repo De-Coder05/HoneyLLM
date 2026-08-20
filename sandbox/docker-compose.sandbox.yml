@@ -1,0 +1,66 @@
+# Mirror Maze — isolated decoy topology (Phase 3, Step 3.1; Architecture §5).
+#
+# Zero-egress design: the decoy sits on an `internal` network with NO outbound
+# connectivity at all — it cannot reach the host, the internet, the production
+# gateway, or any DB. Its ONLY reachable peer is a socat proxy that forwards a
+# single port to the host's Ollama. So the decoy can generate, and can do
+# literally nothing else. That is the core safety guarantee, made concrete.
+#
+# Bring up:  docker compose -f sandbox/docker-compose.sandbox.yml up --build -d
+# Verify:    bash sandbox/isolation_smoke_test.sh
+
+networks:
+  sandbox_internal:
+    internal: true          # <-- no route out except to peers on this network
+  proxy_egress: {}          # only the egress proxy is attached here (to reach host Ollama)
+  ingress_net: {}           # only the ingress proxy is attached here (host -> decoy)
+
+services:
+  # Single-purpose egress point: forwards :11434 to the host's Ollama and nothing
+  # else. The decoy talks to THIS, never to the host directly.
+  ollama-proxy:
+    image: alpine/socat:latest
+    command: >-
+      TCP-LISTEN:11434,fork,reuseaddr TCP:host.docker.internal:11434
+    networks: [sandbox_internal, proxy_egress]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  mirror_maze:
+    build:
+      context: ..
+      dockerfile: sandbox/Dockerfile
+    environment:
+      # The decoy's only egress path — the proxy, which only reaches Ollama.
+      OLLAMA_BASE_URL: http://ollama-proxy:11434
+      OLLAMA_HOST_HEADER: localhost:11434   # pass Ollama's DNS-rebind host check
+      DECOY_MODEL: llama3:latest
+    networks: [sandbox_internal]     # internal ONLY — zero egress except the proxy
+    # NOTE: no published port here — an internal-only container can't publish one,
+    # and giving it a non-internal network would break the egress lock. The host
+    # reaches it through the single-purpose ingress proxy below instead.
+    # --- container-escape hardening (Phase 6 audit) ---
+    cap_drop: [ALL]                  # no Linux capabilities
+    security_opt:
+      - no-new-privileges:true       # can't gain privileges via setuid
+    read_only: true                  # immutable rootfs
+    tmpfs:
+      - /tmp                         # the one writable scratch area
+    depends_on:
+      - ollama-proxy
+    restart: unless-stopped
+
+  # Single-purpose ingress: forwards host :9100 to the decoy on the internal
+  # network. The decoy never dials this, so it grants the decoy no egress — it
+  # only lets the host gateway call in.
+  ingress-proxy:
+    image: alpine/socat:latest
+    command: >-
+      TCP-LISTEN:9100,fork,reuseaddr TCP:mirror_maze:9100
+    networks: [sandbox_internal, ingress_net]
+    ports:
+      - "9100:9100"
+    depends_on:
+      - mirror_maze
+    restart: unless-stopped
