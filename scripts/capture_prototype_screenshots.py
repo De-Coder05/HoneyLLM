@@ -18,7 +18,6 @@ async def capture_all():
             await page.goto("http://localhost:3000/chat", wait_until="networkidle", timeout=15000)
             await asyncio.sleep(2)
             
-            # Send a sample customer query if input is available
             input_box = await page.query_selector("input, textarea")
             if input_box:
                 await input_box.fill("How do I upgrade my 5G unlimited roaming plan?")
@@ -33,25 +32,34 @@ async def capture_all():
         finally:
             await page.close()
 
-        # 2. Capture Admin Control Panel (/admin)
+        # 2. Capture Admin Control Panel (/admin) with LOGIN + SCENARIO TRACE
         page = await context.new_page()
         try:
-            print("Navigating to /admin...")
+            print("Navigating to /admin and logging in...")
             await page.goto("http://localhost:3000/admin", wait_until="networkidle", timeout=15000)
-            await asyncio.sleep(2)
+            await asyncio.sleep(1)
             
-            # Look for trigger or test injection buttons if any
-            run_btn = await page.query_selector("button")
-            if run_btn:
-                try:
-                    await run_btn.click()
-                    await asyncio.sleep(1.5)
-                except Exception:
-                    pass
+            # Fill password
+            pw_input = await page.query_selector("input[type='password'], input[placeholder*='token']")
+            if pw_input:
+                await pw_input.fill("honeyllm-demo-admin")
+                unlock_btn = await page.query_selector("button:has-text('Unlock')")
+                if unlock_btn:
+                    await unlock_btn.click()
+                else:
+                    await page.keyboard.press("Enter")
+                await asyncio.sleep(2)
+            
+            # Click a scenario button (e.g. DAN role-play or Direct override)
+            scenario_btn = await page.query_selector("button:has-text('Direct override'), button:has-text('DAN role-play'), button:has-text('Data exfiltration')")
+            if scenario_btn:
+                print("Clicking scenario button to trigger decision trace...")
+                await scenario_btn.click()
+                await asyncio.sleep(4)
                     
             admin_path = os.path.join(ASSETS_DIR, "prototype_admin_ui.png")
             await page.screenshot(path=admin_path)
-            print(f"Captured: {admin_path}")
+            print(f"Captured logged-in admin: {admin_path}")
         except Exception as e:
             print(f"Error capturing /admin: {e}")
         finally:
@@ -62,7 +70,7 @@ async def capture_all():
         try:
             print("Navigating to /dashboard...")
             await page.goto("http://localhost:3000/dashboard", wait_until="networkidle", timeout=15000)
-            await asyncio.sleep(2)
+            await asyncio.sleep(3)
             
             dashboard_path = os.path.join(ASSETS_DIR, "prototype_soc_dashboard.png")
             await page.screenshot(path=dashboard_path)
