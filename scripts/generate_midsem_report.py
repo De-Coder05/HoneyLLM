@@ -61,15 +61,6 @@ class AcademicNumberedCanvas(canvas.Canvas):
             arabic_num = page_num - 9
             page_str = str(arabic_num)
 
-        # Header for Chapter pages (page >= 10, i.e., Chapter 1 onward)
-        if page_num >= 10:
-            self.setFont("Times-Italic", 9)
-            self.setFillColor(colors.HexColor("#4B5563"))
-            self.drawString(108, 775, "Honey-LLM: Capstone Technical Report (Mid-Semester Evaluation)")
-            self.setStrokeColor(colors.HexColor("#D1D5DB"))
-            self.setLineWidth(0.5)
-            self.line(108, 768, 523.27, 768)
-
         # Bottom center page numbering
         self.setFont("Times-Roman", 10)
         self.setFillColor(colors.HexColor("#1F2937"))
