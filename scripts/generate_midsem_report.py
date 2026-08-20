@@ -352,21 +352,14 @@ def build_technical_report():
     story.append(Paragraph("<b>Submitted by:</b>", cover_sub_style))
     story.append(Spacer(1, 6))
 
-    team_table_data = [
-        [Paragraph("<b>(102303312)</b>", cover_sub_style), Paragraph("<b>ANOUSHKA SINGH</b>", cover_bold_style)],
-        [Paragraph("<b>(102303315)</b>", cover_sub_style), Paragraph("<b>TARUN KRISHNA SHASTRI</b>", cover_bold_style)],
-        [Paragraph("<b>(102303631)</b>", cover_sub_style), Paragraph("<b>DEVANSH WADHWANI</b>", cover_bold_style)],
-        [Paragraph("<b>(102303684)</b>", cover_sub_style), Paragraph("<b>SHREYA GIRI</b>", cover_bold_style)]
-    ]
-    t_team = Table(team_table_data, colWidths=[120, 250])
-    t_team.setStyle(TableStyle([
-        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('TOPPADDING', (0,0), (-1,-1), 1.5),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 1.5),
-    ]))
-    story.append(t_team)
-    story.append(Spacer(1, 12))
+    story.append(Paragraph("<b>(102303312) ANOUSHKA SINGH</b>", cover_bold_style))
+    story.append(Spacer(1, 2))
+    story.append(Paragraph("<b>(102303315) TARUN KRISHNA SHASTRI</b>", cover_bold_style))
+    story.append(Spacer(1, 2))
+    story.append(Paragraph("<b>(102303631) DEVANSH WADHWANI</b>", cover_bold_style))
+    story.append(Spacer(1, 2))
+    story.append(Paragraph("<b>(102303684) SHREYA GIRI</b>", cover_bold_style))
+    story.append(Spacer(1, 14))
 
     story.append(Paragraph("<b>BE Third Year, Computer Engineering (CoE)</b>", cover_sub_style))
     story.append(Spacer(1, 3))

@@ -132,24 +132,20 @@ def create_docx_report():
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.runs[0].font.size = Pt(12)
 
-    team_data = [
-        ("(102303312)", "ANOUSHKA SINGH"),
-        ("(102303315)", "TARUN KRISHNA SHASTRI"),
-        ("(102303631)", "DEVANSH WADHWANI"),
-        ("(102303684)", "SHREYA GIRI")
+    students_cover = [
+        "(102303312) ANOUSHKA SINGH",
+        "(102303315) TARUN KRISHNA SHASTRI",
+        "(102303631) DEVANSH WADHWANI",
+        "(102303684) SHREYA GIRI"
     ]
-    tbl = doc.add_table(rows=4, cols=2)
-    tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-    for idx, (roll, name) in enumerate(team_data):
-        r = tbl.rows[idx]
-        r.cells[0].paragraphs[0].text = roll
-        r.cells[0].paragraphs[0].runs[0].font.name = 'Times New Roman'
-        r.cells[0].paragraphs[0].runs[0].font.size = Pt(12)
-        r.cells[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        r.cells[1].paragraphs[0].text = name
-        r.cells[1].paragraphs[0].runs[0].font.name = 'Times New Roman'
-        r.cells[1].paragraphs[0].runs[0].font.size = Pt(12)
-        r.cells[1].paragraphs[0].runs[0].font.bold = True
+    for sc in students_cover:
+        p_st = doc.add_paragraph(sc)
+        p_st.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_st.paragraph_format.line_spacing = 1.2
+        p_st.paragraph_format.space_after = Pt(2)
+        p_st.runs[0].font.name = 'Times New Roman'
+        p_st.runs[0].font.size = Pt(12)
+        p_st.runs[0].font.bold = True
 
     doc.add_paragraph()
     p = doc.add_paragraph("BE Third Year, Computer Engineering (CoE)\nCPG No: 75")
