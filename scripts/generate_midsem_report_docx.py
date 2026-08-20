@@ -634,7 +634,7 @@ def create_docx_report():
         run.font.name = 'Times New Roman'
         run.font.size = Pt(10.5)
 
-    doc.add_paragraph()
+    doc.add_page_break()
     add_chapter("APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT")
     add_body("This technical report was developed in compliance with TIET academic integrity guidelines. All experimental code, system architecture diagrams, and benchmark evaluations represent original work carried out by the student team under faculty supervision. External literary contributions, foundational datasets, and benchmark suites have been cited using standard IEEE reference numbering.")
     add_body("Similarity Index: Verified below institutional threshold (< 10% similarity excluding references).", indent=False)

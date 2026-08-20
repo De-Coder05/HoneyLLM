@@ -1313,7 +1313,11 @@ def build_technical_report():
     for ref in references:
         story.append(Paragraph(ref, ref_item_style))
 
-    story.append(Spacer(1, 14))
+    story.append(PageBreak())
+    
+    # =========================================================================
+    # APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT (Page 22)
+    # =========================================================================
     story.append(Paragraph("<b>APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=12))
     story.append(Paragraph(
