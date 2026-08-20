@@ -617,7 +617,10 @@ def build_technical_report():
     figures_list = [
         [Paragraph("<b>Figure No.</b>", table_header_style), Paragraph("<b>Caption</b>", table_header_style), Paragraph("<b>Page No.</b>", table_header_style)],
         [Paragraph("Figure 1.1", table_text_style), Paragraph("Honey-LLM Multi-Tier Routing and Decision Gateway Architecture", table_text_style), Paragraph("6", table_text_style)],
-        [Paragraph("Figure 4.1", table_text_style), Paragraph("Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", table_text_style), Paragraph("17", table_text_style)]
+        [Paragraph("Figure 4.1", table_text_style), Paragraph("Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", table_text_style), Paragraph("16", table_text_style)],
+        [Paragraph("Figure 4.2", table_text_style), Paragraph("NexTel Production Customer Support Interface (/chat)", table_text_style), Paragraph("17", table_text_style)],
+        [Paragraph("Figure 4.3", table_text_style), Paragraph("Honey-LLM Admin Live Sieve Decision Tracer (/admin)", table_text_style), Paragraph("17", table_text_style)],
+        [Paragraph("Figure 4.4", table_text_style), Paragraph("Dark SOC Real-Time Threat Intelligence Dashboard (/dashboard)", table_text_style), Paragraph("18", table_text_style)]
     ]
     t_lof = Table(figures_list, colWidths=[65, 300, 50])
     t_lof.setStyle(TableStyle([
@@ -1137,9 +1140,33 @@ def build_technical_report():
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>4.3 User Interface Specifications & Designed Surfaces</b>", heading1_style))
     story.append(Paragraph(
-        "Honey-LLM designs three user interface surfaces: (1) <b>NexTel Customer Chat Widget</b> (/chat): Clean corporate telecom aesthetic with zero visual indicators of the security layer; (2) <b>Dark SOC Threat Intelligence Dashboard</b> (/dashboard): Designed monitor for real-time attack frequency, taxonomy breakdown, detection tier ratios, and measured dwell times (Phase 5 implementation); and (3) <b>Admin & Demo Control Panel</b> (/admin): Authenticated control surface allowing evaluation panels to trigger benign and malicious scenarios live and trace the tier-by-tier decision path in real time.",
+        "Honey-LLM designs three distinct user interface surfaces tailored to specific operational personas:",
         body_indent_style
     ))
+    story.append(Paragraph(
+        "1. <b>NexTel Customer Chat Interface (/chat):</b> Clean corporate telecom portal with zero visual indicators of the security interception layer (Figure 4.2).",
+        bullet_style
+    ))
+    story.append(Paragraph(
+        "2. <b>Admin Live Sieve Decision Tracer (/admin):</b> Interactive test surface allowing evaluation panels to trigger sample benign and malicious prompts live, tracing Tier-0/1/2 evaluation times and sandbox quarantine routing (Figure 4.3).",
+        bullet_style
+    ))
+    story.append(Paragraph(
+        "3. <b>Dark SOC Threat Intelligence Dashboard (/dashboard):</b> Security operations center view visualizing attack frequencies, taxonomy distribution, tier ratios, and dwell time meters (Figure 4.4).",
+        bullet_style
+    ))
+
+    chat_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_chat_ui.png"
+    if os.path.exists(chat_img_path):
+        story.append(Spacer(1, 4))
+        story.append(RLImage(chat_img_path, width=390, height=170))
+        story.append(Paragraph("FIGURE 4.2: NexTel Production Customer Support Interface (/chat)", figure_caption_style))
+
+    admin_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_admin_ui.png"
+    if os.path.exists(admin_img_path):
+        story.append(Spacer(1, 4))
+        story.append(RLImage(admin_img_path, width=390, height=170))
+        story.append(Paragraph("FIGURE 4.3: Honey-LLM Admin Live Sieve Decision Tracer (/admin)", figure_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>4.4 Working Prototype Execution (Phases 1 to 4 Verified)</b>", heading1_style))
@@ -1172,6 +1199,12 @@ def build_technical_report():
     story.append(Spacer(1, 4))
     story.append(draw_sequence_and_state_diagram())
     story.append(Paragraph("FIGURE 4.1: Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", figure_caption_style))
+
+    soc_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_soc_dashboard.png"
+    if os.path.exists(soc_img_path):
+        story.append(Spacer(1, 4))
+        story.append(RLImage(soc_img_path, width=390, height=170))
+        story.append(Paragraph("FIGURE 4.4: Dark SOC Real-Time Threat Intelligence Dashboard (/dashboard)", figure_caption_style))
 
     story.append(PageBreak())
 

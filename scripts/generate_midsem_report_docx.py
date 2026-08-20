@@ -511,7 +511,24 @@ def create_docx_report():
             tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
 
     add_heading1("4.3 User Interface Specifications & Designed Surfaces")
-    add_body("Honey-LLM designs three user interface surfaces: (1) NexTel Customer Chat Widget (/chat): Clean corporate telecom aesthetic with zero visual indicators of the security layer; (2) Dark SOC Threat Intelligence Dashboard (/dashboard): Designed monitor for real-time attack frequency, taxonomy breakdown, detection tier ratios, and measured dwell times (Phase 5 implementation); and (3) Admin & Demo Control Panel (/admin): Authenticated control surface allowing evaluation panels to trigger benign and malicious scenarios live and trace the tier-by-tier decision path in real time.")
+    add_body("Honey-LLM designs three distinct user interface surfaces tailored to specific operational personas:")
+    add_bullet("1. NexTel Customer Chat Interface (/chat): Clean corporate telecom portal with zero visual indicators of the security interception layer (Figure 4.2).")
+    add_bullet("2. Admin Live Sieve Decision Tracer (/admin): Interactive test surface allowing evaluation panels to trigger sample benign and malicious prompts live, tracing Tier-0/1/2 evaluation times and sandbox quarantine routing (Figure 4.3).")
+    add_bullet("3. Dark SOC Threat Intelligence Dashboard (/dashboard): Security operations center view visualizing attack frequencies, taxonomy distribution, tier ratios, and dwell time meters (Figure 4.4).")
+
+    chat_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_chat_ui.png"
+    if os.path.exists(chat_img_path):
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.add_run().add_picture(chat_img_path, width=Inches(5.5))
+        add_caption("FIGURE 4.2: NexTel Production Customer Support Interface (/chat)", is_table=False)
+
+    admin_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_admin_ui.png"
+    if os.path.exists(admin_img_path):
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.add_run().add_picture(admin_img_path, width=Inches(5.5))
+        add_caption("FIGURE 4.3: Honey-LLM Admin Live Sieve Decision Tracer (/admin)", is_table=False)
 
     add_heading1("4.4 Working Prototype Execution (Phases 1 to 4 Verified)")
     add_caption("TABLE 4.2: Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", is_table=True)
@@ -542,6 +559,13 @@ def create_docx_report():
                 aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.bold = True
 
     add_caption("FIGURE 4.1: Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", is_table=False)
+
+    soc_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_soc_dashboard.png"
+    if os.path.exists(soc_img_path):
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.add_run().add_picture(soc_img_path, width=Inches(5.5))
+        add_caption("FIGURE 4.4: Dark SOC Real-Time Threat Intelligence Dashboard (/dashboard)", is_table=False)
 
     doc.add_page_break()
 
