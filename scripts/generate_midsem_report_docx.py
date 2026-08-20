@@ -210,8 +210,23 @@ def create_docx_report():
 
     doc.add_paragraph()
     doc.add_paragraph("Counter Signed By:")
-    p = doc.add_paragraph("Dr. Saif Nalband\t\t\t\tDr. Neeraj Kumar\nAssistant Professor, CSED\t\t\t\tProfessor & Head, CSED\nTIET, Patiala\t\t\t\tTIET, Patiala")
-    p.runs[0].font.bold = True
+    
+    csign_tbl = doc.add_table(rows=3, cols=2)
+    csign_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+    csign_tbl.rows[0].cells[0].paragraphs[0].text = "Faculty Mentor:"
+    csign_tbl.rows[0].cells[0].paragraphs[0].runs[0].font.bold = True
+    csign_tbl.rows[0].cells[1].paragraphs[0].text = "Head of Department:"
+    csign_tbl.rows[0].cells[1].paragraphs[0].runs[0].font.bold = True
+
+    sig_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/saif_nalband_signature.jpg"
+    if os.path.exists(sig_path):
+        p_sig = csign_tbl.rows[1].cells[0].paragraphs[0]
+        p_sig.add_run().add_picture(sig_path, width=Inches(1.1))
+
+    csign_tbl.rows[2].cells[0].paragraphs[0].text = "Dr. Saif Nalband\nAssistant Professor, CSED\nTIET, Patiala"
+    csign_tbl.rows[2].cells[0].paragraphs[0].runs[0].font.bold = True
+    csign_tbl.rows[2].cells[1].paragraphs[0].text = "Dr. Neeraj Kumar\nProfessor & Head, CSED\nTIET, Patiala"
+    csign_tbl.rows[2].cells[1].paragraphs[0].runs[0].font.bold = True
 
     doc.add_page_break()
 

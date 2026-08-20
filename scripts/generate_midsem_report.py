@@ -3,7 +3,7 @@ import sys
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable, Image as RLImage
 )
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfgen import canvas
@@ -435,20 +435,23 @@ def build_technical_report():
     story.append(Spacer(1, 25))
 
     story.append(Paragraph("<b>Counter Signed By:</b>", body_style))
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 4))
+
+    sig_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/saif_nalband_signature.jpg"
+    sig_img = RLImage(sig_path, width=80, height=56) if os.path.exists(sig_path) else Spacer(1, 30)
 
     mentor_sign_data = [
         [Paragraph("<b>Faculty Mentor:</b>", table_header_style), Paragraph("<b>Head of Department:</b>", table_header_style)],
-        [Spacer(1, 16), Spacer(1, 16)],
+        [sig_img, Spacer(1, 56)],
         [Paragraph("<b>Dr. Saif Nalband</b>", table_text_style), Paragraph("<b>Dr. Neeraj Kumar</b>", table_text_style)],
         [Paragraph("Assistant Professor, CSED", table_text_style), Paragraph("Professor & Head, CSED", table_text_style)],
         [Paragraph("TIET, Patiala", table_text_style), Paragraph("TIET, Patiala", table_text_style)]
     ]
     t_msign = Table(mentor_sign_data, colWidths=[207, 208])
     t_msign.setStyle(TableStyle([
-        ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('TOPPADDING', (0,0), (-1,-1), 2),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+        ('VALIGN', (0,0), (-1,-1), 'BOTTOM'),
+        ('TOPPADDING', (0,0), (-1,-1), 1),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 1),
     ]))
     story.append(t_msign)
 
