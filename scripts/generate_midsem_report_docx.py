@@ -114,11 +114,6 @@ def create_docx_report():
         return p
 
     # --- COVER PAGE ---
-    p_spec = doc.add_paragraph("(A typical Specimen of Cover Page & Title Page)")
-    p_spec.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_spec.runs[0].font.size = Pt(10)
-    p_spec.runs[0].font.color.rgb = RGBColor(0x66, 0x66, 0x66)
-
     doc.add_paragraph()
     add_title("HONEY-LLM: AN INTERACTIVE, SELF-HEALING HONEYPOT DEFENSE ECOSYSTEM FOR AGENTIC AI")
     

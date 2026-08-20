@@ -341,8 +341,7 @@ def build_technical_report():
     # =========================================================================
     # 1. COVER PAGE / TITLE PAGE (Page 1)
     # =========================================================================
-    story.append(Paragraph("<font size=9.5 color='#555555'>(A typical Specimen of Cover Page & Title Page)</font>", cover_sub_style))
-    story.append(Spacer(1, 15))
+    story.append(Spacer(1, 20))
     story.append(Paragraph("<b>HONEY-LLM: AN INTERACTIVE, SELF-HEALING HONEYPOT DEFENSE ECOSYSTEM FOR AGENTIC AI</b>", title_cover_style))
     story.append(Spacer(1, 10))
     story.append(Paragraph("<b>Capstone Project Report</b>", cover_bold_style))
