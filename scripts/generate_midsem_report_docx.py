@@ -602,7 +602,7 @@ def create_docx_report():
     inv_rows = [
         ("1", "Descriptive", "Cataloging and characterizing scientific phenomena under structured observation.", "Formulated the 8-class Adversarial Threat Taxonomy, classifying prompt injection vectors across enterprise telecom domains (Phase 1)."),
         ("2", "Comparative", "Systematically evaluating alternative models and configurations against baseline metrics.", "Benchmarked Llama-Guard 3 1B vs. 8B [11] across default and custom policies on JailbreakBench [12], proving custom policy lifts detection from 37.5% to 95.8% (Phase 2)."),
-        ("3", "Experimental", "Hypothesis testing using controlled independent and dependent variables.", "Evaluated the two-tier OR-ensemble on 889 held-out prompts, measuring 95.8% JailbreakBench recall and 98.3% in-the-wild detection (559/569 adversarial, 98.9% overall accuracy) at 0.0% benign FPR (0/320 benign) with ~2.1 ms P50 benign fast-path latency (Phase 2).")
+        ("3", "Experimental", "Hypothesis testing using controlled independent and dependent variables.", "Evaluated the two-tier OR-ensemble on 889 held-out prompts, measuring 95.8% JailbreakBench recall and 98.3% adversarial detection recall across the combined curated and in-the-wild corpus (559/569 adversarial, 98.9% overall accuracy) at 0.0% benign FPR (0/320 benign) with ~2.1 ms P50 benign fast-path latency (Phase 2).")
     ]
     for r_idx, rdata in enumerate(inv_rows, start=1):
         for c_idx, val in enumerate(rdata):
@@ -784,9 +784,9 @@ def create_docx_report():
             obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading1("5.2 Mid-Semester Conclusions & Empirical Reliability")
-    add_body("Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the system has successfully proven that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% recall across in-the-wild datasets (559/569 attacks, 98.9% overall accuracy) without penalizing benign customer traffic (0/320 false flags, ~2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization effectively contain attacker reconnaissance (no container breakouts observed across 5 executed penetration test vectors); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds.")
+    add_body("Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9% overall accuracy) without penalizing benign customer traffic (0/320 false flags, ~2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds.")
     
-    add_caption("TABLE 5.2: Intent Sieve Benchmark Evaluation on In-The-Wild Adversarial Datasets", is_table=True)
+    add_caption("TABLE 5.2: Intent Sieve Benchmark Evaluation on Curated and In-The-Wild Datasets", is_table=True)
     sieve_tbl = doc.add_table(rows=6, cols=5)
     sieve_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     s_headers = ["Model / Sieve Configuration", "Dataset Scope", "Adversarial Recall (%)", "Benign FPR (%)", "Latency (P50)"]

@@ -818,7 +818,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
             Paragraph("3", table_text_style),
             Paragraph("Experimental", table_text_style),
             Paragraph("Hypothesis testing using controlled independent and dependent variables.", table_text_style),
-            Paragraph("Evaluated the two-tier OR-ensemble on 889 held-out prompts, measuring 95.8% JailbreakBench recall and 98.3% in-the-wild detection (559/569 adversarial, 98.9% overall accuracy) at 0.0% benign FPR (0/320 benign) with ~2.1 ms P50 benign fast-path latency (Phase 2).", table_text_style)
+            Paragraph("Evaluated the two-tier OR-ensemble on 889 held-out prompts, measuring 95.8% JailbreakBench recall and 98.3% adversarial detection recall across the combined curated and in-the-wild corpus (559/569 adversarial, 98.9% overall accuracy) at 0.0% benign FPR (0/320 benign) with ~2.1 ms P50 benign fast-path latency (Phase 2).", table_text_style)
         ]
     ]
     t_tech = Table(tech_data, colWidths=[30, 80, 140, 165])
@@ -1087,11 +1087,11 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>5.2 Mid-Semester Conclusions & Empirical Reliability</b>", heading1_style))
     story.append(Paragraph(
-        "Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the system has successfully proven that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% recall across in-the-wild datasets (559/569 attacks, 98.9% overall accuracy) without penalizing benign customer traffic (0/320 false flags, ~2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization effectively contain attacker reconnaissance (no container breakouts observed across 5 executed penetration test vectors); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds. Table 5.2 summarizes the empirical classification results.",
+        "Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9% overall accuracy) without penalizing benign customer traffic (0/320 false flags, ~2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds. Table 5.2 summarizes the empirical classification results.",
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 5.2: Intent Sieve Benchmark Evaluation on In-The-Wild Adversarial Datasets", table_caption_style))
+    story.append(Paragraph("TABLE 5.2: Intent Sieve Benchmark Evaluation on Curated and In-The-Wild Datasets", table_caption_style))
     sieve_eval_data = [
         [Paragraph("<b>Model / Sieve Configuration</b>", table_header_style), Paragraph("<b>Dataset Scope</b>", table_header_style), Paragraph("<b>Adversarial Recall (%)</b>", table_header_style), Paragraph("<b>Benign FPR (%)</b>", table_header_style), Paragraph("<b>Latency (P50)</b>", table_header_style)],
         [Paragraph("Default Llama-Guard 3 (1B) [11]", table_text_style), Paragraph("JailbreakBench (100) [12]", table_text_style), Paragraph("37.5% (37/100)", table_text_style), Paragraph("0.0% (0/100)", table_text_style), Paragraph("180 ms", table_text_style)],
