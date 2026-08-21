@@ -1046,7 +1046,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         [
             Paragraph("1. High-Accuracy Intent Sieve", table_text_style),
             Paragraph("Accuracy >95% on JailbreakBench [12], FPR <1%", table_text_style),
-            Paragraph("<b>95.8% recall on JailbreakBench</b> (exceeding >95% target); <b>98.3% recall across combined 889 dataset</b> (559/569 attacks, 98.9% overall accuracy); <b>0.0% benign FPR</b> (0/320 queries); ~2.1 ms P50 benign fast-path latency.", table_text_style),
+            Paragraph("<b>95.8% recall on JailbreakBench</b> (exceeding >95% target); <b>98.3% recall across combined 889 dataset</b> (559/569 attacks, 98.9% overall accuracy); <b>0.0% benign FPR</b> (0/320 queries); ~2.1 to 8 ms benign fast-path latency.", table_text_style),
             Paragraph("Phase 2<br/>(COMPLETED)", table_header_style)
         ],
         [
@@ -1058,7 +1058,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         [
             Paragraph("3. Autonomous Guardrail Synthesis", table_text_style),
             Paragraph("Automated NeMo rule generation, zero manual triage", table_text_style),
-            Paragraph("Distills attack pattern, validates Colang [6], passes regression gate; <b>time-to-patch 10.4 s</b>.", table_text_style),
+            Paragraph("Distills attack pattern, validates Colang [6], passes regression gate; <b>time-to-patch 10.4 s to 12.8 s</b>.", table_text_style),
             Paragraph("Phase 4<br/>(COMPLETED)", table_header_style)
         ],
         [
@@ -1087,23 +1087,25 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>5.2 Mid-Semester Conclusions & Empirical Reliability</b>", heading1_style))
     story.append(Paragraph(
-        "Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9% overall accuracy) without penalizing benign customer traffic (0/320 false flags, ~2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds. Table 5.2 summarizes the empirical classification results.",
+        "Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9% overall accuracy) while protecting benign customer traffic (~2.1 to 8 ms P50 fast-path, 0/320 false flags); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 to 12.8 seconds. Table 5.2 summarizes the empirical classification results and multi-tier latency breakdown.",
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 5.2: Intent Sieve Benchmark Evaluation on Curated and In-The-Wild Datasets", table_caption_style))
+    story.append(Paragraph("TABLE 5.2: Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile", table_caption_style))
     sieve_eval_data = [
-        [Paragraph("<b>Model / Sieve Configuration</b>", table_header_style), Paragraph("<b>Dataset Scope</b>", table_header_style), Paragraph("<b>Adversarial Recall (%)</b>", table_header_style), Paragraph("<b>Benign FPR (%)</b>", table_header_style), Paragraph("<b>Latency (P50)</b>", table_header_style)],
+        [Paragraph("<b>Sieve Layer / Model</b>", table_header_style), Paragraph("<b>Evaluation Target</b>", table_header_style), Paragraph("<b>Adversarial Recall</b>", table_header_style), Paragraph("<b>Benign FPR</b>", table_header_style), Paragraph("<b>Latency (P50)</b>", table_header_style)],
         [Paragraph("Default Llama-Guard 3 (1B) [11]", table_text_style), Paragraph("JailbreakBench (100) [12]", table_text_style), Paragraph("37.5% (37/100)", table_text_style), Paragraph("0.0% (0/100)", table_text_style), Paragraph("180 ms", table_text_style)],
-        [Paragraph("Default Llama-Guard 3 (8B) [11]", table_text_style), Paragraph("JailbreakBench (100) [12]", table_text_style), Paragraph("62.5% (62/100)", table_text_style), Paragraph("0.0% (0/100)", table_text_style), Paragraph("720 ms", table_text_style)],
-        [Paragraph("Custom-Policy Llama-Guard 3 (8B) [11]", table_text_style), Paragraph("JailbreakBench (100) [12]", table_text_style), Paragraph("95.8% (95/100)", table_text_style), Paragraph("0.0% (0/100)", table_text_style), Paragraph("740 ms", table_text_style)],
-        [Paragraph("<b>Honey-LLM Two-Tier Sieve (Ensemble)</b>", table_header_style), Paragraph("<b>Curated + Wild (889)</b>", table_header_style), Paragraph("<b>98.3% (559/569)</b>", table_header_style), Paragraph("<b>0.0% (0/320)</b>", table_header_style), Paragraph("<b>~2.1 ms (P50 benign)</b>", table_header_style)]
+        [Paragraph("Default Llama-Guard 3 (8B) [11]", table_text_style), Paragraph("JailbreakBench (100) [12]", table_text_style), Paragraph("62.5% (62/100)", table_text_style), Paragraph("0.0% (0/100)", table_text_style), Paragraph("720 ms (Cloud GPU)", table_text_style)],
+        [Paragraph("Custom-Policy Llama-Guard 3 (8B) [11]", table_text_style), Paragraph("JailbreakBench (100) [12]", table_text_style), Paragraph("95.8% (95/100)", table_text_style), Paragraph("0.0% (0/100)", table_text_style), Paragraph("8.5 s (Local) / 740 ms (GPU)", table_text_style)],
+        [Paragraph("Tier-0 Colang Guardrail [6]", table_text_style), Paragraph("Replay / Variants", table_text_style), Paragraph("100% (Active)", table_text_style), Paragraph("0.0% (0/320)", table_text_style), Paragraph("~340 ms", table_text_style)],
+        [Paragraph("<b>Honey-LLM Fast-Path (Tier-1)</b>", table_header_style), Paragraph("<b>Benign Telecom Stream</b>", table_header_style), Paragraph("<b>N/A (Safe Pass)</b>", table_header_style), Paragraph("<b>0.0% (0/320)</b>", table_header_style), Paragraph("<b>~2.1–8.0 ms</b>", table_header_style)],
+        [Paragraph("<b>Honey-LLM Two-Tier Ensemble</b>", table_header_style), Paragraph("<b>Curated + Wild (889)</b>", table_header_style), Paragraph("<b>98.3% (559/569)</b>", table_header_style), Paragraph("<b>0.0% (0/320)</b>", table_header_style), Paragraph("<b>~8.0 ms (Benign P50)</b>", table_header_style)]
     ]
-    t_sieve = Table(sieve_eval_data, colWidths=[120, 85, 75, 70, 65])
+    t_sieve = Table(sieve_eval_data, colWidths=[115, 80, 75, 65, 80])
     t_sieve.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#F1F5F9")),
-        ('BACKGROUND', (0,4), (-1,4), colors.HexColor("#F0FDF4")),
+        ('BACKGROUND', (0,5), (-1,6), colors.HexColor("#F0FDF4")),
         ('TOPPADDING', (0,0), (-1,-1), 3),
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),

@@ -32,7 +32,9 @@ class SynthesizedGuardrail:
 
 
 def _co_escape(s: str) -> str:
-    return s.replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ").strip()
+    # Strip external quotes and normalize internal quotes to single-quotes for clean Colang 2.0 parsing
+    clean = s.strip().strip('"').strip("'").replace('"', "'").replace("\n", " ").strip()
+    return clean
 
 
 def synthesize_colang(pattern: AttackPattern) -> SynthesizedGuardrail:

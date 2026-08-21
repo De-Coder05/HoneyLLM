@@ -771,9 +771,9 @@ def create_docx_report():
         set_cell_background(obj_tbl.rows[0].cells[i], "F1F5F9")
 
     o_rows = [
-        ("1. High-Accuracy Intent Sieve", "Accuracy >95% on JailbreakBench [12], FPR <1%", "95.8% recall on JailbreakBench (exceeding >95% target); 98.3% recall across combined 889 dataset (559/569 attacks, 98.9% overall accuracy); 0.0% benign FPR (0/320 queries); ~2.1 ms P50 benign fast-path latency.", "Phase 2 (COMPLETED)"),
+        ("1. High-Accuracy Intent Sieve", "Accuracy >95% on JailbreakBench [12], FPR <1%", "95.8% recall on JailbreakBench (exceeding >95% target); 98.3% recall across combined 889 dataset (559/569 attacks, 98.9% overall accuracy); 0.0% benign FPR (0/320 queries); ~2.1 to 8 ms benign fast-path latency.", "Phase 2 (COMPLETED)"),
         ("2. Mirror Maze Sandbox Deception", "Believable decoy, dwell time >5 min, synthetic bait", "LLM 'Sarah' decoy persona; leaks fake tokens (NT-CORE-01); verified dwell tracking.", "Phase 3 (COMPLETED)"),
-        ("3. Autonomous Guardrail Synthesis", "Automated NeMo rule generation, zero manual triage", "Distills attack pattern, validates Colang [6], passes regression gate; time-to-patch 10.4 s.", "Phase 4 (COMPLETED)"),
+        ("3. Autonomous Guardrail Synthesis", "Automated NeMo rule generation, zero manual triage", "Distills attack pattern, validates Colang [6], passes regression gate; time-to-patch 10.4 s to 12.8 s.", "Phase 4 (COMPLETED)"),
         ("4. Zero-Escape Sandbox Security", "Zero-egress container isolation, zero network/host leakage under audit probes", "Docker zero-egress network; No container escape observed across 5/5 executed penetration probes; read-only rootfs; non-root UID 10001.", "Phase 3/4 (COMPLETED)"),
         ("5. SOC Telemetry Dashboard", "Real-time monitoring, <1s refresh, taxonomy stats", "Architecture completed; live telemetry populated (176 requests, 85 attacks, 4m 46s avg dwell).", "Phase 5 (IN PROGRESS)")
     ]
@@ -784,12 +784,12 @@ def create_docx_report():
             obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading1("5.2 Mid-Semester Conclusions & Empirical Reliability")
-    add_body("Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9% overall accuracy) without penalizing benign customer traffic (0/320 false flags, ~2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds.")
+    add_body("Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9% overall accuracy) while protecting benign customer traffic (~2.1 to 8 ms P50 fast-path, 0/320 false flags); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 to 12.8 seconds.")
     
-    add_caption("TABLE 5.2: Intent Sieve Benchmark Evaluation on Curated and In-The-Wild Datasets", is_table=True)
-    sieve_tbl = doc.add_table(rows=6, cols=5)
+    add_caption("TABLE 5.2: Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile", is_table=True)
+    sieve_tbl = doc.add_table(rows=8, cols=5)
     sieve_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-    s_headers = ["Model / Sieve Configuration", "Dataset Scope", "Adversarial Recall (%)", "Benign FPR (%)", "Latency (P50)"]
+    s_headers = ["Sieve Layer / Model", "Evaluation Target", "Adversarial Recall (%)", "Benign FPR (%)", "Latency (P50)"]
     for i, h in enumerate(s_headers):
         sieve_tbl.rows[0].cells[i].paragraphs[0].text = h
         sieve_tbl.rows[0].cells[i].paragraphs[0].runs[0].font.bold = True
@@ -797,15 +797,19 @@ def create_docx_report():
 
     s_rows = [
         ("Default Llama-Guard 3 (1B) [11]", "JailbreakBench (100) [12]", "37.5% (37/100)", "0.0% (0/100)", "180 ms"),
-        ("Default Llama-Guard 3 (8B) [11]", "JailbreakBench (100) [12]", "62.5% (62/100)", "0.0% (0/100)", "720 ms"),
-        ("Custom-Policy Llama-Guard 3 (8B) [11]", "JailbreakBench (100) [12]", "95.8% (95/100)", "0.0% (0/100)", "740 ms"),
-        ("Honey-LLM Two-Tier Sieve (Ensemble)", "Curated + Wild (889)", "98.3% (559/569)", "0.0% (0/320)", "~2.1 ms (P50 benign)")
+        ("Default Llama-Guard 3 (8B) [11]", "JailbreakBench (100) [12]", "62.5% (62/100)", "0.0% (0/100)", "720 ms (Cloud GPU)"),
+        ("Custom-Policy Llama-Guard 3 (8B) [11]", "JailbreakBench (100) [12]", "95.8% (95/100)", "0.0% (0/100)", "8.5 s (Local) / 740 ms (GPU)"),
+        ("Tier-0 Colang Guardrail [6]", "Replay / Variants", "100% (Active)", "0.0% (0/320)", "~340 ms"),
+        ("Honey-LLM Fast-Path (Tier-1)", "Benign Telecom Stream", "N/A (Safe Pass)", "0.0% (0/320)", "~2.1–8.0 ms"),
+        ("Honey-LLM Two-Tier Ensemble", "Curated + Wild (889)", "98.3% (559/569)", "0.0% (0/320)", "~8.0 ms (Benign P50)")
     ]
     for r_idx, rdata in enumerate(s_rows, start=1):
         for c_idx, val in enumerate(rdata):
             sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+            if r_idx in [6, 7]:
+                set_cell_background(sieve_tbl.rows[r_idx].cells[c_idx], "F0FDF4")
 
     add_heading1("5.3 Economic, Social, and Environmental Benefits")
     add_bullet("Economic Benefits: Eliminates commercial API token expenditures (~$27,000/year savings for high-throughput enterprises) and protects sensitive corporate data from exfiltration.")

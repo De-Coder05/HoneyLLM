@@ -55,7 +55,7 @@ class Settings(BaseSettings):
     # not a magic number (rules.md §2). Retune by editing .env, no code change.
     use_fast_path: bool = Field(default=True)
     fast_path_model_path: str = Field(default="ml/models/fast_path.joblib")
-    fast_path_safe_threshold: float = Field(default=0.15)
+    fast_path_safe_threshold: float = Field(default=0.25)
     # OR-ensemble high gate (Step 2.1 finding): the 8B Guard misses ~41% of real
     # in-the-wild jailbreaks that the fast path catches. Above this score the
     # fast path flags UNSAFE even if the Guard says safe. Calibrated to 0

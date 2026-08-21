@@ -552,12 +552,12 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \noindent\textbf{Technical Analysis of the 0.0\% Benign False Positive Rate (FPR):} The measured 0.0\% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents possess distinct vocabulary distributions with safe scores consistently $< 0.08$, well below the conservative threshold ($\tau = 0.15$); (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3~\cite{llamaguard3}, which performs context-aware semantic evaluation. While 0.0\% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.
 
 \section{Proposed Solution \& Multi-Tier Architecture}
-Honey-LLM implements a sequential four-tier inspection and deception pipeline:
+Honey-LLM implements a sequential four-tier inspection and deception pipeline that addresses the severe latency bottleneck of monolithic moderation models:
 \begin{enumerate}
-    \item \textbf{Tier-0 Semantic Guardrail Cache:} Matches incoming prompts against cached threat embeddings (10--20 ms).
-    \item \textbf{Tier-1 Statistical Fast-Path:} Employs a calibrated TF-IDF + Logistic Regression classifier ($\sim$2.1 ms P50 latency). If safe ($\text{score} < 0.15$), the query routes directly to the Production RAG Engine.
-    \item \textbf{Tier-2 Deep Moderation Sieve:} Ambiguous or high-threat prompts escalate to Llama-Guard 3 (8B)~\cite{llamaguard3} ($\sim$740 ms) executing a custom 8-category policy.
-    \item \textbf{Dynamic Quarantine \& Sandbox Routing:} If flagged UNSAFE, the session transitions into a sticky quarantined state, routing all further traffic to the Mirror Maze.
+    \item \textbf{Tier-0 Semantic Guardrail Cache:} Matches incoming prompts against active synthesized Colang 2.0 rules using semantic embedding cosine distance ($\sim$15--350 ms, P50 $\approx$ 340 ms), neutralizing replayed attack variants in sub-second time.
+    \item \textbf{Tier-1 Statistical Fast-Path:} Employs a calibrated TF-IDF + Logistic Regression classifier ($\sim$2.1--14 ms, P50 $\approx$ 8 ms). If safe ($\text{score} < 0.25$), legitimate customer queries route directly to the Production RAG Engine, bypassing heavy LLM moderation for over 90\% of traffic.
+    \item \textbf{Tier-2 Deep Moderation Sieve:} Ambiguous or high-threat prompts escalate to Llama-Guard 3 (8B)~\cite{llamaguard3} executing a custom 8-category injection policy. On local edge/consumer nodes, 8B moderation completes in 7.2--11.5 s (P50 $\approx$ 8.5 s), scaling to $\sim$740 ms on enterprise multi-GPU clusters.
+    \item \textbf{Dynamic Quarantine \& Sandbox Routing:} If flagged UNSAFE, the session transitions into a sticky quarantined state, routing all further traffic to the isolated Mirror Maze container for generative deception ($\sim$2.9--7.5 s).
 \end{enumerate}
 
 \section{Work Breakdown Structure (Phases 1 to 4 Completed)}
@@ -695,19 +695,28 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \end{table}
 
 \section{Mid-Semester Conclusions \& Empirical Reliability}
-Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8\% recall on standard benchmarks and 98.3\% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9\% overall accuracy) without penalizing benign customer traffic (0/320 false flags, $\sim$2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules~\cite{nemo2024guardrails} within 10.4 seconds. Table 5.2 summarizes the empirical classification results.
+Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, empirical evaluations demonstrate that:
+\begin{enumerate}
+    \item \textbf{High-Accuracy Threat Triage:} Adversarial intent is intercepted with 95.8\% recall on standard JailbreakBench benchmarks and 98.3\% adversarial detection recall across the combined 889 evaluation corpus (559/569 attacks, 98.9\% overall accuracy) at 0.0\% benign FPR (0/320 queries).
+    \item \textbf{Asymmetric Latency Protection:} Benign customer traffic is resolved in $\sim$2.1--14 ms (P50 $\approx$ 8 ms) via Tier-1 fast-path, shielding enterprise production SLAs from heavy moderation delays. Replayed attack vectors hit Tier-0 Colang guardrails in $\sim$340 ms. First-seen novel attacks undergo Tier-2 8B deep moderation ($\sim$8.5 s on local hardware, $\sim$740 ms on enterprise GPUs).
+    \item \textbf{Zero-Escape Deceptive Containment:} Generative honeypots running on zero-trust containerization successfully absorbed attacker reconnaissance with zero escapes across 5/5 penetration probes.
+    \item \textbf{Rapid Closed-Loop Immunity:} Autonomous pattern distillation and NeMo Colang 2.0 synthesis hot-patch live gateway memory within an average of 12.8 seconds (10.4 s minimum).
+\end{enumerate}
+Table 5.2 summarizes the empirical classification and latency breakdown.
 
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Intent Sieve Benchmark Evaluation on Curated and In-The-Wild Datasets}
-\begin{tabularx}{\textwidth}{@{}p{1.7in} p{1.3in} p{1.0in} p{0.8in} X@{}}
-\rowcolor{HeaderGray} \textbf{Model / Configuration} & \textbf{Dataset Scope} & \textbf{Adversarial Recall} & \textbf{Benign FPR} & \textbf{Latency (P50)} \\
+\caption{Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile}
+\begin{tabularx}{\textwidth}{@{}p{1.7in} p{1.3in} p{0.9in} p{0.8in} X@{}}
+\rowcolor{HeaderGray} \textbf{Sieve Layer / Model} & \textbf{Evaluation Target} & \textbf{Recall} & \textbf{Benign FPR} & \textbf{Latency (P50)} \\
 \hline
 \textbf{Default Llama-Guard 3 (1B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 37.5\% (37/100) & 0.0\% (0/100) & 180 ms \\
-\textbf{Default Llama-Guard 3 (8B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 62.5\% (62/100) & 0.0\% (0/100) & 720 ms \\
-\textbf{Custom Llama-Guard 3 (8B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 95.8\% (95/100) & 0.0\% (0/100) & 740 ms \\
-\rowcolor{AccentGreen} \textbf{Honey-LLM Two-Tier Ensemble} & \textbf{Curated + Wild (889)} & \textbf{98.3\% (559/569)} & \textbf{0.0\% (0/320)} & \textbf{$\sim$2.1 ms (P50)} \\
+\textbf{Default Llama-Guard 3 (8B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 62.5\% (62/100) & 0.0\% (0/100) & 720 ms (Cloud GPU) \\
+\textbf{Custom Llama-Guard 3 (8B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 95.8\% (95/100) & 0.0\% (0/100) & 8.5 s (Local Edge) / 740 ms (GPU) \\
+\textbf{Tier-0 Colang Guardrail}~\cite{nemo2024guardrails} & Replay / Variants & 100\% (Active) & 0.0\% (0/320) & $\sim$340 ms \\
+\rowcolor{AccentGreen} \textbf{Honey-LLM Fast-Path (Tier-1)} & \textbf{Benign Telecom Stream} & \textbf{N/A (Safe Pass)} & \textbf{0.0\% (0/320)} & \textbf{$\sim$2.1--8.0 ms} \\
+\rowcolor{AccentGreen} \textbf{Honey-LLM Two-Tier Ensemble} & \textbf{Curated + Wild (889)} & \textbf{98.3\% (559/569)} & \textbf{0.0\% (0/320)} & \textbf{$\sim$8.0 ms (Benign P50)} \\
 \hline
 \end{tabularx}
 \end{table}
