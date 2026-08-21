@@ -61,7 +61,7 @@
   {\thechapter. }
   {0pt}
   {}
-\titlespacing*{\chapter}{0pt}{-10pt}{14pt}
+\titlespacing*{\chapter}{0pt}{-18pt}{12pt}
 
 % Section headings: 14pt Bold
 \titleformat{\section}
@@ -69,7 +69,7 @@
   {\thesection}
   {1em}
   {}
-\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titlespacing*{\section}{0pt}{12pt}{5pt}
 
 % Subsection headings: 13pt Bold
 \titleformat{\subsection}
@@ -77,7 +77,7 @@
   {\thesubsection}
   {1em}
   {}
-\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+\titlespacing*{\subsection}{0pt}{9pt}{3pt}
 
 % Paragraph settings: Justified with 0.3in first line indent
 \setlength{\parindent}{0.3in}
@@ -90,14 +90,17 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-% TOC formatting
+% Compact TOC formatting to fit strictly on 2 pages
+\setlength{\cftbeforechapskip}{3pt}
+\setlength{\cftbeforesecskip}{1pt}
+\setlength{\cftbeforesubsecskip}{0pt}
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 \renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
 
 % List customization
-\setlist[itemize]{leftmargin=0.4in, itemsep=2pt, topsep=2pt, parsep=0pt}
-\setlist[enumerate]{leftmargin=0.4in, itemsep=2pt, topsep=2pt, parsep=0pt}
+\setlist[itemize]{leftmargin=0.35in, itemsep=1.5pt, topsep=1.5pt, parsep=0pt}
+\setlist[enumerate]{leftmargin=0.35in, itemsep=1.5pt, topsep=1.5pt, parsep=0pt}
 
 % Code snippet styling
 \lstset{
@@ -122,38 +125,38 @@
 \centering
 \thispagestyle{empty}
 
-\vspace*{0.2in}
+\vspace*{0.1in}
 {\fontsize{18pt}{22pt}\selectfont\bfseries\color{SlateDark} HONEY-LLM: AN INTERACTIVE, SELF-HEALING HONEYPOT DEFENSE ECOSYSTEM FOR AGENTIC AI \par}
 
-\vspace{0.25in}
+\vspace{0.2in}
 {\fontsize{13pt}{17pt}\selectfont\bfseries Capstone Project Report \par}
-\vspace{0.05in}
+\vspace{0.04in}
 {\fontsize{12pt}{16pt}\selectfont\bfseries MID SEMESTER EVALUATION (Phases 1 to 4 Progress) \par}
 
-\vspace{0.3in}
+\vspace{0.25in}
 {\fontsize{12pt}{16pt}\selectfont\bfseries Submitted by: \par}
-\vspace{0.1in}
+\vspace{0.08in}
 {\fontsize{12pt}{16pt}\selectfont
 \textbf{(102303312) ANOUSHKA SINGH} \\
 \textbf{(102303315) TARUN KRISHNA SHASTRI} \\
 \textbf{(102303631) DEVANSH WADHWANI} \\
 \textbf{(102303684) SHREYA GIRI} \par}
 
-\vspace{0.2in}
+\vspace{0.18in}
 {\fontsize{12pt}{16pt}\selectfont
 BE Third Year, Computer Engineering (CoE) \\
 \textbf{CPG No: 75} \par}
 
-\vspace{0.25in}
+\vspace{0.2in}
 {\fontsize{12pt}{16pt}\selectfont Under the Mentorship of: \par}
-\vspace{0.05in}
+\vspace{0.04in}
 {\fontsize{12pt}{16pt}\selectfont\textbf{Dr. Saif Nalband} \\
 Assistant Professor, Computer Science and Engineering Department \par}
 
-\vspace{0.3in}
-\includegraphics[width=1.6in]{assets/thapar_logo.png}
-
 \vspace{0.25in}
+\includegraphics[width=1.5in]{assets/thapar_logo.png}
+
+\vspace{0.2in}
 {\fontsize{12pt}{16pt}\selectfont\bfseries
 Computer Science and Engineering Department \\
 Thapar Institute of Engineering and Technology, Patiala \\
@@ -168,19 +171,21 @@ August 2026 \par}
 \setcounter{page}{1}
 
 % -------------------------------------------------------------------------
-% ABSTRACT (Page i)
+% ABSTRACT (Page i) - strictly fits on 1 page
 % -------------------------------------------------------------------------
 \chapter*{ABSTRACT}
 \addcontentsline{toc}{chapter}{ABSTRACT}
 \hrule height 1.2pt
-\vspace{0.15in}
+\vspace{0.12in}
 
+\begin{spacing}{1.28}
 As generative Artificial Intelligence and Large Language Models (LLMs) transition from exploratory conversational tools to autonomous enterprise agents executing multi-turn workflows, they introduce critical security vulnerabilities. Chief among these is adversarial prompt injection, where attackers manipulate natural-language instructions to bypass safety guardrails, hijack system roles, and exfiltrate proprietary corporate assets. Conventional perimeter defenses, including static Web Application Firewalls (WAFs) and rigid keyword matchers, operate on a reactive rejection paradigm that inadvertently reveals filter boundaries to attackers while failing against multi-turn semantic chaining.
 
 This capstone project presents the design, system architecture, and verified implementation of \textbf{Honey-LLM}, covering work completed across \textbf{Phases 1 through 4} of the academic project roadmap. Specifically, the mid-semester implementation achieves four core deliverables: (1) an 8-class Adversarial Threat Taxonomy tailored to conversational enterprise agents; (2) a multi-tier \textit{Intent Sieve} combining a $\sim$2.1 ms P50 benign fast-path statistical classifier (Tier-1) with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3 [11]), achieving a \textbf{95.8\% adversarial recall on JailbreakBench [12]} and \textbf{98.3\% adversarial detection recall across the combined 889-sample evaluation corpus} (559/569 adversarial payloads intercepted, 98.9\% overall classification accuracy) while maintaining a \textbf{0.0\% False Positive Rate} on the benign domain evaluation split (0/320 legitimate customer queries flagged); (3) a containerized zero-trust deception sandbox termed the \textit{Mirror Maze} running an LLM-driven decoy persona that dynamic-hallucinates synthetic bait to absorb attacker reconnaissance (verified with \textbf{no container escapes observed across 5/5 executed penetration probes}); and (4) an \textit{Autonomous Guardrail Synthesis} feedback loop that distills captured exploit patterns into formal \textbf{NVIDIA NeMo Colang} rules [6], hot-patching live gateway policies in \textbf{10.4 seconds} with zero service interruption. The subsequent project lifecycle, comprising Phase 5 (SOC Threat Intelligence Dashboard) and Phase 6 (Empirical Red-Teaming via Microsoft PyRIT [13]), forms the roadmap for the final semester submission.
 
-\vspace{0.1in}
+\vspace{0.08in}
 \noindent\textbf{Keywords:} Generative AI Security, Prompt Injection, Semantic Intent Sieve, LLM Honeypot, Autonomous Guardrails, NVIDIA NeMo, Zero-Trust Containerization.
+\end{spacing}
 
 \newpage
 
@@ -236,35 +241,40 @@ Devansh Wadhwani (102303631), Shreya Giri (102303684)
 % -------------------------------------------------------------------------
 % TABLE OF CONTENTS (Pages iv & v)
 % -------------------------------------------------------------------------
+\begin{spacing}{1.18}
 \tableofcontents
+\end{spacing}
 \newpage
 
 % -------------------------------------------------------------------------
 % LIST OF TABLES (Page vi)
 % -------------------------------------------------------------------------
+\begin{spacing}{1.2}
 \listoftables
 \addcontentsline{toc}{chapter}{LIST OF TABLES}
+\end{spacing}
 \newpage
 
 % -------------------------------------------------------------------------
 % LIST OF FIGURES (Page vii)
 % -------------------------------------------------------------------------
+\begin{spacing}{1.2}
 \listoffigures
 \addcontentsline{toc}{chapter}{LIST OF FIGURES}
+\end{spacing}
 \newpage
 
 % -------------------------------------------------------------------------
-% LIST OF ABBREVIATIONS (Page viii)
+% LIST OF ABBREVIATIONS (Page viii) - direct non-floating table
 % -------------------------------------------------------------------------
 \chapter*{LIST OF ABBREVIATIONS}
 \addcontentsline{toc}{chapter}{LIST OF ABBREVIATIONS}
 \hrule height 1.2pt
-\vspace{0.15in}
+\vspace{0.12in}
 
+\begin{spacing}{1.1}
 \noindent
-\begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
 \begin{tabularx}{\textwidth}{@{}p{1.2in} X@{}}
 \rowcolor{HeaderGray} \textbf{Abbreviation} & \textbf{Full Expansion} \\
 \hline
@@ -302,7 +312,7 @@ Devansh Wadhwani (102303631), Shreya Giri (102303684)
 \textbf{WAF} & Web Application Firewall \\
 \hline
 \end{tabularx}
-\end{table}
+\end{spacing}
 
 \newpage
 
@@ -370,7 +380,7 @@ To architect, implement, and empirically validate an automated, dual-tier cybers
 \section{Assumptions and Constraints}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{System Assumptions and Engineering Constraints}
 \begin{tabularx}{\textwidth}{@{}p{1.4in} X@{}}
 \rowcolor{HeaderGray} \textbf{Category} & \textbf{Operational Specification \& Constraint} \\
@@ -418,7 +428,7 @@ Unlike commercial firewalls that operate via static rejection or research honeyp
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{assets/fig1_1_architecture.png}
+\includegraphics[width=0.92\textwidth]{assets/fig1_1_architecture.png}
 \caption{Honey-LLM Multi-Tier Routing and Decision Gateway Architecture}
 \end{figure}
 
@@ -437,7 +447,7 @@ Current academic and industrial paradigms fall into three broad categories: (1) 
 \subsection{Research Findings for Existing Literature}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Comparative Literature Survey of Generative Honeypot Frameworks}
 \begin{tabularx}{\textwidth}{@{}p{1.2in} p{0.9in} p{0.9in} X@{}}
 \rowcolor{HeaderGray} \textbf{Framework} & \textbf{Architecture} & \textbf{Sieve Layer} & \textbf{Primary Operational Limitation} \\
@@ -474,7 +484,7 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \section{Cost \& Computational Feasibility Analysis}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Computational Resource Feasibility \& Cloud Cost Comparison}
 \begin{tabularx}{\textwidth}{@{}p{1.5in} p{1.1in} p{1.1in} X@{}}
 \rowcolor{HeaderGray} \textbf{Deployment Model} & \textbf{Hardware Req.} & \textbf{Monthly Cost} & \textbf{Feasibility Assessment} \\
@@ -489,7 +499,7 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \section{Risk Analysis and Mitigation Strategies}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Risk Assessment Matrix and Fail-Closed Mitigation Controls}
 \begin{tabularx}{\textwidth}{@{}p{1.3in} p{0.8in} p{0.8in} X@{}}
 \rowcolor{HeaderGray} \textbf{Identified Risk} & \textbf{Severity} & \textbf{Probability} & \textbf{Engineering Mitigation Control} \\
@@ -510,7 +520,7 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \section{Investigative Techniques \& Empirical FPR Explanation}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Classification and Justification of Investigative Research Techniques}
 \begin{tabularx}{\textwidth}{@{}p{0.5in} p{1.0in} p{1.4in} X@{}}
 \rowcolor{HeaderGray} \textbf{S.No.} & \textbf{Technique} & \textbf{Investigative Description} & \textbf{Honey-LLM Implementation \& Justification} \\
@@ -544,7 +554,7 @@ Honey-LLM implements a sequential four-tier inspection and deception pipeline:
 \section{Enterprise Hardware, Software, and Framework Stack}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Honey-LLM Technology and Framework Specifications}
 \begin{tabularx}{\textwidth}{@{}p{1.4in} p{1.6in} X@{}}
 \rowcolor{HeaderGray} \textbf{Layer} & \textbf{Technology / Framework} & \textbf{Operational Role} \\
@@ -564,7 +574,7 @@ Figure 3.1 provides the formal UML sequence diagram tracing both benign customer
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{assets/fig3_1_sequence.png}
+\includegraphics[width=0.95\textwidth]{assets/fig3_1_sequence.png}
 \caption{UML Sequence Diagram for Multi-Tier Request Interception \& Deception}
 \end{figure}
 
@@ -579,7 +589,7 @@ The FastAPI Gateway acts as the authoritative reverse proxy, exposing three oper
 \section{Threat Taxonomy \& Sticky Quarantine State Machine}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Adversarial Threat Taxonomy Mappings and Severity Classification}
 \begin{tabularx}{\textwidth}{@{}p{0.5in} p{1.4in} p{1.0in} X@{}}
 \rowcolor{HeaderGray} \textbf{Code} & \textbf{Threat Category} & \textbf{Severity} & \textbf{Enterprise Impact Manifestation} \\
@@ -598,7 +608,7 @@ The FastAPI Gateway acts as the authoritative reverse proxy, exposing three oper
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{assets/fig4_1_state_machine.png}
+\includegraphics[width=0.92\textwidth]{assets/fig4_1_state_machine.png}
 \caption{UML State Machine Diagram for Session Quarantine \& Self-Healing Loop}
 \end{figure}
 
@@ -612,20 +622,20 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{assets/fig4_2_chat_ui.png}
+\includegraphics[width=0.72\textwidth]{assets/fig4_2_chat_ui.png}
 \caption{NexTel Production Customer Support Interface (\texttt{/chat})}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{assets/fig4_3_admin_trace.png}
+\includegraphics[width=0.72\textwidth]{assets/fig4_3_admin_trace.png}
 \caption{Honey-LLM Admin Live Sieve Decision Tracer (\texttt{/admin})}
 \end{figure}
 
 \section{Working Prototype Execution (Phases 1 to 4 Verified)}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Sandbox Container Breakout Penetration Test Results (5/5 Isolation)}
 \begin{tabularx}{\textwidth}{@{}p{0.5in} p{1.4in} p{1.2in} X@{}}
 \rowcolor{HeaderGray} \textbf{Probe} & \textbf{Penetration Vector} & \textbf{Tested Command} & \textbf{Audit Observation \& Result} \\
@@ -641,7 +651,7 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{assets/fig4_4_soc_dashboard.png}
+\includegraphics[width=0.78\textwidth]{assets/fig4_4_soc_dashboard.png}
 \caption{Dark SOC Real-Time Threat Intelligence Dashboard (\texttt{/dashboard})}
 \end{figure}
 
@@ -653,7 +663,7 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \section{Mid-Semester Accomplishments vs. Approved Objectives}
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Mid-Semester Mapping of Approved Objectives to Implemented Progress}
 \begin{tabularx}{\textwidth}{@{}p{1.3in} p{1.3in} X p{0.8in}@{}}
 \rowcolor{HeaderGray} \textbf{Approved Objective} & \textbf{Target Specification} & \textbf{Mid-Semester Implemented Progress} & \textbf{Status} \\
@@ -672,15 +682,15 @@ Honey-LLM demonstrates that proactive deception combined with automated guardrai
 
 \begin{table}[H]
 \small
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.2}
 \caption{Intent Sieve Benchmark Evaluation on Curated and In-The-Wild Datasets}
-\begin{tabularx}{\textwidth}{@{}p{1.6in} p{1.2in} p{1.1in} p{0.9in} X@{}}
-\rowcolor{HeaderGray} \textbf{Model / Configuration} & \textbf{Dataset Scope} & \textbf{Adversarial Recall (\%)} & \textbf{Benign FPR (\%)} & \textbf{Latency (P50)} \\
+\begin{tabularx}{\textwidth}{@{}p{1.7in} p{1.3in} p{1.0in} p{0.8in} X@{}}
+\rowcolor{HeaderGray} \textbf{Model / Configuration} & \textbf{Dataset Scope} & \textbf{Adversarial Recall} & \textbf{Benign FPR} & \textbf{Latency (P50)} \\
 \hline
 \textbf{Default Llama-Guard 3 (1B)} [11] & JailbreakBench (100) [12] & 37.5\% (37/100) & 0.0\% (0/100) & 180 ms \\
 \textbf{Default Llama-Guard 3 (8B)} [11] & JailbreakBench (100) [12] & 62.5\% (62/100) & 0.0\% (0/100) & 720 ms \\
 \textbf{Custom Llama-Guard 3 (8B)} [11] & JailbreakBench (100) [12] & 95.8\% (95/100) & 0.0\% (0/100) & 740 ms \\
-\rowcolor{AccentGreen} \textbf{Honey-LLM Two-Tier Ensemble} & \textbf{Curated + Wild (889)} & \textbf{98.3\% (559/569)} & \textbf{0.0\% (0/320)} & \textbf{$\sim$2.1 ms (P50 benign)} \\
+\rowcolor{AccentGreen} \textbf{Honey-LLM Two-Tier Ensemble} & \textbf{Curated + Wild (889)} & \textbf{98.3\% (559/569)} & \textbf{0.0\% (0/320)} & \textbf{$\sim$2.1 ms (P50)} \\
 \hline
 \end{tabularx}
 \end{table}
@@ -707,11 +717,11 @@ Following the mid-semester evaluation, the project team will execute the final t
 \chapter*{APPENDIX A: REFERENCES}
 \addcontentsline{toc}{chapter}{APPENDIX A: REFERENCES (IEEE Style)}
 \hrule height 1.2pt
-\vspace{0.2in}
+\vspace{0.18in}
 
 \begin{spacing}{1.0}
 \noindent
-\begin{enumerate}[label={[\arabic*]}, leftmargin=0.35in, itemsep=6pt]
+\begin{enumerate}[label={[\arabic*]}, leftmargin=0.35in, itemsep=5pt]
     \item Anthropic. ``Constitutional AI: Harmlessness from AI feedback.'' \textit{arXiv preprint arXiv:2212.08073}, 2022.
     \item D. Ayzenshteyn, R. Weiss, and Y. Mirsky. ``Cloak, Honey, Trap: Proactive defenses against LLM agents.'' Ben-Gurion University of the Negev, \textit{USENIX Security Symposium}, 2025.
     \item I. Goodfellow, Y. Bengio, and A. Courville. \textit{Deep Learning}. Cambridge, MA, USA: MIT Press, 2016.
