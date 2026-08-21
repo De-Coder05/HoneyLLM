@@ -167,29 +167,17 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     # =========================================================================
     # 2. ABSTRACT (Page i)
     # =========================================================================
-    abstract_style = ParagraphStyle(
-        'AbstractBody',
-        parent=body_indent_style,
-        fontSize=10,
-        leading=14,
-        spaceAfter=5,
-        firstLineIndent=14
-    )
     story.append(Paragraph("<b>ABSTRACT</b>", chapter_style))
-    story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=10))
+    story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=12))
     story.append(Paragraph(
-        "As generative Artificial Intelligence and Large Language Models (LLMs) transition from exploratory conversational tools to autonomous enterprise agents capable of executing multi-turn workflows, they introduce critical security vulnerabilities. Chief among these is adversarial prompt injection, where attackers manipulate natural-language instructions to bypass safety guardrails, hijack system roles, and exfiltrate proprietary corporate assets. Conventional perimeter defenses, including static Web Application Firewalls (WAFs) and rigid keyword matchers, operate on a reactive rejection paradigm that inadvertently reveals filter boundaries to attackers while failing against multi-turn semantic chaining.",
-        abstract_style
+        "As generative Artificial Intelligence and Large Language Models (LLMs) transition from exploratory conversational tools to autonomous enterprise agents executing multi-turn workflows, they introduce critical security vulnerabilities. Chief among these is adversarial prompt injection, where attackers manipulate natural-language instructions to bypass safety guardrails, hijack system roles, and exfiltrate proprietary corporate assets. Conventional perimeter defenses, including static Web Application Firewalls (WAFs) and rigid keyword matchers, operate on a reactive rejection paradigm that inadvertently reveals filter boundaries to attackers while failing against multi-turn semantic chaining.",
+        body_indent_style
     ))
     story.append(Paragraph(
-        "This capstone project presents the design, system architecture, and verified implementation of <b>Honey-LLM</b>, covering work completed across <b>Phases 1 through 4</b> of the academic project roadmap. Specifically, the mid-semester implementation achieves four core deliverables: (1) an 8-class Adversarial Threat Taxonomy tailored to conversational enterprise agents; (2) a multi-tier <i>Intent Sieve</i> combining a ~2.1 ms P50 benign fast-path statistical classifier (Tier-1) with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3 [11]), achieving a <b>95.8% adversarial recall on JailbreakBench [12]</b> and <b>98.3% adversarial detection recall across the combined 889-sample evaluation corpus</b> (559/569 adversarial payloads intercepted, 98.9% overall classification accuracy) while maintaining a <b>0.0% False Positive Rate</b> on the benign domain evaluation split (0/320 legitimate customer queries flagged); (3) a containerized zero-trust deception sandbox termed the <i>Mirror Maze</i> running an LLM-driven decoy persona that dynamic-hallucinates synthetic bait to absorb attacker reconnaissance (verified with <b>no container escapes observed across 5/5 executed penetration probes</b>); and (4) an <i>Autonomous Guardrail Synthesis</i> feedback loop that distills captured exploit patterns into formal <b>NVIDIA NeMo Colang</b> rules [6], hot-patching live gateway policies in <b>10.4 seconds</b> with zero service interruption.",
-        abstract_style
+        "This capstone project presents the design, system architecture, and verified implementation of <b>Honey-LLM</b>, covering work completed across <b>Phases 1 through 4</b> of the academic project roadmap. Specifically, the mid-semester implementation achieves four core deliverables: (1) an 8-class Adversarial Threat Taxonomy tailored to conversational enterprise agents; (2) a multi-tier <i>Intent Sieve</i> combining a ~2.1 ms P50 benign fast-path statistical classifier (Tier-1) with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3 [11]), achieving a <b>95.8% adversarial recall on JailbreakBench [12]</b> and <b>98.3% adversarial detection recall across the combined 889-sample evaluation corpus</b> (559/569 adversarial payloads intercepted, 98.9% overall classification accuracy) while maintaining a <b>0.0% False Positive Rate</b> on the benign domain evaluation split (0/320 legitimate customer queries flagged); (3) a containerized zero-trust deception sandbox termed the <i>Mirror Maze</i> running an LLM-driven decoy persona that dynamic-hallucinates synthetic bait to absorb attacker reconnaissance (verified with <b>no container escapes observed across 5/5 executed penetration probes</b>); and (4) an <i>Autonomous Guardrail Synthesis</i> feedback loop that distills captured exploit patterns into formal <b>NVIDIA NeMo Colang</b> rules [6], hot-patching live gateway policies in <b>10.4 seconds</b> with zero service interruption. The subsequent project lifecycle, comprising Phase 5 (SOC Threat Intelligence Dashboard) and Phase 6 (Empirical Red-Teaming via Microsoft PyRIT [13]), forms the roadmap for the final semester submission.",
+        body_indent_style
     ))
-    story.append(Paragraph(
-        "The subsequent project lifecycle, comprising Phase 5 (Forensic Telemetry and Live SOC Threat Intelligence Dashboard visualization) and Phase 6 (Empirical Red-Teaming at scale via multi-converter Microsoft PyRIT campaigns [13] and concurrency load profiling), is established as the structured roadmap for the final semester evaluation.",
-        abstract_style
-    ))
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 8))
     story.append(Paragraph("<b>Keywords:</b> Generative AI Security, Prompt Injection, Semantic Intent Sieve, LLM Honeypot, Autonomous Guardrails, NVIDIA NeMo, Zero-Trust Containerization.", body_style))
 
     story.append(PageBreak())
