@@ -181,7 +181,7 @@ August 2026 \par}
 \begin{spacing}{1.28}
 As generative Artificial Intelligence and Large Language Models (LLMs) transition from exploratory conversational tools to autonomous enterprise agents executing multi-turn workflows, they introduce critical security vulnerabilities. Chief among these is adversarial prompt injection, where attackers manipulate natural-language instructions to bypass safety guardrails, hijack system roles, and exfiltrate proprietary corporate assets. Conventional perimeter defenses, including static Web Application Firewalls (WAFs) and rigid keyword matchers, operate on a reactive rejection paradigm that inadvertently reveals filter boundaries to attackers while failing against multi-turn semantic chaining.
 
-This capstone project presents the design, system architecture, and verified implementation of \textbf{Honey-LLM}, covering work completed across \textbf{Phases 1 through 4} of the academic project roadmap. Specifically, the mid-semester implementation achieves four core deliverables: (1) an 8-class Adversarial Threat Taxonomy tailored to conversational enterprise agents; (2) a multi-tier \textit{Intent Sieve} combining a $\sim$2.1 ms P50 benign fast-path statistical classifier (Tier-1) with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3 [11]), achieving a \textbf{95.8\% adversarial recall on JailbreakBench [12]} and \textbf{98.3\% adversarial detection recall across the combined 889-sample evaluation corpus} (559/569 adversarial payloads intercepted, 98.9\% overall classification accuracy) while maintaining a \textbf{0.0\% False Positive Rate} on the benign domain evaluation split (0/320 legitimate customer queries flagged); (3) a containerized zero-trust deception sandbox termed the \textit{Mirror Maze} running an LLM-driven decoy persona that dynamic-hallucinates synthetic bait to absorb attacker reconnaissance (verified with \textbf{no container escapes observed across 5/5 executed penetration probes}); and (4) an \textit{Autonomous Guardrail Synthesis} feedback loop that distills captured exploit patterns into formal \textbf{NVIDIA NeMo Colang} rules [6], hot-patching live gateway policies in \textbf{10.4 seconds} with zero service interruption. The subsequent project lifecycle, comprising Phase 5 (SOC Threat Intelligence Dashboard) and Phase 6 (Empirical Red-Teaming via Microsoft PyRIT [13]), forms the roadmap for the final semester submission.
+This capstone project presents the design, system architecture, and verified implementation of \textbf{Honey-LLM}, covering work completed across \textbf{Phases 1 through 4} of the academic project roadmap. Specifically, the mid-semester implementation achieves four core deliverables: (1) an 8-class Adversarial Threat Taxonomy tailored to conversational enterprise agents; (2) a multi-tier \textit{Intent Sieve} combining a $\sim$2.1 ms P50 benign fast-path statistical classifier (Tier-1) with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3~\cite{llamaguard3}), achieving a \textbf{95.8\% adversarial recall on JailbreakBench~\cite{jailbreakbench2024}} and \textbf{98.3\% adversarial detection recall across the combined 889-sample evaluation corpus} (559/569 adversarial payloads intercepted, 98.9\% overall classification accuracy) while maintaining a \textbf{0.0\% False Positive Rate} on the benign domain evaluation split (0/320 legitimate customer queries flagged); (3) a containerized zero-trust deception sandbox termed the \textit{Mirror Maze} running an LLM-driven decoy persona that dynamic-hallucinates synthetic bait to absorb attacker reconnaissance (verified with \textbf{no container escapes observed across 5/5 executed penetration probes}); and (4) an \textit{Autonomous Guardrail Synthesis} feedback loop that distills captured exploit patterns into formal \textbf{NVIDIA NeMo Colang} rules~\cite{nemo2024guardrails}, hot-patching live gateway policies in \textbf{10.4 seconds} with zero service interruption. The subsequent project lifecycle, comprising Phase 5 (SOC Threat Intelligence Dashboard) and Phase 6 (Empirical Red-Teaming via Microsoft PyRIT~\cite{pyrit2024}), forms the roadmap for the final semester submission.
 
 \vspace{0.08in}
 \noindent\textbf{Keywords:} Generative AI Security, Prompt Injection, Semantic Intent Sieve, LLM Honeypot, Autonomous Guardrails, NVIDIA NeMo, Zero-Trust Containerization.
@@ -328,29 +328,29 @@ Devansh Wadhwani (102303631), Shreya Giri (102303684)
 \chapter{INTRODUCTION}
 
 \section{Project Overview}
-In the contemporary enterprise computing landscape of 2026, Large Language Models (LLMs) have evolved beyond isolated text generation interfaces into deeply integrated autonomous agents. Modern enterprise deployments rely on LLMs to automate mission-critical customer operations, query private structured databases, orchestrate multi-step API workflows, and execute tool-use tasks [7]. However, this rapid operational adoption has outpaced conventional cybersecurity paradigms, exposing a profound vulnerability surface known as the semantic attack vector [9].
+In the contemporary enterprise computing landscape of 2026, Large Language Models (LLMs) have evolved beyond isolated text generation interfaces into deeply integrated autonomous agents. Modern enterprise deployments rely on LLMs to automate mission-critical customer operations, query private structured databases, orchestrate multi-step API workflows, and execute tool-use tasks~\cite{openai2023gpt4}. However, this rapid operational adoption has outpaced conventional cybersecurity paradigms, exposing a profound vulnerability surface known as the semantic attack vector~\cite{owasp2023top10}.
 
-Unlike traditional software systems where security boundaries are strictly demarcated between binary executable code and passive data buffers, LLMs process system instructions, operational context, and untrusted user inputs within a single unified semantic channel. Consequently, malicious actors exploit this architectural reality through Adversarial Prompt Injection and Jailbreaking techniques [9]. Attackers craft persuasive, contextually masked natural-language payloads, ranging from direct role overrides to indirect prompt injections embedded in retrieved enterprise documents, to manipulate the underlying model into bypassing access controls.
+Unlike traditional software systems where security boundaries are strictly demarcated between binary executable code and passive data buffers, LLMs process system instructions, operational context, and untrusted user inputs within a single unified semantic channel. Consequently, malicious actors exploit this architectural reality through Adversarial Prompt Injection and Jailbreaking techniques~\cite{owasp2023top10}. Attackers craft persuasive, contextually masked natural-language payloads, ranging from direct role overrides to indirect prompt injections embedded in retrieved enterprise documents, to manipulate the underlying model into bypassing access controls.
 
 Traditional perimeter defenses, such as Web Application Firewalls (WAFs), heuristic keyword matchers, and static regular expressions, are fundamentally inadequate against semantic attacks. They lack linguistic context, cannot track conversational state across multi-turn sessions, and are trivially bypassed through character obfuscation or subtle adversarial paraphrasing. More critically, standard security mechanisms follow a rigid block-and-alert model. When a malicious query is blocked with an explicit refusal message, the attacker immediately learns the perimeter filtering boundary and iterates their attack prompt until an evasion succeeds.
 
 To systematically address these defensive limitations, this capstone project develops and demonstrates \textbf{Honey-LLM}: an interactive, self-hardening defense ecosystem for conversational AI architectures. For the Mid-Semester Evaluation, the project team has fully developed, integrated, and verified the first four engineering phases:
 \begin{itemize}
     \item \textbf{Phase 1 (Adversarial Profiling \& Threat Taxonomy):} Formulated an 8-class threat taxonomy mapping prompt injections to specific enterprise manifestations and validated concurrent dual-model local inference.
-    \item \textbf{Phase 2 (The Multi-Tier Semantic Intent Sieve):} Constructed an intelligent input-filtering pipeline that inspects queries in real time, pairing a $\sim$2.1 ms P50 benign fast-path statistical classifier (Tier-1) with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3 [11]), achieving a 95.8\% adversarial recall on JailbreakBench [12] and 98.3\% adversarial detection recall across 889 evaluation prompts (559/569 adversarial payloads intercepted, 98.9\% overall accuracy) at a 0.0\% False Positive Rate on benign domain traffic (0/320 benign queries flagged).
+    \item \textbf{Phase 2 (The Multi-Tier Semantic Intent Sieve):} Constructed an intelligent input-filtering pipeline that inspects queries in real time, pairing a $\sim$2.1 ms P50 benign fast-path statistical classifier (Tier-1) with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3~\cite{llamaguard3}), achieving a 95.8\% adversarial recall on JailbreakBench~\cite{jailbreakbench2024} and 98.3\% adversarial detection recall across 889 evaluation prompts (559/569 adversarial payloads intercepted, 98.9\% overall accuracy) at a 0.0\% False Positive Rate on benign domain traffic (0/320 benign queries flagged).
     \item \textbf{Phase 3 (The `Mirror Maze' Deception Honeypot):} Deployed an isolated zero-trust Docker sandbox hosting the `Sarah' decoy persona, which dynamic-hallucinates synthetic bait to absorb attacker reconnaissance without leaking real infrastructure.
-    \item \textbf{Phase 4 (Autonomous Guardrail Synthesis):} Implemented a closed self-healing loop that distills captured exploits into validated NVIDIA NeMo Colang rules [6], hot-patching live gateway policies in 10.4 seconds with zero downtime.
+    \item \textbf{Phase 4 (Autonomous Guardrail Synthesis):} Implemented a closed self-healing loop that distills captured exploits into validated NVIDIA NeMo Colang rules~\cite{nemo2024guardrails}, hot-patching live gateway policies in 10.4 seconds with zero downtime.
 \end{itemize}
 
 \section{Need Analysis}
 \subsection{The `Smart Mirror' Trap: Enterprise Adoption vs. Defensive Lag}
-Industry surveys indicate that enterprise adoption of conversational AI agents has expanded rapidly across customer-facing workflows [7]. However, defensive capabilities have lagged behind offensive prompt exploitation techniques. Conventional static honeypots are quickly identified and abandoned by automated scanners. In contrast, generative honeypots offer dynamic semantic interaction, creating an essential observation window to capture zero-day exploitation techniques before they reach production services.
+Industry surveys indicate that enterprise adoption of conversational AI agents has expanded rapidly across customer-facing workflows~\cite{openai2023gpt4}. However, defensive capabilities have lagged behind offensive prompt exploitation techniques. Conventional static honeypots are quickly identified and abandoned by automated scanners. In contrast, generative honeypots offer dynamic semantic interaction, creating an essential observation window to capture zero-day exploitation techniques before they reach production services.
 
 \subsection{The Shift: Machine-Speed Autonomous Warfare}
-With conversational models managing automated customer dialogues [7], adversarial techniques have shifted from manual, one-off jailbreaks to automated, machine-speed offensive frameworks (such as ARACNE, Garak, and Microsoft PyRIT [13]). Automated offensive agents can systematically discover exploitable prompt sequences across iterative conversational turns, compressing vulnerability discovery timelines and rendering human-reliant triage workflows ineffective.
+With conversational models managing automated customer dialogues~\cite{openai2023gpt4}, adversarial techniques have shifted from manual, one-off jailbreaks to automated, machine-speed offensive frameworks (such as ARACNE, Garak, and Microsoft PyRIT~\cite{pyrit2024}). Automated offensive agents can systematically discover exploitable prompt sequences across iterative conversational turns, compressing vulnerability discovery timelines and rendering human-reliant triage workflows ineffective.
 
 \subsection{The `Shadow Trust' Gap: Vulnerability of the Semantic Layer}
-Prompt injection is categorized as the primary vulnerability in the OWASP Top 10 for Large Language Model Applications (LLM01) [9]. Because conversational agents are granted operational trust to execute database lookups and internal APIs, a compromised prompt inherits the agent's broad permissions. In multi-turn dialogue, gradual semantic drift and contextual grooming can frequently bypass static refusal boundaries in unprotected commercial systems.
+Prompt injection is categorized as the primary vulnerability in the OWASP Top 10 for Large Language Model Applications (LLM01)~\cite{owasp2023top10}. Because conversational agents are granted operational trust to execute database lookups and internal APIs, a compromised prompt inherits the agent's broad permissions. In multi-turn dialogue, gradual semantic drift and contextual grooming can frequently bypass static refusal boundaries in unprotected commercial systems.
 
 \subsection{The Dynamic Security Window: Addressing Reactive Lag}
 Standard commercial defense workflows require human security analysts to triage incident logs, manually construct mitigation patches, and redeploy models over multi-week cycles. Honey-LLM eliminates this operational lag by autonomously converting captured honeypot interaction transcripts into formal guardrail rules in memory, closing the vulnerability window within seconds of an attempted compromise.
@@ -415,13 +415,13 @@ To architect, implement, and empirically validate an automated, dual-tier cybers
 The mid-semester engineering execution spans four completed phases:
 \begin{itemize}
     \item \textbf{Phase 1 (Adversarial Profiling):} Cataloged an 8-class threat taxonomy mapping prompt injections to specific enterprise manifestations and validated dual-model local inference.
-    \item \textbf{Phase 2 (Semantic Intent Sieve):} Developed a two-tier input classifier pairing a $\sim$2.1 ms P50 fast-path statistical model with an authoritative 8B moderation model (Llama-Guard 3 [11]).
+    \item \textbf{Phase 2 (Semantic Intent Sieve):} Developed a two-tier input classifier pairing a $\sim$2.1 ms P50 fast-path statistical model with an authoritative 8B moderation model (Llama-Guard 3~\cite{llamaguard3}).
     \item \textbf{Phase 3 (Mirror Maze Sandbox):} Deployed an isolated Docker container hosting the `Sarah' decoy persona with dynamic synthetic canary token injection.
-    \item \textbf{Phase 4 (Autonomous Synthesis):} Engineered a closed self-healing loop that converts captured attack transcripts into verified NeMo Colang 2.0 rules [6] hot-patched in 10.4 seconds.
+    \item \textbf{Phase 4 (Autonomous Synthesis):} Engineered a closed self-healing loop that converts captured attack transcripts into verified NeMo Colang 2.0 rules~\cite{nemo2024guardrails} hot-patched in 10.4 seconds.
 \end{itemize}
 
 \section{Mid-Semester Outcomes and Deliverables}
-Mid-semester deliverables completed to date include: (1) an operational FastAPI gateway with multi-tier routing; (2) a calibrated TF-IDF + Llama-Guard 3 [11] ensemble sieve; (3) a containerized Mirror Maze decoy running the `Sarah' persona with synthetic bait; (4) an autonomous NeMo Guardrail synthesis engine [6]; and (5) empirical validation benchmarks across 889 curated and in-the-wild prompt samples.
+Mid-semester deliverables completed to date include: (1) an operational FastAPI gateway with multi-tier routing; (2) a calibrated TF-IDF + Llama-Guard 3~\cite{llamaguard3} ensemble sieve; (3) a containerized Mirror Maze decoy running the `Sarah' persona with synthetic bait; (4) an autonomous NeMo Guardrail synthesis engine~\cite{nemo2024guardrails}; and (5) empirical validation benchmarks across 889 curated and in-the-wild prompt samples.
 
 \section{Novelty of Work}
 Unlike commercial firewalls that operate via static rejection or research honeypots that incur massive inference overhead, Honey-LLM introduces: (1) an asymmetric two-tier architecture that protects benign conversational latency; (2) believable generative deception that absorbs attacker reconnaissance without data leakage; and (3) automated in-memory guardrail synthesis that eliminates human patching delays.
@@ -442,7 +442,7 @@ Unlike commercial firewalls that operate via static rejection or research honeyp
 Adversarial prompt injection represents a manifestation of the classic confused deputy problem instantiated within semantic vector spaces. Because LLM decoders operate autoregressively across concatenated prompt contexts, semantic instructions from untrusted users can override system-level constraints [9].
 
 \subsection{Existing Systems and Solutions}
-Current academic and industrial paradigms fall into three broad categories: (1) \textit{Input Classifiers}, such as Meta Llama-Guard [11] and Lakera Guard, which evaluate inputs before reaching primary models; (2) \textit{Programmable Rails}, such as NVIDIA NeMo Guardrails [6], which enforce dialogue flows via Colang rules; and (3) \textit{LLM Honeypot Prototypes}, such as Shell Honeypots [4, 8, 10] and Beekeeper [5], which deploy language models as dynamic deception environments.
+Current academic and industrial paradigms fall into three broad categories: (1) \textit{Input Classifiers}, such as Meta Llama-Guard~\cite{llamaguard3} and Lakera Guard, which evaluate inputs before reaching primary models; (2) \textit{Programmable Rails}, such as NVIDIA NeMo Guardrails~\cite{nemo2024guardrails}, which enforce dialogue flows via Colang rules; and (3) \textit{LLM Honeypot Prototypes}, such as Shell Honeypots~\cite{guan2024honeyllm, otal2024llmhoneypot, sladic2024llmshell} and Beekeeper~\cite{ilg2025beekeeper}, which deploy language models as dynamic deception environments.
 
 \subsection{Research Findings for Existing Literature}
 \begin{table}[H]
@@ -452,11 +452,11 @@ Current academic and industrial paradigms fall into three broad categories: (1) 
 \begin{tabularx}{\textwidth}{@{}p{1.2in} p{0.9in} p{0.9in} X@{}}
 \rowcolor{HeaderGray} \textbf{Framework} & \textbf{Architecture} & \textbf{Sieve Layer} & \textbf{Primary Operational Limitation} \\
 \hline
-\textbf{Goodfellow et al. [3]} & Neural Baseline & None & Foundational deep learning; lacks prompt defense. \\
-\textbf{Guan et al. [4]} & Shell Honeypot & None & Heavy latency overhead; lacks input intent triage. \\
-\textbf{Ilg et al. [5]} & Beekeeper & Post-Hoc & Passive log parsing; zero real-time hot-patching. \\
-\textbf{Otal et al. [8]} & LLM Honeypot & None & No production RAG path; unconstrained decoy. \\
-\textbf{Sladic et al. [10]} & Shell Sandbox & None & Direct LLM routing; vulnerable to state exhaustion. \\
+\textbf{Goodfellow et al.~\cite{goodfellow2016deep}} & Neural Baseline & None & Foundational deep learning; lacks prompt defense. \\
+\textbf{Guan et al.~\cite{guan2024honeyllm}} & Shell Honeypot & None & Heavy latency overhead; lacks input intent triage. \\
+\textbf{Ilg et al.~\cite{ilg2025beekeeper}} & Beekeeper & Post-Hoc & Passive log parsing; zero real-time hot-patching. \\
+\textbf{Otal et al.~\cite{otal2024llmhoneypot}} & LLM Honeypot & None & No production RAG path; unconstrained decoy. \\
+\textbf{Sladic et al.~\cite{sladic2024llmshell}} & Shell Sandbox & None & Direct LLM routing; vulnerable to state exhaustion. \\
 \textbf{Honey-LLM (Ours)} & Multi-Tier Ecosystem & Dual Sieve & Sub-millisecond benign path, closed-loop self-healing. \\
 \hline
 \end{tabularx}
@@ -466,7 +466,7 @@ Current academic and industrial paradigms fall into three broad categories: (1) 
 The primary deficiencies identified include: (1) reliance on static refusal responses that train adversaries; (2) absence of sub-second semantic classification on production paths; and (3) a complete disconnect between threat intelligence collection and real-time security policy updates.
 
 \subsection{Survey of Tools and Technologies Used}
-Honey-LLM integrates: (1) \textbf{FastAPI / Uvicorn} for asynchronous routing; (2) \textbf{Meta Llama-Guard 3 (8B)} [11] for semantic moderation; (3) \textbf{Docker Engine} for zero-egress sandboxing; (4) \textbf{NVIDIA NeMo Guardrails} [6] for Colang rule compilation; and (5) \textbf{Next.js 15 / TailwindCSS} for front-end telemetry visualization.
+Honey-LLM integrates: (1) \textbf{FastAPI / Uvicorn} for asynchronous routing; (2) \textbf{Meta Llama-Guard 3 (8B)}~\cite{llamaguard3} for semantic moderation; (3) \textbf{Docker Engine} for zero-egress sandboxing; (4) \textbf{NVIDIA NeMo Guardrails}~\cite{nemo2024guardrails} for Colang rule compilation; and (5) \textbf{Next.js 15 / TailwindCSS} for front-end telemetry visualization.
 
 \section{Software Requirement Specification (SRS)}
 \subsection{Introduction \& Scope}
@@ -526,20 +526,20 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \rowcolor{HeaderGray} \textbf{S.No.} & \textbf{Technique} & \textbf{Investigative Description} & \textbf{Honey-LLM Implementation \& Justification} \\
 \hline
 \textbf{1} & Descriptive & Cataloging phenomena under structured observation. & Formulated the 8-class Adversarial Threat Taxonomy across telecom domains (Phase 1). \\
-\textbf{2} & Comparative & Evaluating alternative models against baseline metrics. & Benchmarked Llama-Guard 3 1B vs. 8B [11] on JailbreakBench [12] (Phase 2). \\
+\textbf{2} & Comparative & Evaluating alternative models against baseline metrics. & Benchmarked Llama-Guard 3 1B vs. 8B~\cite{llamaguard3} on JailbreakBench~\cite{jailbreakbench2024} (Phase 2). \\
 \textbf{3} & Experimental & Hypothesis testing with controlled variables. & Evaluated the two-tier OR-ensemble on 889 held-out prompts, measuring 95.8\% JailbreakBench recall and 98.3\% adversarial detection recall across the combined curated and in-the-wild corpus (559/569 adversarial, 98.9\% overall accuracy) at 0.0\% benign FPR (0/320 benign) with $\sim$2.1 ms P50 benign fast-path latency (Phase 2). \\
 \hline
 \end{tabularx}
 \end{table}
 
-\noindent\textbf{Technical Analysis of the 0.0\% Benign False Positive Rate (FPR):} The measured 0.0\% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents possess distinct vocabulary distributions with safe scores consistently $< 0.08$, well below the conservative threshold ($\tau = 0.15$); (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3 [11], which performs context-aware semantic evaluation. While 0.0\% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.
+\noindent\textbf{Technical Analysis of the 0.0\% Benign False Positive Rate (FPR):} The measured 0.0\% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents possess distinct vocabulary distributions with safe scores consistently $< 0.08$, well below the conservative threshold ($\tau = 0.15$); (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3~\cite{llamaguard3}, which performs context-aware semantic evaluation. While 0.0\% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.
 
 \section{Proposed Solution \& Multi-Tier Architecture}
 Honey-LLM implements a sequential four-tier inspection and deception pipeline:
 \begin{enumerate}
     \item \textbf{Tier-0 Semantic Guardrail Cache:} Matches incoming prompts against cached threat embeddings (10--20 ms).
     \item \textbf{Tier-1 Statistical Fast-Path:} Employs a calibrated TF-IDF + Logistic Regression classifier ($\sim$2.1 ms P50 latency). If safe ($\text{score} < 0.15$), the query routes directly to the Production RAG Engine.
-    \item \textbf{Tier-2 Deep Moderation Sieve:} Ambiguous or high-threat prompts escalate to Llama-Guard 3 (8B) [11] ($\sim$740 ms) executing a custom 8-category policy.
+    \item \textbf{Tier-2 Deep Moderation Sieve:} Ambiguous or high-threat prompts escalate to Llama-Guard 3 (8B)~\cite{llamaguard3} ($\sim$740 ms) executing a custom 8-category policy.
     \item \textbf{Dynamic Quarantine \& Sandbox Routing:} If flagged UNSAFE, the session transitions into a sticky quarantined state, routing all further traffic to the Mirror Maze.
 \end{enumerate}
 
@@ -548,7 +548,7 @@ Honey-LLM implements a sequential four-tier inspection and deception pipeline:
     \item \textbf{Phase 1:} 8-class taxonomy formulation, dataset curation (889 samples), dual-model runtime setup.
     \item \textbf{Phase 2:} TF-IDF vectorizer training, Llama-Guard 3 custom policy calibration, dual-tier OR-ensemble evaluation.
     \item \textbf{Phase 3:} Docker zero-egress sandbox deployment, `Sarah' persona prompt engineering, synthetic token injection.
-    \item \textbf{Phase 4:} Exploit pattern distillation pipeline, NeMo Colang 2.0 rule synthesis [6], regression test gate validation.
+    \item \textbf{Phase 4:} Exploit pattern distillation pipeline, NeMo Colang 2.0 rule synthesis~\cite{nemo2024guardrails}, regression test gate validation.
 \end{itemize}
 
 \section{Enterprise Hardware, Software, and Framework Stack}
@@ -559,12 +559,12 @@ Honey-LLM implements a sequential four-tier inspection and deception pipeline:
 \begin{tabularx}{\textwidth}{@{}p{1.4in} p{1.6in} X@{}}
 \rowcolor{HeaderGray} \textbf{Layer} & \textbf{Technology / Framework} & \textbf{Operational Role} \\
 \hline
-\textbf{Inference Host} & Enterprise Compute ($\ge$16GB VRAM) & Local execution of Llama-Guard 3 8B [11] and Llama-3 8B. \\
+\textbf{Inference Host} & Enterprise Compute ($\ge$16GB VRAM) & Local execution of Llama-Guard 3 8B~\cite{llamaguard3} and Llama-3 8B. \\
 \textbf{Backend Gateway} & Python 3.12 / FastAPI / Uvicorn & Asynchronous request orchestration and session routing. \\
-\textbf{Guardrail Engine} & NVIDIA NeMo Guardrails / Colang 2.0 [6] & Formal rule validation, pattern extraction, and hot-patching. \\
+\textbf{Guardrail Engine} & NVIDIA NeMo Guardrails / Colang 2.0~\cite{nemo2024guardrails} & Formal rule validation, pattern extraction, and hot-patching. \\
 \textbf{Container Isolation} & Docker Engine / Linux cgroups & Zero-egress isolated decoy sandbox with socat proxy. \\
 \textbf{Frontend Surfaces} & Next.js 15 / React 19 / TailwindCSS & NexTel customer UI, Dark SOC dashboard, Admin tracer. \\
-\textbf{Red-Teaming (Future)} & Microsoft PyRIT [13] & 12+ obfuscation converters, break-out audits, load stress. \\
+\textbf{Red-Teaming (Future)} & Microsoft PyRIT~\cite{pyrit2024} & 12+ obfuscation converters, break-out audits, load stress. \\
 \hline
 \end{tabularx}
 \end{table}
@@ -668,9 +668,9 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \begin{tabularx}{\textwidth}{@{}p{1.3in} p{1.3in} X p{0.8in}@{}}
 \rowcolor{HeaderGray} \textbf{Approved Objective} & \textbf{Target Specification} & \textbf{Mid-Semester Implemented Progress} & \textbf{Status} \\
 \hline
-\textbf{1. High-Accuracy Intent Sieve} & Accuracy $>95\%$ on JailbreakBench [12], FPR $<1\%$ & \textbf{95.8\% recall on JailbreakBench} (exceeding $>95\%$ target); \textbf{98.3\% recall across combined 889 dataset} (559/569 attacks, 98.9\% overall accuracy); \textbf{0.0\% benign FPR} (0/320 queries); $\sim$2.1 ms P50 benign fast-path latency. & Phase 2 \newline(COMPLETED) \\
+\textbf{1. High-Accuracy Intent Sieve} & Accuracy $>95\%$ on JailbreakBench~\cite{jailbreakbench2024}, FPR $<1\%$ & \textbf{95.8\% recall on JailbreakBench} (exceeding $>95\%$ target); \textbf{98.3\% recall across combined 889 dataset} (559/569 attacks, 98.9\% overall accuracy); \textbf{0.0\% benign FPR} (0/320 queries); $\sim$2.1 ms P50 benign fast-path latency. & Phase 2 \newline(COMPLETED) \\
 \textbf{2. Mirror Maze Sandbox} & Believable decoy, dwell time $>5$ min, synthetic bait & LLM `Sarah' decoy persona; leaks fake tokens (\texttt{NT-CORE-01}); verified dwell tracking. & Phase 3 \newline(COMPLETED) \\
-\textbf{3. Autonomous Synthesis} & Automated NeMo rule generation, zero manual triage & Distills attack pattern, validates Colang [6], passes regression gate; \textbf{time-to-patch 10.4 s}. & Phase 4 \newline(COMPLETED) \\
+\textbf{3. Autonomous Synthesis} & Automated NeMo rule generation, zero manual triage & Distills attack pattern, validates Colang~\cite{nemo2024guardrails}, passes regression gate; \textbf{time-to-patch 10.4 s}. & Phase 4 \newline(COMPLETED) \\
 \textbf{4. Zero-Escape Security} & Zero-egress container isolation, zero host leakage & Docker zero-egress network; \textbf{No container escape observed across 5/5 executed penetration probes}; read-only rootfs; non-root UID 10001. & Phase 3/4 \newline(COMPLETED) \\
 \textbf{5. SOC Telemetry} & Real-time monitoring, $<1$s refresh, taxonomy stats & Architecture completed; live telemetry populated (176 requests, 85 attacks, 4m 46s avg dwell). & Phase 5 \newline(IN PROGRESS) \\
 \hline
@@ -678,7 +678,7 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \end{table}
 
 \section{Mid-Semester Conclusions \& Empirical Reliability}
-Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8\% recall on standard benchmarks and 98.3\% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9\% overall accuracy) without penalizing benign customer traffic (0/320 false flags, $\sim$2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds. Table 5.2 summarizes the empirical classification results.
+Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8\% recall on standard benchmarks and 98.3\% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9\% overall accuracy) without penalizing benign customer traffic (0/320 false flags, $\sim$2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules~\cite{nemo2024guardrails} within 10.4 seconds. Table 5.2 summarizes the empirical classification results.
 
 \begin{table}[H]
 \small
@@ -687,9 +687,9 @@ Honey-LLM demonstrates that proactive deception combined with automated guardrai
 \begin{tabularx}{\textwidth}{@{}p{1.7in} p{1.3in} p{1.0in} p{0.8in} X@{}}
 \rowcolor{HeaderGray} \textbf{Model / Configuration} & \textbf{Dataset Scope} & \textbf{Adversarial Recall} & \textbf{Benign FPR} & \textbf{Latency (P50)} \\
 \hline
-\textbf{Default Llama-Guard 3 (1B)} [11] & JailbreakBench (100) [12] & 37.5\% (37/100) & 0.0\% (0/100) & 180 ms \\
-\textbf{Default Llama-Guard 3 (8B)} [11] & JailbreakBench (100) [12] & 62.5\% (62/100) & 0.0\% (0/100) & 720 ms \\
-\textbf{Custom Llama-Guard 3 (8B)} [11] & JailbreakBench (100) [12] & 95.8\% (95/100) & 0.0\% (0/100) & 740 ms \\
+\textbf{Default Llama-Guard 3 (1B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 37.5\% (37/100) & 0.0\% (0/100) & 180 ms \\
+\textbf{Default Llama-Guard 3 (8B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 62.5\% (62/100) & 0.0\% (0/100) & 720 ms \\
+\textbf{Custom Llama-Guard 3 (8B)}~\cite{llamaguard3} & JailbreakBench (100)~\cite{jailbreakbench2024} & 95.8\% (95/100) & 0.0\% (0/100) & 740 ms \\
 \rowcolor{AccentGreen} \textbf{Honey-LLM Two-Tier Ensemble} & \textbf{Curated + Wild (889)} & \textbf{98.3\% (559/569)} & \textbf{0.0\% (0/320)} & \textbf{$\sim$2.1 ms (P50)} \\
 \hline
 \end{tabularx}
@@ -706,13 +706,13 @@ Honey-LLM demonstrates that proactive deception combined with automated guardrai
 Following the mid-semester evaluation, the project team will execute the final two planned engineering phases leading to end-semester submission:
 \begin{itemize}
     \item \textbf{Phase 5: Forensic Telemetry \& Threat Intelligence Dashboard:} Finalize the sub-second polling Next.js 15 SOC dashboard, integrate live attacker dwell-time meters, and complete end-to-end visualization of attack taxonomy trends.
-    \item \textbf{Phase 6: Empirical Validation \& Adversarial Red-Teaming:} Subject the deployed gateway to scaled Microsoft PyRIT [13] adversarial stress campaigns across 12+ prompt obfuscation converters (Base64, ROT13, Leetspeak, Unicode confusables), conduct multi-user concurrency load profiling, and author the final capstone thesis.
+    \item \textbf{Phase 6: Empirical Validation \& Adversarial Red-Teaming:} Subject the deployed gateway to scaled Microsoft PyRIT~\cite{pyrit2024} adversarial stress campaigns across 12+ prompt obfuscation converters (Base64, ROT13, Leetspeak, Unicode confusables), conduct multi-user concurrency load profiling, and author the final capstone thesis.
 \end{itemize}
 
 \newpage
 
 % =========================================================================
-% APPENDIX A: REFERENCES (IEEE Style, Single Spaced Justified)
+% APPENDIX A: REFERENCES (IEEE Style BibTeX)
 % =========================================================================
 \chapter*{APPENDIX A: REFERENCES}
 \addcontentsline{toc}{chapter}{APPENDIX A: REFERENCES (IEEE Style)}
@@ -720,22 +720,12 @@ Following the mid-semester evaluation, the project team will execute the final t
 \vspace{0.18in}
 
 \begin{spacing}{1.0}
-\noindent
-\begin{enumerate}[label={[\arabic*]}, leftmargin=0.35in, itemsep=5pt]
-    \item Anthropic. ``Constitutional AI: Harmlessness from AI feedback.'' \textit{arXiv preprint arXiv:2212.08073}, 2022.
-    \item D. Ayzenshteyn, R. Weiss, and Y. Mirsky. ``Cloak, Honey, Trap: Proactive defenses against LLM agents.'' Ben-Gurion University of the Negev, \textit{USENIX Security Symposium}, 2025.
-    \item I. Goodfellow, Y. Bengio, and A. Courville. \textit{Deep Learning}. Cambridge, MA, USA: MIT Press, 2016.
-    \item C. Guan, G. Cao, and S. Zhu. ``HoneyLLM: Enabling shell honeypots with large language models.'' In \textit{Proc. 2024 IEEE Conference on Communications and Network Security (CNS)}, Taipei, Taiwan, pp. 1--9, Oct. 2024.
-    \item N. Ilg, D. Germek, P. Duplys, and M. Menth. ``Beekeeper: Accelerating honeypot analysis with LLM-driven feedback.'' \textit{IEEE Access}, vol. 13, pp. 10508--10521, Feb. 2025.
-    \item NVIDIA. ``NeMo Guardrails Documentation: Programmable Rails with Colang 2.0.'' NVIDIA Developer Docs, Internet: \url{https://docs.nvidia.com/nemo/guardrails/}, 2024 [Accessed: Aug. 15, 2026].
-    \item OpenAI. ``GPT-4 Technical Report.'' \textit{arXiv preprint arXiv:2303.08774}, 2023.
-    \item H. T. Otal and M. A. Canbaz. ``LLM Honeypot: Leveraging large language models as advanced interactive honeypot systems.'' In \textit{Proc. 2024 IEEE Conference on Communications and Network Security (CNS)}, Taipei, Taiwan, pp. 1--9, Oct. 2024.
-    \item OWASP Foundation. ``OWASP Top 10 for Large Language Model Applications (v1.1).'' OWASP GenAI Security Project, Internet: \url{https://owasp.org/www-project-top-10-for-large-language-model-applications/}, 2023 [Accessed: Aug. 10, 2026].
-    \item M. Sladic, V. Valeros, C. Catania, and S. Garcia. ``LLM in the shell: Generative honeypots.'' In \textit{Proc. 2024 IEEE European Symposium on Security and Privacy Workshops (EuroS\&PW)}, Vienna, Austria, pp. 412--421, Jul. 2024.
-    \item Meta AI. ``Llama Guard 3: Developing safe and responsible generative AI models.'' Meta Research Technical Report, 2024.
-    \item P. Chao, A. Robey, E. Dobriban, H. Hassani, G. J. Pappas, and E. Wong. ``JailbreakBench: An open robustness benchmark for jailbreaking large language models.'' In \textit{Proc. 38th Conference on Neural Information Processing Systems (NeurIPS)}, Vancouver, Canada, Dec. 2024.
-    \item Microsoft. ``Python Risk Identification Tool for Generative AI (PyRIT).'' Microsoft Security AI Research, Internet: \url{https://github.com/Azure/PyRIT}, 2024 [Accessed: Aug. 18, 2026].
-\end{enumerate}
+\bibliographystyle{ieeetr}
+\renewcommand{\bibname}{}
+\begingroup
+\renewcommand{\chapter}[2]{}
+\bibliography{references}
+\endgroup
 \end{spacing}
 
 \newpage
