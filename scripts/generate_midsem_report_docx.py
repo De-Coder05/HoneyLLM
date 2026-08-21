@@ -327,7 +327,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             lot_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             lot_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            lot_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            lot_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     doc.add_page_break()
 
@@ -355,7 +355,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             lof_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             lof_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            lof_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            lof_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     doc.add_page_break()
 
@@ -395,7 +395,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             abbr_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             abbr_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            abbr_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            abbr_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     doc.add_page_break()
 
@@ -458,7 +458,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             assump_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             assump_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            assump_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            assump_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading1("1.6 Applicable Standards")
     add_bullet("OWASP Top 10 for LLM Applications (2025/2026): Primary mitigation targeting LLM01 (Prompt Injection), LLM02 (Sensitive Information Disclosure), and LLM06 (Excessive Agency) [9].")
@@ -523,7 +523,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             lit_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             lit_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            lit_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            lit_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading2("2.1.4 Problems Identified in State of the Art")
     add_body("The primary deficiencies identified include: (1) reliance on static refusal responses that train adversaries; (2) absence of sub-second semantic classification on production paths; and (3) a complete disconnect between threat intelligence collection and real-time security policy updates.")
@@ -559,7 +559,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             cost_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             cost_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            cost_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            cost_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading1("2.4 Risk Analysis and Mitigation Strategies")
     add_caption("TABLE 2.3: Risk Assessment Matrix and Fail-Closed Mitigation Controls", is_table=True)
@@ -581,7 +581,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             risk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             risk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            risk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            risk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     doc.add_page_break()
 
@@ -608,7 +608,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             inv_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             inv_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            inv_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            inv_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_body("Technical Analysis of the 0.0% Benign False Positive Rate (FPR): The measured 0.0% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents (e.g., SIM provisioning, roaming rates, invoice queries) possess distinct vocabulary distributions with safe scores consistently < 0.08, well below the conservative threshold of 0.15; (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3 [11], which performs context-aware semantic evaluation and preserves legitimate customer queries. While 0.0% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.")
 
@@ -643,7 +643,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             stk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             stk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            stk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            stk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading1("3.5 UML Sequence Model for Interception Flow")
     add_body("Figure 3.1 provides the formal UML sequence diagram tracing both benign customer queries and adversarial prompt injection attempts across all software lifelines.")
@@ -690,7 +690,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     fig4_1_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/fig4_1_state_machine.png"
     if os.path.exists(fig4_1_path):
@@ -743,7 +743,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
             if c_idx == 3:
                 aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.bold = True
 
@@ -781,7 +781,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading1("5.2 Mid-Semester Conclusions & Empirical Reliability")
     add_body("Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the system has successfully proven that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% recall across in-the-wild datasets (559/569 attacks, 98.9% overall accuracy) without penalizing benign customer traffic (0/320 false flags, ~2.1 ms P50 benign fast-path); (2) generative honeypots running on zero-trust containerization effectively contain attacker reconnaissance (no container breakouts observed across 5 executed penetration test vectors); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 seconds.")
@@ -805,7 +805,7 @@ def create_docx_report():
         for c_idx, val in enumerate(rdata):
             sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
-            sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(9.5)
+            sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
 
     add_heading1("5.3 Economic, Social, and Environmental Benefits")
     add_bullet("Economic Benefits: Eliminates commercial API token expenditures (~$27,000/year savings for high-throughput enterprises) and protects sensitive corporate data from exfiltration.")
