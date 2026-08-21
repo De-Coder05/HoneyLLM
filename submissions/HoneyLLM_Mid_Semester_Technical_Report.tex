@@ -398,7 +398,6 @@ To architect, implement, and empirically validate an automated, dual-tier cybers
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{System Assumptions and Engineering Constraints}
 \begin{tabularx}{\textwidth}{@{}p{1.4in} X@{}}
 \rowcolor{HeaderGray} \textbf{Category} & \textbf{Operational Specification \& Constraint} \\
 \hline
@@ -409,6 +408,7 @@ To architect, implement, and empirically validate an automated, dual-tier cybers
 \textbf{Domain Scope} & Enterprise customer service workflows, specifically benchmarked against the NexTel telecom customer support topology. \\
 \hline
 \end{tabularx}
+\caption{System Assumptions and Engineering Constraints}
 \end{table}
 
 \section{Applicable Standards}
@@ -465,7 +465,6 @@ Current academic and industrial paradigms fall into three broad categories: (1) 
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Comparative Literature Survey of Generative Honeypot Frameworks}
 \begin{tabularx}{\textwidth}{@{}p{1.2in} p{0.9in} p{0.9in} X@{}}
 \rowcolor{HeaderGray} \textbf{Framework} & \textbf{Architecture} & \textbf{Sieve Layer} & \textbf{Primary Operational Limitation} \\
 \hline
@@ -477,6 +476,7 @@ Current academic and industrial paradigms fall into three broad categories: (1) 
 \textbf{Honey-LLM (Ours)} & Multi-Tier Ecosystem & Dual Sieve & Sub-millisecond benign path, closed-loop self-healing. \\
 \hline
 \end{tabularx}
+\caption{Comparative Literature Survey of Generative Honeypot Frameworks}
 \end{table}
 
 \subsection{Problems Identified in State of the Art}
@@ -502,7 +502,6 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Computational Resource Feasibility \& Cloud Cost Comparison}
 \begin{tabularx}{\textwidth}{@{}p{1.5in} p{1.1in} p{1.1in} X@{}}
 \rowcolor{HeaderGray} \textbf{Deployment Model} & \textbf{Hardware Req.} & \textbf{Monthly Cost} & \textbf{Feasibility Assessment} \\
 \hline
@@ -511,13 +510,13 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \textbf{Honey-LLM (Optimized)} & 16GB Host (M3/PC) & \$0.00 / mo & \textbf{Highly Feasible}; runs 100\% locally. \\
 \hline
 \end{tabularx}
+\caption{Computational Resource Feasibility \& Cloud Cost Comparison}
 \end{table}
 
 \section{Risk Analysis and Mitigation Strategies}
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Risk Assessment Matrix and Fail-Closed Mitigation Controls}
 \begin{tabularx}{\textwidth}{@{}p{1.3in} p{0.8in} p{0.8in} X@{}}
 \rowcolor{HeaderGray} \textbf{Identified Risk} & \textbf{Severity} & \textbf{Probability} & \textbf{Engineering Mitigation Control} \\
 \hline
@@ -527,6 +526,7 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \textbf{Rule Regression} & Medium & Low & Automated regression testing against benign test suite. \\
 \hline
 \end{tabularx}
+\caption{Risk Assessment Matrix and Fail-Closed Mitigation Controls}
 \end{table}
 
 % =========================================================================
@@ -538,7 +538,6 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Classification and Justification of Investigative Research Techniques}
 \begin{tabularx}{\textwidth}{@{}p{0.5in} p{1.0in} p{1.4in} X@{}}
 \rowcolor{HeaderGray} \textbf{S.No.} & \textbf{Technique} & \textbf{Investigative Description} & \textbf{Honey-LLM Implementation \& Justification} \\
 \hline
@@ -547,6 +546,7 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \textbf{3} & Experimental & Hypothesis testing with controlled variables. & Evaluated the two-tier OR-ensemble on 889 held-out prompts, measuring 95.8\% JailbreakBench recall and 98.3\% adversarial detection recall across the combined curated and in-the-wild corpus (559/569 adversarial, 98.9\% overall accuracy) at 0.0\% benign FPR (0/320 benign) with $\sim$2.1 ms P50 benign fast-path latency (Phase 2). \\
 \hline
 \end{tabularx}
+\caption{Classification and Justification of Investigative Research Techniques}
 \end{table}
 
 \noindent\textbf{Technical Analysis of the 0.0\% Benign False Positive Rate (FPR):} The measured 0.0\% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents possess distinct vocabulary distributions with safe scores consistently $< 0.08$, well below the conservative threshold ($\tau = 0.15$); (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3~\cite{llamaguard3}, which performs context-aware semantic evaluation. While 0.0\% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.
@@ -572,7 +572,6 @@ Honey-LLM implements a sequential four-tier inspection and deception pipeline th
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Honey-LLM Technology and Framework Specifications}
 \begin{tabularx}{\textwidth}{@{}p{1.4in} p{1.6in} X@{}}
 \rowcolor{HeaderGray} \textbf{Layer} & \textbf{Technology / Framework} & \textbf{Operational Role} \\
 \hline
@@ -584,6 +583,7 @@ Honey-LLM implements a sequential four-tier inspection and deception pipeline th
 \textbf{Red-Teaming (Future)} & Microsoft PyRIT~\cite{pyrit2024} & 12+ obfuscation converters, break-out audits, load stress. \\
 \hline
 \end{tabularx}
+\caption{Honey-LLM Technology and Framework Specifications}
 \end{table}
 
 \section{UML Sequence Model for Interception Flow}
@@ -607,7 +607,6 @@ The FastAPI Gateway acts as the authoritative reverse proxy, exposing three oper
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Adversarial Threat Taxonomy Mappings and Severity Classification}
 \begin{tabularx}{\textwidth}{@{}p{0.5in} p{1.4in} p{1.0in} X@{}}
 \rowcolor{HeaderGray} \textbf{Code} & \textbf{Threat Category} & \textbf{Severity} & \textbf{Enterprise Impact Manifestation} \\
 \hline
@@ -621,6 +620,7 @@ The FastAPI Gateway acts as the authoritative reverse proxy, exposing three oper
 \textbf{S8} & Resource Exhaustion & Low & Prompt bloating, algorithmic denial of service. \\
 \hline
 \end{tabularx}
+\caption{Adversarial Threat Taxonomy Mappings and Severity Classification}
 \end{table}
 
 \begin{figure}[H]
@@ -653,7 +653,6 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Sandbox Container Breakout Penetration Test Results (5/5 Isolation)}
 \begin{tabularx}{\textwidth}{@{}p{0.5in} p{1.4in} p{1.2in} X@{}}
 \rowcolor{HeaderGray} \textbf{Probe} & \textbf{Penetration Vector} & \textbf{Tested Command} & \textbf{Audit Observation \& Result} \\
 \hline
@@ -664,6 +663,7 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \textbf{P5} & Privilege Escalation & \texttt{sudo su; chmod +s} & \textbf{BLOCKED}; \texttt{--cap-drop=ALL} enforced. \\
 \hline
 \end{tabularx}
+\caption{Sandbox Container Breakout Penetration Test Results (5/5 Isolation)}
 \end{table}
 
 \begin{figure}[H]
@@ -681,7 +681,6 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Mid-Semester Mapping of Approved Objectives to Implemented Progress}
 \begin{tabularx}{\textwidth}{@{}p{1.3in} p{1.3in} X p{0.8in}@{}}
 \rowcolor{HeaderGray} \textbf{Approved Objective} & \textbf{Target Specification} & \textbf{Mid-Semester Implemented Progress} & \textbf{Status} \\
 \hline
@@ -692,6 +691,7 @@ Honey-LLM designs three distinct user interface surfaces tailored to specific op
 \textbf{5. SOC Telemetry} & Real-time monitoring, $<1$s refresh, taxonomy stats & Architecture completed; live telemetry populated (176 requests, 85 attacks, 4m 46s avg dwell). & Phase 5 \newline(IN PROGRESS) \\
 \hline
 \end{tabularx}
+\caption{Mid-Semester Mapping of Approved Objectives to Implemented Progress}
 \end{table}
 
 \section{Mid-Semester Conclusions \& Empirical Reliability}
@@ -707,7 +707,6 @@ Table 5.2 summarizes the empirical classification and latency breakdown.
 \begin{table}[H]
 \small
 \renewcommand{\arraystretch}{1.2}
-\caption{Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile}
 \begin{tabularx}{\textwidth}{@{}p{1.7in} p{1.3in} p{0.9in} p{0.8in} X@{}}
 \rowcolor{HeaderGray} \textbf{Sieve Layer / Model} & \textbf{Evaluation Target} & \textbf{Recall} & \textbf{Benign FPR} & \textbf{Latency (P50)} \\
 \hline
@@ -719,6 +718,7 @@ Table 5.2 summarizes the empirical classification and latency breakdown.
 \rowcolor{AccentGreen} \textbf{Honey-LLM Two-Tier Ensemble} & \textbf{Curated + Wild (889)} & \textbf{98.3\% (559/569)} & \textbf{0.0\% (0/320)} & \textbf{$\sim$8.0 ms (Benign P50)} \\
 \hline
 \end{tabularx}
+\caption{Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile}
 \end{table}
 
 \section{Economic, Social, and Environmental Benefits}

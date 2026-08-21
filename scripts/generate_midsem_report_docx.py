@@ -438,7 +438,6 @@ def create_docx_report():
     add_body("Mid-Semester Project Scope: Demonstrated on NexTel, an enterprise telecommunications customer support platform. The completed mid-semester scope covers real-time intent classification across 8 adversarial taxonomy classes, containerized deception with synthetic bait, autonomous NeMo guardrail synthesis, and zero-downtime hot-patching (Phases 1 to 4).")
 
     add_heading1("1.5 Assumptions and Constraints")
-    add_caption("TABLE 1.1: System Assumptions and Engineering Constraints", is_table=True)
     assump_tbl = doc.add_table(rows=6, cols=3)
     assump_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     as_headers = ["S.No.", "Category", "Specification & Technical Justification"]
@@ -459,6 +458,7 @@ def create_docx_report():
             assump_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             assump_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             assump_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 1.1: System Assumptions and Engineering Constraints", is_table=True)
 
     add_heading1("1.6 Applicable Standards")
     add_bullet("OWASP Top 10 for LLM Applications (2025/2026): Primary mitigation targeting LLM01 (Prompt Injection), LLM02 (Sensitive Information Disclosure), and LLM06 (Excessive Agency) [9].")
@@ -503,7 +503,6 @@ def create_docx_report():
     add_body("Early generative honeypot research explored using LLMs to simulate Linux command-line environments (shelLM [10], LLM-Honeypot [8], and HoneyLLM [4]). While these systems demonstrated that LLM-driven generation increases honeypot credibility, they operated as passive research testbeds rather than active defenses. Defense frameworks like CHeaT [2] introduced trap tokens for autonomous agents, while Beekeeper [5] applied LLMs for automated honeypot auditing. However, none of these systems integrated real-time traffic classification with automated policy synthesis.")
 
     add_heading2("2.1.3 Research Findings for Existing Literature")
-    add_caption("TABLE 2.1: Comparative Literature Survey of Generative Honeypot Frameworks", is_table=True)
     lit_tbl = doc.add_table(rows=6, cols=5)
     lit_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     l_headers = ["Framework", "Core Approach", "Key Contributions", "Identified Limitations", "Honey-LLM Advancement"]
@@ -524,6 +523,7 @@ def create_docx_report():
             lit_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             lit_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             lit_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 2.1: Comparative Literature Survey of Generative Honeypot Frameworks", is_table=True)
 
     add_heading2("2.1.4 Problems Identified in State of the Art")
     add_body("The primary deficiencies identified include: (1) reliance on static refusal responses that train adversaries; (2) absence of sub-second semantic classification on production paths; and (3) a complete disconnect between threat intelligence collection and real-time security policy updates.")
@@ -540,7 +540,6 @@ def create_docx_report():
     add_heading1("2.3 Cost & Computational Feasibility Analysis")
     add_body("Because Honey-LLM is engineered on a software track, the primary cost consideration is computational feasibility and inference efficiency. By running quantized open-weight models on localized hardware, the architecture completely eliminates recurring per-token cloud API costs while maintaining zero data egress.")
     
-    add_caption("TABLE 2.2: Computational Resource Feasibility & Cloud Cost Comparison", is_table=True)
     cost_tbl = doc.add_table(rows=5, cols=3)
     cost_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     c_headers = ["Dimension", "Honey-LLM Local Architecture", "Cloud API Baseline (GPT-4 / Moderation API)"]
@@ -560,9 +559,9 @@ def create_docx_report():
             cost_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             cost_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             cost_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 2.2: Computational Resource Feasibility & Cloud Cost Comparison", is_table=True)
 
     add_heading1("2.4 Risk Analysis and Mitigation Strategies")
-    add_caption("TABLE 2.3: Risk Assessment Matrix and Fail-Closed Mitigation Controls", is_table=True)
     risk_tbl = doc.add_table(rows=5, cols=3)
     risk_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     r_headers = ["Identified Risk Event", "Impact", "Engineered Fail-Closed Mitigation Control"]
@@ -582,6 +581,7 @@ def create_docx_report():
             risk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             risk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             risk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 2.3: Risk Assessment Matrix and Fail-Closed Mitigation Controls", is_table=True)
 
     doc.add_page_break()
 
@@ -590,7 +590,6 @@ def create_docx_report():
     # =========================================================================
     add_chapter("CHAPTER 3: METHODOLOGY ADOPTED")
     add_heading1("3.1 Investigative Techniques & Empirical FPR Explanation")
-    add_caption("TABLE 3.1: Classification and Justification of Investigative Research Techniques", is_table=True)
     inv_tbl = doc.add_table(rows=4, cols=4)
     inv_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     inv_headers = ["S.No.", "Technique", "Investigative Description", "Honey-LLM Implementation & Justification"]
@@ -609,6 +608,7 @@ def create_docx_report():
             inv_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             inv_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             inv_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 3.1: Classification and Justification of Investigative Research Techniques", is_table=True)
 
     add_body("Technical Analysis of the 0.0% Benign False Positive Rate (FPR): The measured 0.0% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents (e.g., SIM provisioning, roaming rates, invoice queries) possess distinct vocabulary distributions with safe scores consistently < 0.08, well below the conservative threshold of 0.15; (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3 [11], which performs context-aware semantic evaluation and preserves legitimate customer queries. While 0.0% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.")
 
@@ -622,7 +622,6 @@ def create_docx_report():
     add_body("The project methodology is structured into six progressive phases. Phases 1 to 4 have been fully implemented, integrated, and verified for the mid-semester evaluation milestone. Phases 5 and 6 are established as the second-half roadmap.")
 
     add_heading1("3.4 Enterprise Hardware, Software, and Framework Stack")
-    add_caption("TABLE 3.2: Honey-LLM Technology and Framework Specifications", is_table=True)
     stk_tbl = doc.add_table(rows=7, cols=3)
     stk_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     stk_headers = ["Layer", "Technology / Framework", "Operational Role"]
@@ -644,6 +643,7 @@ def create_docx_report():
             stk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             stk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             stk_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 3.2: Honey-LLM Technology and Framework Specifications", is_table=True)
 
     add_heading1("3.5 UML Sequence Model for Interception Flow")
     add_body("Figure 3.1 provides the formal UML sequence diagram tracing both benign customer queries and adversarial prompt injection attempts across all software lifelines.")
@@ -667,7 +667,6 @@ def create_docx_report():
     add_heading1("4.2 Threat Taxonomy & Sticky Quarantine State Machine")
     add_body("The system maintains state consistency through sticky quarantine. Once a session ID is flagged as adversarial, subsequent benign queries within the same session remain trapped in the Mirror Maze, preventing attackers from probing for filter boundaries. Table 4.1 maps the 8 threat taxonomy categories established in Phase 1.")
 
-    add_caption("TABLE 4.1: Adversarial Threat Taxonomy Mappings and Severity Classification", is_table=True)
     tax_tbl = doc.add_table(rows=9, cols=4)
     tax_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     t_headers = ["ID", "Threat Category", "Enterprise Manifestation (NexTel Context)", "Severity Level"]
@@ -691,6 +690,7 @@ def create_docx_report():
             tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             tax_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 4.1: Adversarial Threat Taxonomy Mappings and Severity Classification", is_table=True)
 
     fig4_1_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/fig4_1_state_machine.png"
     if os.path.exists(fig4_1_path):
@@ -720,7 +720,6 @@ def create_docx_report():
         add_caption("FIGURE 4.3: Honey-LLM Admin Live Sieve Decision Tracer (/admin)", is_table=False)
 
     add_heading1("4.4 Working Prototype Execution (Phases 1 to 4 Verified)")
-    add_caption("TABLE 4.2: Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", is_table=True)
     aud_tbl = doc.add_table(rows=9, cols=4)
     aud_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     aud_headers = ["Audit Probe Vector", "Expected Security State", "Measured Result", "Integrity Status"]
@@ -746,6 +745,7 @@ def create_docx_report():
             aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
             if c_idx == 3:
                 aud_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.bold = True
+    add_caption("TABLE 4.2: Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", is_table=True)
 
     soc_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_soc_dashboard.png"
     if os.path.exists(soc_img_path):
@@ -761,7 +761,6 @@ def create_docx_report():
     # =========================================================================
     add_chapter("CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE")
     add_heading1("5.1 Mid-Semester Accomplishments vs. Approved Objectives")
-    add_caption("TABLE 5.1: Mid-Semester Mapping of Approved Objectives to Implemented Progress", is_table=True)
     obj_tbl = doc.add_table(rows=6, cols=4)
     obj_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     o_headers = ["Approved Objective", "Target Specification", "Mid-Semester Implemented Progress", "Phase / Status"]
@@ -782,11 +781,11 @@ def create_docx_report():
             obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].text = val
             obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.name = 'Times New Roman'
             obj_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
+    add_caption("TABLE 5.1: Mid-Semester Mapping of Approved Objectives to Implemented Progress", is_table=True)
 
     add_heading1("5.2 Mid-Semester Conclusions & Empirical Reliability")
     add_body("Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the evaluation demonstrates that: (1) adversarial intent can be intercepted with 95.8% recall on standard benchmarks and 98.3% adversarial detection recall across the combined curated and in-the-wild evaluation corpus (559/569 attacks, 98.9% overall accuracy) while protecting benign customer traffic (~2.1 to 8 ms P50 fast-path, 0/320 false flags); (2) generative honeypots running on zero-trust containerization contained attacker reconnaissance in the evaluated sandbox tests (no container escapes observed across the 5 executed penetration probes); and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within 10.4 to 12.8 seconds.")
     
-    add_caption("TABLE 5.2: Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile", is_table=True)
     sieve_tbl = doc.add_table(rows=8, cols=5)
     sieve_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     s_headers = ["Sieve Layer / Model", "Evaluation Target", "Adversarial Recall (%)", "Benign FPR (%)", "Latency (P50)"]
@@ -810,6 +809,7 @@ def create_docx_report():
             sieve_tbl.rows[r_idx].cells[c_idx].paragraphs[0].runs[0].font.size = Pt(10)
             if r_idx in [6, 7]:
                 set_cell_background(sieve_tbl.rows[r_idx].cells[c_idx], "F0FDF4")
+    add_caption("TABLE 5.2: Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile", is_table=True)
 
     add_heading1("5.3 Economic, Social, and Environmental Benefits")
     add_bullet("Economic Benefits: Eliminates commercial API token expenditures (~$27,000/year savings for high-throughput enterprises) and protects sensitive corporate data from exfiltration.")

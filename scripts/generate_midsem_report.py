@@ -571,7 +571,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 1.1: System Assumptions and Engineering Constraints", table_caption_style))
     assump_data = [
         [Paragraph("<b>S.No.</b>", table_header_style), Paragraph("<b>Category</b>", table_header_style), Paragraph("<b>Specification & Technical Justification</b>", table_header_style)],
         [Paragraph("1", table_text_style), Paragraph("Hardware Sizing", table_text_style), Paragraph("Dual 8B parameter models (Llama-Guard 3 and Llama-3) execute concurrently on standard host compute (>=16 GB RAM / VRAM) with zero memory thrashing.", table_text_style)],
@@ -589,6 +588,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
     story.append(t_assump)
+    story.append(Paragraph("TABLE 1.1: System Assumptions and Engineering Constraints", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>1.6 Applicable Standards</b>", heading1_style))
@@ -671,7 +671,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 2.1: Comparative Literature Survey of Generative Honeypot Frameworks", table_caption_style))
     lit_table_data = [
         [Paragraph("<b>Framework</b>", table_header_style), Paragraph("<b>Core Approach</b>", table_header_style), Paragraph("<b>Key Contributions</b>", table_header_style), Paragraph("<b>Identified Limitations</b>", table_header_style), Paragraph("<b>Honey-LLM Advancement</b>", table_header_style)],
         [
@@ -719,6 +718,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
     story.append(t_lit)
+    story.append(Paragraph("TABLE 2.1: Comparative Literature Survey of Generative Honeypot Frameworks", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>2.1.4 Problems Identified in State of the Art</b>", heading2_style))
@@ -747,7 +747,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 2.2: Computational Resource Feasibility & Cloud Cost Comparison", table_caption_style))
     cost_data = [
         [Paragraph("<b>Dimension</b>", table_header_style), Paragraph("<b>Honey-LLM Local Architecture</b>", table_header_style), Paragraph("<b>Cloud API Baseline (GPT-4 / Moderation API)</b>", table_header_style)],
         [Paragraph("Compute Environment", table_text_style), Paragraph("Enterprise Host Compute (>=16 GB RAM / VRAM)", table_text_style), Paragraph("Hosted Cloud Server Cluster ($450/month)", table_text_style)],
@@ -763,12 +762,12 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
     ]))
     story.append(t_cost)
+    story.append(Paragraph("TABLE 2.2: Computational Resource Feasibility & Cloud Cost Comparison", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>2.4 Risk Analysis and Mitigation Strategies</b>", heading1_style))
     story.append(Paragraph("Table 2.3 documents critical operational risks and their engineered fail-closed controls.", body_style))
 
-    story.append(Paragraph("TABLE 2.3: Risk Assessment Matrix and Fail-Closed Mitigation Controls", table_caption_style))
     risk_data = [
         [Paragraph("<b>Identified Risk Event</b>", table_header_style), Paragraph("<b>Impact</b>", table_header_style), Paragraph("<b>Engineered Fail-Closed Mitigation Control</b>", table_header_style)],
         [Paragraph("Inference Service Outage", table_text_style), Paragraph("High", table_text_style), Paragraph("Gateway fails closed to safe degraded static support; never bypasses security.", table_text_style)],
@@ -784,6 +783,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
     ]))
     story.append(t_risk)
+    story.append(Paragraph("TABLE 2.3: Risk Assessment Matrix and Fail-Closed Mitigation Controls", table_caption_style))
 
     story.append(PageBreak())
 
@@ -799,7 +799,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 3.1: Classification and Justification of Investigative Research Techniques", table_caption_style))
     tech_data = [
         [Paragraph("<b>S.No.</b>", table_header_style), Paragraph("<b>Technique</b>", table_header_style), Paragraph("<b>Investigative Description</b>", table_header_style), Paragraph("<b>Honey-LLM Implementation & Justification</b>", table_header_style)],
         [
@@ -830,6 +829,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
     story.append(t_tech)
+    story.append(Paragraph("TABLE 3.1: Classification and Justification of Investigative Research Techniques", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph(
@@ -877,7 +877,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     story.append(Paragraph("<b>3.4 Enterprise Hardware, Software, and Framework Stack</b>", heading1_style))
     story.append(Paragraph("Table 3.2 summarizes the verified technology stack powering Honey-LLM.", body_style))
 
-    story.append(Paragraph("TABLE 3.2: Honey-LLM Technology and Framework Specifications", table_caption_style))
     stack_data = [
         [Paragraph("<b>Layer</b>", table_header_style), Paragraph("<b>Technology / Framework</b>", table_header_style), Paragraph("<b>Operational Role</b>", table_header_style)],
         [Paragraph("Inference Host", table_text_style), Paragraph("Enterprise Host Compute (>=16 GB RAM / VRAM)", table_text_style), Paragraph("Local execution for Llama-Guard 3 8B [11] and Llama-3 8B.", table_text_style)],
@@ -895,6 +894,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
     ]))
     story.append(t_stack)
+    story.append(Paragraph("TABLE 3.2: Honey-LLM Technology and Framework Specifications", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>3.5 UML Sequence Model for Interception Flow</b>", heading1_style))
@@ -928,7 +928,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 4.1: Adversarial Threat Taxonomy Mappings and Severity Classification", table_caption_style))
     tax_data = [
         [Paragraph("<b>ID</b>", table_header_style), Paragraph("<b>Threat Category</b>", table_header_style), Paragraph("<b>Enterprise Manifestation (NexTel Context)</b>", table_header_style), Paragraph("<b>Severity Level</b>", table_header_style)],
         [Paragraph("S1", table_text_style), Paragraph("direct-override", table_text_style), Paragraph("Direct command override seeking admin codes", table_text_style), Paragraph("Critical", table_text_style)],
@@ -948,6 +947,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
     ]))
     story.append(t_tax)
+    story.append(Paragraph("TABLE 4.1: Adversarial Threat Taxonomy Mappings and Severity Classification", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(KeepTogether([
@@ -997,7 +997,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 4.2: Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", table_caption_style))
     audit_data = [
         [Paragraph("<b>Audit Probe Vector</b>", table_header_style), Paragraph("<b>Expected Security State</b>", table_header_style), Paragraph("<b>Measured Result</b>", table_header_style), Paragraph("<b>Integrity Status</b>", table_header_style)],
         [Paragraph("Internet HTTP Egress (example.com:443)", table_text_style), Paragraph("BLOCKED", table_text_style), Paragraph("BLOCKED (Timeout / No Route)", table_text_style), Paragraph("PASS", table_header_style)],
@@ -1017,6 +1016,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
     ]))
     story.append(t_audit)
+    story.append(Paragraph("TABLE 4.2: Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", table_caption_style))
 
     soc_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_soc_dashboard.png"
     if os.path.exists(soc_img_path):
@@ -1040,7 +1040,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 5.1: Mid-Semester Mapping of Approved Objectives to Implemented Progress", table_caption_style))
     obj_eval_data = [
         [Paragraph("<b>Approved Objective</b>", table_header_style), Paragraph("<b>Target Specification</b>", table_header_style), Paragraph("<b>Mid-Semester Implemented Progress</b>", table_header_style), Paragraph("<b>Phase / Status</b>", table_header_style)],
         [
@@ -1083,6 +1082,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
     story.append(t_objeval)
+    story.append(Paragraph("TABLE 5.1: Mid-Semester Mapping of Approved Objectives to Implemented Progress", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>5.2 Mid-Semester Conclusions & Empirical Reliability</b>", heading1_style))
@@ -1091,7 +1091,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         body_indent_style
     ))
 
-    story.append(Paragraph("TABLE 5.2: Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile", table_caption_style))
     sieve_eval_data = [
         [Paragraph("<b>Sieve Layer / Model</b>", table_header_style), Paragraph("<b>Evaluation Target</b>", table_header_style), Paragraph("<b>Adversarial Recall</b>", table_header_style), Paragraph("<b>Benign FPR</b>", table_header_style), Paragraph("<b>Latency (P50)</b>", table_header_style)],
         [Paragraph("Default Llama-Guard 3 (1B) [11]", table_text_style), Paragraph("JailbreakBench (100) [12]", table_text_style), Paragraph("37.5% (37/100)", table_text_style), Paragraph("0.0% (0/100)", table_text_style), Paragraph("180 ms", table_text_style)],
@@ -1111,6 +1110,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
     story.append(t_sieve)
+    story.append(Paragraph("TABLE 5.2: Intent Sieve Benchmark Evaluation and Multi-Tier Latency Profile", table_caption_style))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>5.3 Economic, Social, and Environmental Benefits</b>", heading1_style))
