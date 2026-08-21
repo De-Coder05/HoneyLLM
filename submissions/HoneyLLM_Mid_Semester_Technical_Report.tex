@@ -388,9 +388,9 @@ To architect, implement, and empirically validate an automated, dual-tier cybers
 \noindent\textbf{Scope of Mid-Semester Evaluation (Phases 1 to 4):}
 \begin{itemize}
     \item Formulation and dataset curation of an 8-Class Adversarial Threat Taxonomy (S1--S8).
-    \item Development and threshold calibration of the Multi-Tier Semantic Intent Sieve ($P_{\text{benign}} < 0.15$).
+    \item Development and threshold calibration of the Multi-Tier Semantic Intent Sieve ($\tau_{\text{safe}} = 0.25$).
     \item Implementation of the isolated Docker-based `Mirror Maze' deception sandbox on port \texttt{:9100} with zero-egress policies.
-    \item Engineering of the closed-loop Autonomous Guardrail Synthesis pipeline compiling NVIDIA NeMo Colang 2.0 rules [6].
+    \item Engineering of the closed-loop Autonomous Guardrail Synthesis pipeline compiling NVIDIA NeMo Colang 2.0 rules~\cite{nemo2024guardrails}.
     \item Empirical validation of classification accuracy, benign false-positive rates, container isolation, and time-to-patch latency.
 \end{itemize}
 
@@ -413,7 +413,7 @@ To architect, implement, and empirically validate an automated, dual-tier cybers
 
 \section{Applicable Standards}
 \begin{itemize}
-    \item \textbf{OWASP Top 10 for LLM Applications (2025/2026):} Primary mitigation targeting LLM01 (Prompt Injection), LLM02 (Sensitive Information Disclosure), and LLM06 (Excessive Agency) [9].
+    \item \textbf{OWASP Top 10 for LLM Applications (2025/2026):} Primary mitigation targeting LLM01 (Prompt Injection), LLM02 (Sensitive Information Disclosure), and LLM06 (Excessive Agency)~\cite{owasp2023top10}.
     \item \textbf{NIST AI Risk Management Framework (AI RMF 1.0):} Alignment with Govern, Map, Measure, and Manage functions for trustworthiness and adversarial robustness.
     \item \textbf{IEEE Standard for Software System Verification and Validation (IEEE Std 1012-2016):} Applied to empirical classifier evaluations and regression testing gates.
     \item \textbf{Docker Security Benchmarks (CIS Docker Benchmark v1.6.0):} Strict container sandboxing, dropping kernel capabilities (\texttt{--cap-drop=ALL}), and enforcing read-only root filesystems.
@@ -456,7 +456,7 @@ Unlike commercial firewalls that operate via static rejection or research honeyp
 
 \section{Literature Survey}
 \subsection{Theory Associated With Problem Area}
-Adversarial prompt injection represents a manifestation of the classic confused deputy problem instantiated within semantic vector spaces. Because LLM decoders operate autoregressively across concatenated prompt contexts, semantic instructions from untrusted users can override system-level constraints [9].
+Adversarial prompt injection represents a manifestation of the classic confused deputy problem instantiated within semantic vector spaces. Because LLM decoders operate autoregressively across concatenated prompt contexts, semantic instructions from untrusted users can override system-level constraints~\cite{owasp2023top10}.
 
 \subsection{Existing Systems and Solutions}
 Current academic and industrial paradigms fall into three broad categories: (1) \textit{Input Classifiers}, such as Meta Llama-Guard~\cite{llamaguard3} and Lakera Guard, which evaluate inputs before reaching primary models; (2) \textit{Programmable Rails}, such as NVIDIA NeMo Guardrails~\cite{nemo2024guardrails}, which enforce dialogue flows via Colang rules; and (3) \textit{LLM Honeypot Prototypes}, such as Shell Honeypots~\cite{guan2024honeyllm, otal2024llmhoneypot, sladic2024llmshell} and Beekeeper~\cite{ilg2025beekeeper}, which deploy language models as dynamic deception environments.
@@ -549,7 +549,7 @@ High availability, sub-50 ms sieve overhead on benign paths, fail-closed safety 
 \caption{Classification and Justification of Investigative Research Techniques}
 \end{table}
 
-\noindent\textbf{Technical Analysis of the 0.0\% Benign False Positive Rate (FPR):} The measured 0.0\% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents possess distinct vocabulary distributions with safe scores consistently $< 0.08$, well below the conservative threshold ($\tau = 0.15$); (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3~\cite{llamaguard3}, which performs context-aware semantic evaluation. While 0.0\% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.
+\noindent\textbf{Technical Analysis of the 0.0\% Benign False Positive Rate (FPR):} The measured 0.0\% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents possess distinct vocabulary distributions with safe scores consistently $< 0.10$, well below the conservative threshold ($\tau = 0.25$); (2) Ambiguous queries in the margin (0.25 to 0.70) are escalated to Tier-2 Llama-Guard 3~\cite{llamaguard3}, which performs context-aware semantic evaluation. While 0.0\% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.
 
 \section{Proposed Solution \& Multi-Tier Architecture}
 Honey-LLM implements a sequential four-tier inspection and deception pipeline that addresses the severe latency bottleneck of monolithic moderation models:
