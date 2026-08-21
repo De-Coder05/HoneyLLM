@@ -785,21 +785,28 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>1.6 Applicable Standards</b>", heading1_style))
     story.append(Paragraph(
-        "Honey-LLM adheres strictly to established international cybersecurity and AI governance standards:",
-        body_indent_style
+        "• <b>OWASP Top 10 for LLM Applications (2025/2026):</b> Primary mitigation targeting LLM01 (Prompt Injection), LLM02 (Sensitive Information Disclosure), and LLM06 (Excessive Agency) [9].",
+        bullet_style
     ))
-    story.append(Paragraph("• <b>OWASP Top 10 for LLM Applications (2025/2026):</b> Primary mitigation targeting LLM01 (Prompt Injection), LLM02 (Sensitive Information Disclosure), and LLM06 (Excessive Agency) [9].", bullet_style))
-    story.append(Paragraph("• <b>NIST AI Risk Management Framework (AI RMF 1.0):</b> Fulfills core functions of Map, Measure, Manage, and Govern for adversarial robustness.", bullet_style))
-    story.append(Paragraph("• <b>IEEE Standard for Software Quality Assurance (IEEE 730-2014):</b> Structured unit, integration, and security regression testing protocols.", bullet_style))
-    story.append(Paragraph("• <b>NVIDIA NeMo Colang 2.0 Syntax Standards:</b> Formal language definition for programmable conversational guardrail policies [6].", bullet_style))
+    story.append(Paragraph(
+        "• <b>NIST AI Risk Management Framework (AI RMF 1.0):</b> Fulfills core functions of Map, Measure, Manage, and Govern for adversarial robustness.",
+        bullet_style
+    ))
+    story.append(Paragraph(
+        "• <b>IEEE Standard for Software Quality Assurance (IEEE 730-2014):</b> Structured unit, integration, and security regression testing protocols.",
+        bullet_style
+    ))
+    story.append(Paragraph(
+        "• <b>NVIDIA NeMo Colang 2.0 Syntax Standards:</b> Formal language definition for programmable conversational guardrail policies [6].",
+        bullet_style
+    ))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>1.7 Approved Objectives (Proposal Evaluation)</b>", heading1_style))
-    story.append(Paragraph("The following five core objectives were approved in the capstone proposal evaluation:", body_indent_style))
-    story.append(Paragraph("1. <b>Develop a High-Accuracy Intent Sieve Classifier:</b> Construct a multi-tier classifier achieving >95% detection on standard adversarial benchmarks (such as JailbreakBench [12]) with <1% False Positive Rate on benign queries (Completed in Phase 2).", bullet_style))
-    story.append(Paragraph("2. <b>Implement a High-Fidelity Generative Sandbox ('Mirror Maze'):</b> Deploy an isolated zero-trust decoy maintaining >5 minutes average attacker dwell time through coherent multi-turn deception (Completed in Phase 3).", bullet_style))
-    story.append(Paragraph("3. <b>Automate Self-Healing Security Guardrails:</b> Build a closed-loop pipeline that extracts attack patterns and synthesizes permanent, hot-patchable NeMo Colang rules with time-to-patch measured in seconds (Completed in Phase 4).", bullet_style))
-    story.append(Paragraph("4. <b>Validate Zero-Escape Sandbox Security:</b> Execute comprehensive container breakout penetration audits to guarantee complete network and host isolation (Completed in Phase 3/4).", bullet_style))
+    story.append(Paragraph("1. <b>Develop a High-Accuracy Intent Sieve Classifier:</b> Construct a multi-tier classifier achieving >95% detection on JailbreakBench [12] with <1% FPR (Completed in Phase 2).", bullet_style))
+    story.append(Paragraph("2. <b>Implement a High-Fidelity Generative Sandbox ('Mirror Maze'):</b> Deploy an isolated zero-trust decoy maintaining >5 minutes average attacker dwell time (Completed in Phase 3).", bullet_style))
+    story.append(Paragraph("3. <b>Automate Self-Healing Security Guardrails:</b> Build a closed-loop pipeline synthesizing permanent NeMo Colang rules in seconds (Completed in Phase 4).", bullet_style))
+    story.append(Paragraph("4. <b>Validate Zero-Escape Sandbox Security:</b> Execute comprehensive container breakout penetration audits to rigorously validate multi-layer network and host isolation (Completed in Phase 3/4).", bullet_style))
     story.append(Paragraph("5. <b>Construct a Real-Time Threat Intelligence SOC Dashboard:</b> Provide security analysts with live visualization (<1s refresh) of attack taxonomies, detection tiers, and measured dwell times (Phase 5, In Progress for End-Sem).", bullet_style))
 
     story.append(Spacer(1, 4))
@@ -1102,7 +1109,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
 
     story.append(Paragraph("<b>4.1 System Architecture & Sieve Gateway Flow</b>", heading1_style))
     story.append(Paragraph(
-        "The architecture enforces an unbreachable barrier between public RAG knowledge and internal synthetic bait. When an HTTP request enters the gateway, it passes through the Tier-0 Guardrail store and Tier-1 Fast Path. If cleared as SAFE, the query is dispatched to the production RAG engine, which is structurally restricted to the public domain knowledge corpus. If flagged UNSAFE, the gateway silently delegates the query to the Mirror Maze container via an internal ingress proxy port (:9100).",
+        "The architecture enforces strict structural isolation between public RAG knowledge and internal synthetic bait. When an HTTP request enters the gateway, it passes through the Tier-0 Guardrail store and Tier-1 Fast Path. If cleared as SAFE, the query is dispatched to the production RAG engine, which is structurally restricted to the public domain knowledge corpus. If flagged UNSAFE, the gateway silently delegates the query to the Mirror Maze container via an internal ingress proxy port (:9100).",
         body_indent_style
     ))
 
@@ -1248,7 +1255,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         ],
         [
             Paragraph("4. Zero-Escape Sandbox Security", table_text_style),
-            Paragraph("Impenetrable isolation, zero network/host leak", table_text_style),
+            Paragraph("Zero-egress container isolation, zero network/host leakage under audit probes", table_text_style),
             Paragraph("Docker zero-egress network; <b>5/5 breakout audit PASS</b>; read-only rootfs; non-root user.", table_text_style),
             Paragraph("Phase 3/4<br/>(COMPLETED)", table_header_style)
         ],
