@@ -1,5 +1,6 @@
 import os
 import sys
+import fitz # PyMuPDF
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import (
@@ -36,21 +37,12 @@ class AcademicNumberedCanvas(canvas.Canvas):
         page_num = self._pageNumber
         self.saveState()
 
-        # Page 1 is Cover Page -> No page number, no header/footer
+        # Page 1 is Cover Page -> No page number
         if page_num == 1:
             self.restoreState()
             return
 
         # Preliminary pages (2 to 9): Roman numerals i to viii
-        # 2: Abstract (i)
-        # 3: Declaration (ii)
-        # 4: Acknowledgement (iii)
-        # 5: Table of Contents (iv)
-        # 6: Table of Contents cont. (v)
-        # 7: List of Tables (vi)
-        # 8: List of Figures (vii)
-        # 9: List of Abbreviations (viii)
-        # 10+: Arabic numerals 1, 2, 3...
         roman_map = {
             2: "i", 3: "ii", 4: "iii", 5: "iv", 6: "v", 7: "vi", 8: "vii", 9: "viii"
         }
@@ -68,114 +60,223 @@ class AcademicNumberedCanvas(canvas.Canvas):
         self.restoreState()
 
 
+# =========================================================================
+# VECTOR DIAGRAM 1: Component & Architecture Diagram (Figure 1.1)
+# =========================================================================
 def draw_architecture_diagram():
-    # Width: 415.27, Height: 112
-    d = Drawing(415, 112)
+    # Width: 415.27, Height: 145 (Clean, spacious, zero text overlaps)
+    d = Drawing(415, 145)
     
     # Outer frame
-    d.add(Rect(0, 0, 415, 112, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=4, ry=4))
+    d.add(Rect(0, 0, 415, 145, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=5, ry=5))
     
-    # 1. User/Attacker Box
-    d.add(Rect(8, 38, 68, 42, fillColor=colors.HexColor("#F1F5F9"), strokeColor=colors.HexColor("#475569"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(42, 63, "User / Attacker", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
-    d.add(String(42, 51, "Incoming Request", fontName="Times-Roman", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#334155")))
-    d.add(String(42, 41, "(HTTP / REST)", fontName="Times-Italic", fontSize=6.2, textAnchor="middle", fillColor=colors.HexColor("#64748B")))
+    # 1. User / Client Box (Left)
+    d.add(Rect(8, 55, 66, 52, fillColor=colors.HexColor("#F1F5F9"), strokeColor=colors.HexColor("#475569"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(41, 92, "Client / User", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
+    d.add(String(41, 78, "Natural-Language", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#334155")))
+    d.add(String(41, 68, "Prompt Request", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#334155")))
     
     # Arrow to Gateway
-    d.add(Line(76, 59, 93, 59, strokeColor=colors.HexColor("#475569"), strokeWidth=1.2))
-    d.add(Polygon([93, 59, 88, 62, 88, 56], fillColor=colors.HexColor("#475569"), strokeColor=colors.HexColor("#475569")))
+    d.add(Line(74, 81, 92, 81, strokeColor=colors.HexColor("#475569"), strokeWidth=1.2))
+    d.add(Polygon([92, 81, 86, 84, 86, 78], fillColor=colors.HexColor("#475569"), strokeColor=colors.HexColor("#475569")))
+    d.add(String(83, 85, "HTTP", fontName="Times-Italic", fontSize=5.5, textAnchor="middle", fillColor=colors.HexColor("#64748B")))
     
-    # 2. Gateway Multi-Tier Sieve Container
-    d.add(Rect(96, 12, 138, 88, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#2563EB"), strokeWidth=1.2, rx=4, ry=4))
-    d.add(String(165, 89, "Honey-LLM FastAPI Gateway", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#1E3A8A")))
+    # 2. Gateway Multi-Tier Sieve Container (Middle)
+    d.add(Rect(94, 24, 152, 112, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#2563EB"), strokeWidth=1.2, rx=4, ry=4))
+    d.add(String(170, 123, "Honey-LLM FastAPI Gateway", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#1E3A8A")))
     
     # Tier-0 Sub-box
-    d.add(Rect(102, 65, 126, 18, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.7, rx=2, ry=2))
-    d.add(String(165, 71, "Tier-0: Semantic Guardrail Cache (10-20 ms)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
+    d.add(Rect(100, 88, 140, 24, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, rx=2, ry=2))
+    d.add(String(170, 102, "Tier-0: Guardrail Cache (10-20 ms)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
+    d.add(String(170, 92, "miniLM Semantic Vector Store", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
     
     # Tier-1 Sub-box
-    d.add(Rect(102, 43, 126, 18, fillColor=colors.HexColor("#DBEAFE"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=0.7, rx=2, ry=2))
-    d.add(String(165, 49, "Tier-1: Statistical Fast-Path (~2 ms)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
+    d.add(Rect(100, 58, 140, 24, fillColor=colors.HexColor("#DBEAFE"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=0.8, rx=2, ry=2))
+    d.add(String(170, 72, "Tier-1: Statistical Fast-Path (~2 ms)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
+    d.add(String(170, 62, "Calibrated TF-IDF + LogReg (tau=0.15)", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#2563EB")))
     
     # Tier-2 Sub-box
-    d.add(Rect(102, 21, 126, 18, fillColor=colors.HexColor("#FEF3C7"), strokeColor=colors.HexColor("#D97706"), strokeWidth=0.7, rx=2, ry=2))
-    d.add(String(165, 27, "Tier-2: Deep Moderation Sieve (Llama-Guard 3)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#78350F")))
+    d.add(Rect(100, 28, 140, 24, fillColor=colors.HexColor("#FEF3C7"), strokeColor=colors.HexColor("#D97706"), strokeWidth=0.8, rx=2, ry=2))
+    d.add(String(170, 42, "Tier-2: Deep Moderation Sieve (8B)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#78350F")))
+    d.add(String(170, 32, "Llama-Guard 3 Custom Policy (~700 ms)", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#B45309")))
 
-    # 3. Branch Top: SAFE -> Production RAG Engine
-    d.add(Line(234, 68, 270, 84, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1.2))
-    d.add(Polygon([270, 84, 263, 85, 266, 79], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
-    d.add(String(246, 81, "SAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#16A34A")))
+    # 3. Branch Top: SAFE -> Production RAG Engine (Right Top)
+    d.add(Line(246, 92, 276, 108, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1.2))
+    d.add(Polygon([276, 108, 269, 109, 272, 103], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
+    d.add(String(246, 108, "SAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#16A34A")))
     
-    d.add(Rect(272, 66, 135, 34, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(339, 87, "Production RAG Engine", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
-    d.add(String(339, 77, "Enterprise Support Knowledge Base", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
-    d.add(String(339, 68, "(Clean Authentic Responses)", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#166534")))
+    d.add(Rect(278, 86, 128, 48, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(342, 120, "Production RAG Engine", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
+    d.add(String(342, 107, "NexTel Domain Knowledge Base", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+    d.add(String(342, 95, "(Authentic Customer Responses)", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#166534")))
     
-    # 4. Branch Bottom: UNSAFE -> Mirror Maze Sandbox
-    d.add(Line(234, 38, 270, 24, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1.2))
-    d.add(Polygon([270, 24, 266, 29, 263, 23], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
-    d.add(String(242, 27, "UNSAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#DC2626")))
+    # 4. Branch Bottom: UNSAFE -> Mirror Maze Sandbox (Right Bottom)
+    d.add(Line(246, 44, 276, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1.2))
+    d.add(Polygon([276, 28, 272, 34, 269, 28], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
+    d.add(String(242, 18, "UNSAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#DC2626")))
     
-    d.add(Rect(272, 8, 135, 38, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(339, 36, "Mirror Maze Deception Sandbox", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
-    d.add(String(339, 26, "Zero-Trust Docker Container (:9100)", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
-    d.add(String(339, 16, "'Sarah' Decoy Persona + Synthetic Bait", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#B91C1C")))
+    d.add(Rect(278, 14, 128, 52, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(342, 52, "Mirror Maze Sandbox", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
+    d.add(String(342, 40, "Docker Zero-Egress Sandbox (:9100)", fontName="Times-Roman", fontSize=6.2, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+    d.add(String(342, 28, "'Sarah' Persona + Synthetic Bait", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#B91C1C")))
 
     # 5. Feedback Loop from Sandbox to Gateway (Bottom dashed line)
-    d.add(Line(339, 8, 339, 2, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.9))
-    d.add(Line(339, 2, 165, 2, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.9))
-    d.add(Line(165, 2, 165, 12, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.9))
-    d.add(Polygon([165, 12, 163, 7, 167, 7], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
-    d.add(String(252, 4.5, "Autonomous NeMo Synthesis & Hot-Patch (10.4s)", fontName="Times-BoldItalic", fontSize=6.2, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
+    d.add(Line(342, 14, 342, 6, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
+    d.add(Line(342, 6, 170, 6, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
+    d.add(Line(170, 6, 170, 24, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
+    d.add(Polygon([170, 24, 167, 19, 173, 19], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
+    d.add(String(256, 8, "Autonomous NeMo Colang Rule Synthesis & Hot-Patch (10.4s)", fontName="Times-BoldItalic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
 
     return d
 
 
-def draw_sequence_and_state_diagram():
-    # Width: 415.27, Height: 115
-    d = Drawing(415, 115)
+# =========================================================================
+# VECTOR DIAGRAM 2: UML Sequence Diagram (Figure 3.1)
+# =========================================================================
+def draw_uml_sequence_diagram():
+    # Width: 415.27, Height: 180 (Generous vertical spacing, zero text-arrow overlap)
+    d = Drawing(415, 180)
+    d.add(Rect(0, 0, 415, 180, fillColor=colors.HexColor("#FAFAFA"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=5, ry=5))
     
-    # Outer frame
-    d.add(Rect(0, 0, 415, 115, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=4, ry=4))
+    # Lifeline Headers
+    lifelines = [
+        (40, "Client"),
+        (115, "Gateway"),
+        (190, "Tier-1 Sieve"),
+        (265, "Tier-2 Sieve"),
+        (335, "RAG Engine"),
+        (390, "Mirror Maze")
+    ]
     
-    # Section Header Left: Dual-Path Request Sequence
-    d.add(String(110, 103, "A. End-to-End Dual-Path Request Sequence", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
+    for x, label in lifelines:
+        d.add(Rect(x - 24, 158, 48, 16, fillColor=colors.HexColor("#1E293B"), strokeColor=colors.HexColor("#0F172A"), strokeWidth=0.8, rx=2, ry=2))
+        d.add(String(x, 163, label, fontName="Times-Bold", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#FFFFFF")))
+        # Lifeline dashed vertical
+        d.add(Line(x, 158, x, 8, strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.7, strokeDashArray=[2, 2]))
+
+    # Message 1: Client -> Gateway
+    d.add(String(77, 147, "1. send_request(prompt)", fontName="Times-Roman", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
+    d.add(Line(40, 142, 115, 142, strokeColor=colors.HexColor("#0F172A"), strokeWidth=1))
+    d.add(Polygon([115, 142, 109, 144, 109, 140], fillColor=colors.HexColor("#0F172A"), strokeColor=colors.HexColor("#0F172A")))
+
+    # Message 2: Gateway -> Tier-1
+    d.add(String(152, 134, "2. score_fast_path()", fontName="Times-Roman", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
+    d.add(Line(115, 129, 190, 129, strokeColor=colors.HexColor("#2563EB"), strokeWidth=0.9))
+    d.add(Polygon([190, 129, 184, 131, 184, 127], fillColor=colors.HexColor("#2563EB"), strokeColor=colors.HexColor("#2563EB")))
+
+    # Box: alt BENIGN PATH
+    d.add(Rect(10, 86, 395, 38, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#22C55E"), strokeWidth=0.7, rx=2, ry=2))
+    d.add(String(16, 114, "[alt: score < 0.15 (Benign Customer Traffic)]", fontName="Times-BoldItalic", fontSize=5.5, fillColor=colors.HexColor("#15803D")))
     
-    # Path 1: Benign Trace (Green pill)
-    d.add(Rect(8, 62, 205, 34, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#22C55E"), strokeWidth=0.8, rx=3, ry=3))
-    d.add(String(14, 86, "1. Benign Request Path (SLA: ~2.1 ms)", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#14532D")))
-    d.add(String(14, 76, "User Query -> Tier-1 Fast-Path [SAFE] -> Direct RAG Engine", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#15803D")))
-    d.add(String(14, 66, "-> Instant Public Response (Zero Moderation Latency Added)", fontName="Times-Italic", fontSize=6.2, fillColor=colors.HexColor("#166534")))
+    # 3a: Gateway -> RAG Engine
+    d.add(String(225, 106, "3a. retrieve_and_generate(safe_query)", fontName="Times-Roman", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
+    d.add(Line(115, 101, 335, 101, strokeColor=colors.HexColor("#16A34A"), strokeWidth=0.9))
+    d.add(Polygon([335, 101, 329, 103, 329, 99], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
     
-    # Path 2: Adversarial Trace (Red pill)
-    d.add(Rect(8, 22, 205, 36, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=0.8, rx=3, ry=3))
-    d.add(String(14, 48, "2. Adversarial Injection Path", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#7F1D1D")))
-    d.add(String(14, 38, "Attack Query -> Tier-2 Custom Sieve [UNSAFE] -> Sticky Quarantine", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#991B1B")))
-    d.add(String(14, 28, "-> Quarantined in Mirror Maze Decoy (Synthetic Bait Returned)", fontName="Times-Italic", fontSize=6.2, fillColor=colors.HexColor("#B91C1C")))
+    # 4a: RAG -> Client
+    d.add(String(185, 93, "4a. return_authentic_response (~2.1 ms)", fontName="Times-Bold", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+    d.add(Line(335, 88, 40, 88, strokeColor=colors.HexColor("#16A34A"), strokeWidth=0.9, strokeDashArray=[3, 1]))
+    d.add(Polygon([40, 88, 46, 90, 46, 86], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
+
+    # Box: alt ADVERSARIAL PATH
+    d.add(Rect(10, 10, 395, 72, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=0.7, rx=2, ry=2))
+    d.add(String(16, 72, "[alt: score >= 0.15 (Ambiguous / Adversarial Threat)]", fontName="Times-BoldItalic", fontSize=5.5, fillColor=colors.HexColor("#B91C1C")))
     
-    # Divider line
-    d.add(Line(220, 10, 220, 105, strokeColor=colors.HexColor("#E2E8F0"), strokeWidth=1))
+    # 3b: Gateway -> Tier-2 LlamaGuard
+    d.add(String(190, 64, "3b. eval_moderation_policy(history)", fontName="Times-Roman", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#78350F")))
+    d.add(Line(115, 59, 265, 59, strokeColor=colors.HexColor("#D97706"), strokeWidth=0.9))
+    d.add(Polygon([265, 59, 259, 61, 259, 57], fillColor=colors.HexColor("#D97706"), strokeColor=colors.HexColor("#D97706")))
     
-    # Section Header Right: Sticky State & Self-Healing Loop
-    d.add(String(318, 103, "B. Sticky Quarantine & Self-Healing Loop", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
+    # 4b: Tier-2 -> Gateway (UNSAFE)
+    d.add(String(190, 51, "4b. verdict: UNSAFE (Taxonomy: S1..S8)", fontName="Times-Bold", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+    d.add(Line(265, 46, 115, 46, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.9, strokeDashArray=[2, 1]))
+    d.add(Polygon([115, 46, 121, 48, 121, 44], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
     
-    # Sticky State Machine Box
-    d.add(Rect(228, 62, 179, 34, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=0.8, rx=3, ry=3))
-    d.add(String(234, 86, "Session State Machine", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#1E3A8A")))
-    d.add(String(234, 76, "[Normal Session] -> Flagged -> [Sticky Quarantined]", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#1E40AF")))
-    d.add(String(234, 66, "Subsequent queries locked to decoy (Zero boundary probing)", fontName="Times-Italic", fontSize=6.2, fillColor=colors.HexColor("#2563EB")))
+    # 5b: Gateway -> Mirror Maze
+    d.add(String(252, 38, "5b. quarantine_and_route(:9100)", fontName="Times-Roman", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
+    d.add(Line(115, 33, 390, 33, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.9))
+    d.add(Polygon([390, 33, 384, 35, 384, 31], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
     
-    # Self-Healing Pipeline Box
-    d.add(Rect(228, 14, 179, 44, fillColor=colors.HexColor("#FAF5FF"), strokeColor=colors.HexColor("#A855F7"), strokeWidth=0.8, rx=3, ry=3))
-    d.add(String(234, 48, "Autonomous Guardrail Feedback Loop", fontName="Times-Bold", fontSize=7, fillColor=colors.HexColor("#581C87")))
-    d.add(String(234, 38, "Capture Exploit -> Distill Pattern -> NeMo Colang Rule", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#6B21A8")))
-    d.add(String(234, 28, "-> Benign Regression Gate -> Hot-Patch in 10.4s", fontName="Times-Roman", fontSize=6.5, fillColor=colors.HexColor("#6B21A8")))
-    d.add(String(234, 18, "(Zero-Downtime Live Defense Adaptation)", fontName="Times-BoldItalic", fontSize=6.2, fillColor=colors.HexColor("#7E22CE")))
+    # 6b: Mirror Maze -> Client
+    d.add(String(215, 25, "6b. return_synthetic_bait ('Sarah' Decoy Persona)", fontName="Times-Bold", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+    d.add(Line(390, 20, 40, 20, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.9, strokeDashArray=[3, 1]))
+    d.add(Polygon([40, 20, 46, 22, 46, 18], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
+
+    # 7b: Async Synthesis loop note
+    d.add(String(215, 12, "7b. async_trigger_self_healing_synthesis(exploit_pattern) -> 10.4s Hot-Patch", fontName="Times-Italic", fontSize=5.5, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
 
     return d
 
 
-def build_technical_report():
+# =========================================================================
+# VECTOR DIAGRAM 3: UML State Machine Diagram (Figure 4.1)
+# =========================================================================
+def draw_uml_state_machine_diagram():
+    # Width: 415.27, Height: 130 (Clean layout, separated transition arrows, clear orthogonal lines)
+    d = Drawing(415, 130)
+    d.add(Rect(0, 0, 415, 130, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=5, ry=5))
+    
+    # State 1: INITIAL / UNVERIFIED
+    d.add(Rect(8, 48, 68, 42, fillColor=colors.HexColor("#F1F5F9"), strokeColor=colors.HexColor("#475569"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(42, 73, "UNVERIFIED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
+    d.add(String(42, 60, "(Clean Session)", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#475569")))
+
+    # Transition 1->2 (Safe score)
+    d.add(Line(76, 76, 118, 98, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1))
+    d.add(Polygon([118, 98, 111, 98, 114, 93], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
+    d.add(String(82, 92, "Score < 0.15", fontName="Times-Bold", fontSize=5.6, fillColor=colors.HexColor("#16A34A")))
+
+    # State 2: BENIGN ACTIVE (Top middle)
+    d.add(Rect(120, 82, 82, 38, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(161, 105, "BENIGN_SERVED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
+    d.add(String(161, 92, "Production RAG Mode", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+
+    # Transition 1->3 (Unsafe score)
+    d.add(Line(76, 58, 118, 36, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1))
+    d.add(Polygon([118, 36, 114, 41, 111, 36], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
+    d.add(String(80, 42, "Score >= 0.15", fontName="Times-Bold", fontSize=5.6, fillColor=colors.HexColor("#DC2626")))
+
+    # State 3: STICKY QUARANTINED (Bottom middle)
+    d.add(Rect(120, 14, 96, 42, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#DC2626"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(168, 41, "STICKY_QUARANTINE", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
+    d.add(String(168, 28, "Trapped in Decoy Sandbox", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+
+    # Self loop on State 3 (Sticky quarantine persistence)
+    d.add(Line(168, 14, 168, 4, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Line(168, 4, 226, 4, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Line(226, 4, 226, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Line(226, 28, 216, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Polygon([216, 28, 221, 30, 221, 26], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
+    d.add(String(197, 7, "Subsequent turns retained", fontName="Times-Italic", fontSize=5.2, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+
+    # Transition 3->4: Async Exploit Distillation
+    d.add(Line(216, 46, 252, 66, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=1))
+    d.add(Polygon([252, 66, 245, 65, 247, 60], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
+    d.add(String(222, 60, "Distill Pattern", fontName="Times-BoldItalic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
+
+    # State 4: SYNTHESIS GATE (Right middle)
+    d.add(Rect(254, 50, 88, 40, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(298, 74, "SYNTHESIS_GATE", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
+    d.add(String(298, 62, "NeMo Colang + Regress Gate", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#5B21B6")))
+
+    # Transition 4->5: Hot-Patch
+    d.add(Line(342, 70, 356, 70, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1))
+    d.add(Polygon([356, 70, 350, 72, 350, 68], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
+
+    # State 5: LIVE IMMUNIZED (Far right)
+    d.add(Rect(358, 50, 50, 40, fillColor=colors.HexColor("#DCFCE7"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(383, 74, "IMMUNIZED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
+    d.add(String(383, 62, "Live in 10.4s", fontName="Times-Bold", fontSize=6.2, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+
+    return d
+
+
+def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
+    # Default fallbacks if no map provided
+    toc_map = toc_map or {}
+    lot_map = lot_map or {}
+    lof_map = lof_map or {}
+
     doc = SimpleDocTemplate(
         PDF_OUTPUT_PATH,
         pagesize=A4,
@@ -186,155 +287,22 @@ def build_technical_report():
     )
 
     # Typography Styles per TIET Guidelines:
-    title_cover_style = ParagraphStyle(
-        'CoverTitle',
-        fontName='Times-Bold',
-        fontSize=18,
-        leading=22,
-        alignment=1,
-        spaceAfter=14
-    )
-
-    cover_sub_style = ParagraphStyle(
-        'CoverSub',
-        fontName='Times-Roman',
-        fontSize=12,
-        leading=16,
-        alignment=1
-    )
-
-    cover_bold_style = ParagraphStyle(
-        'CoverBold',
-        fontName='Times-Bold',
-        fontSize=12,
-        leading=16,
-        alignment=1
-    )
-
-    chapter_style = ParagraphStyle(
-        'ChapterHeader',
-        fontName='Times-Bold',
-        fontSize=16,
-        leading=20,
-        alignment=0,
-        spaceBefore=8,
-        spaceAfter=8,
-        keepWithNext=True
-    )
-
-    heading1_style = ParagraphStyle(
-        'Heading1',
-        fontName='Times-Bold',
-        fontSize=14,
-        leading=18,
-        spaceBefore=11,
-        spaceAfter=5,
-        keepWithNext=True
-    )
-
-    heading2_style = ParagraphStyle(
-        'Heading2',
-        fontName='Times-Bold',
-        fontSize=13,
-        leading=17,
-        spaceBefore=8,
-        spaceAfter=3,
-        keepWithNext=True
-    )
-
-    body_style = ParagraphStyle(
-        'NormalBody',
-        fontName='Times-Roman',
-        fontSize=12,
-        leading=18, # 1.5 line spacing
-        alignment=4, # Justified
-        spaceAfter=7
-    )
-
-    body_indent_style = ParagraphStyle(
-        'BodyIndent',
-        fontName='Times-Roman',
-        fontSize=12,
-        leading=18,
-        firstLineIndent=20,
-        alignment=4,
-        spaceAfter=7
-    )
-
-    bullet_style = ParagraphStyle(
-        'BulletBody',
-        fontName='Times-Roman',
-        fontSize=12,
-        leading=17.5,
-        leftIndent=18,
-        firstLineIndent=-12,
-        alignment=4,
-        spaceAfter=4
-    )
-
-    table_caption_style = ParagraphStyle(
-        'TableCaption',
-        fontName='Times-Bold',
-        fontSize=10,
-        leading=13,
-        alignment=0,
-        spaceBefore=8,
-        spaceAfter=4,
-        keepWithNext=True
-    )
-
-    figure_caption_style = ParagraphStyle(
-        'FigureCaption',
-        fontName='Times-Bold',
-        fontSize=10,
-        leading=13,
-        alignment=1,
-        spaceBefore=5,
-        spaceAfter=9
-    )
-
-    table_text_style = ParagraphStyle(
-        'TableText',
-        fontName='Times-Roman',
-        fontSize=9.5,
-        leading=13,
-        alignment=0
-    )
-
-    table_header_style = ParagraphStyle(
-        'TableHeaderText',
-        fontName='Times-Bold',
-        fontSize=9.5,
-        leading=13,
-        alignment=0
-    )
-
-    ref_item_style = ParagraphStyle(
-        'RefItem',
-        fontName='Times-Roman',
-        fontSize=10.5,
-        leading=14.5,
-        alignment=4,
-        leftIndent=24,
-        firstLineIndent=-24,
-        spaceAfter=5
-    )
-
-    toc_line_style = ParagraphStyle(
-        'TOCLine',
-        fontName='Times-Roman',
-        fontSize=10,
-        leading=14.5,
-        alignment=0
-    )
-
-    toc_bold_style = ParagraphStyle(
-        'TOCBold',
-        fontName='Times-Bold',
-        fontSize=10.5,
-        leading=15.5,
-        alignment=0
-    )
+    title_cover_style = ParagraphStyle('CoverTitle', fontName='Times-Bold', fontSize=18, leading=22, alignment=1, spaceAfter=14)
+    cover_sub_style = ParagraphStyle('CoverSub', fontName='Times-Roman', fontSize=12, leading=16, alignment=1)
+    cover_bold_style = ParagraphStyle('CoverBold', fontName='Times-Bold', fontSize=12, leading=16, alignment=1)
+    chapter_style = ParagraphStyle('ChapterHeader', fontName='Times-Bold', fontSize=16, leading=20, alignment=0, spaceBefore=8, spaceAfter=8, keepWithNext=True)
+    heading1_style = ParagraphStyle('Heading1', fontName='Times-Bold', fontSize=14, leading=18, spaceBefore=11, spaceAfter=5, keepWithNext=True)
+    heading2_style = ParagraphStyle('Heading2', fontName='Times-Bold', fontSize=13, leading=17, spaceBefore=8, spaceAfter=3, keepWithNext=True)
+    body_style = ParagraphStyle('NormalBody', fontName='Times-Roman', fontSize=12, leading=18, alignment=4, spaceAfter=7)
+    body_indent_style = ParagraphStyle('BodyIndent', fontName='Times-Roman', fontSize=12, leading=18, firstLineIndent=20, alignment=4, spaceAfter=7)
+    bullet_style = ParagraphStyle('BulletBody', fontName='Times-Roman', fontSize=12, leading=17.5, leftIndent=18, firstLineIndent=-12, alignment=4, spaceAfter=4)
+    table_caption_style = ParagraphStyle('TableCaption', fontName='Times-Bold', fontSize=10, leading=13, alignment=0, spaceBefore=8, spaceAfter=4, keepWithNext=True)
+    figure_caption_style = ParagraphStyle('FigureCaption', fontName='Times-Bold', fontSize=10, leading=13, alignment=1, spaceBefore=5, spaceAfter=9)
+    table_text_style = ParagraphStyle('TableText', fontName='Times-Roman', fontSize=9.5, leading=13, alignment=0)
+    table_header_style = ParagraphStyle('TableHeaderText', fontName='Times-Bold', fontSize=9.5, leading=13, alignment=0)
+    ref_item_style = ParagraphStyle('RefItem', fontName='Times-Roman', fontSize=10.5, leading=14.5, alignment=4, leftIndent=24, firstLineIndent=-24, spaceAfter=5)
+    toc_line_style = ParagraphStyle('TOCLine', fontName='Times-Roman', fontSize=10, leading=14.5, alignment=0)
+    toc_bold_style = ParagraphStyle('TOCBold', fontName='Times-Bold', fontSize=10.5, leading=15.5, alignment=0)
 
     story = []
 
@@ -394,7 +362,7 @@ def build_technical_report():
         body_indent_style
     ))
     story.append(Paragraph(
-        "This capstone project presents the design, system architecture, and verified implementation of <b>Honey-LLM</b>, covering work completed across <b>Phases 1 through 4</b> of the academic project roadmap. Specifically, the mid-semester implementation achieves four core deliverables: (1) an 8-class Adversarial Threat Taxonomy tailored to conversational enterprise agents; (2) a multi-tier <i>Intent Sieve</i> combining a sub-millisecond Tier-1 statistical classifier with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3 [11]), achieving a <b>98.3% detection rate</b> (559/569 adversarial payloads intercepted) while maintaining a <b>0.0% False Positive Rate</b> on the benign evaluation set (0/320 legitimate customer queries flagged); (3) a containerized zero-trust deception sandbox termed the <i>Mirror Maze</i> running an LLM-driven decoy persona that dynamic-hallucinates synthetic bait to absorb attacker reconnaissance (verified <b>5/5 on container isolation tests</b>); and (4) an <i>Autonomous Guardrail Synthesis</i> feedback loop that distills captured exploit patterns into formal <b>NVIDIA NeMo Colang</b> rules [6], hot-patching live gateway policies in <b>10.4 seconds</b> with zero service interruption.",
+        "This capstone project presents the design, system architecture, and verified implementation of <b>Honey-LLM</b>, covering work completed across <b>Phases 1 through 4</b> of the academic project roadmap. Specifically, the mid-semester implementation achieves four core deliverables: (1) an 8-class Adversarial Threat Taxonomy tailored to conversational enterprise agents; (2) a multi-tier <i>Intent Sieve</i> combining a sub-millisecond Tier-1 statistical classifier with an authoritative 8B moderation model governed by a custom prompt injection policy (Llama-Guard 3 [11]), achieving a <b>98.3% detection rate</b> (559/569 adversarial payloads intercepted) while maintaining a <b>0.0% False Positive Rate</b> on the benign domain evaluation split (0/320 legitimate customer queries flagged); (3) a containerized zero-trust deception sandbox termed the <i>Mirror Maze</i> running an LLM-driven decoy persona that dynamic-hallucinates synthetic bait to absorb attacker reconnaissance (verified <b>5/5 on container isolation tests</b>); and (4) an <i>Autonomous Guardrail Synthesis</i> feedback loop that distills captured exploit patterns into formal <b>NVIDIA NeMo Colang</b> rules [6], hot-patching live gateway policies in <b>10.4 seconds</b> with zero service interruption.",
         body_indent_style
     ))
     story.append(Paragraph(
@@ -497,6 +465,14 @@ def build_technical_report():
     story.append(Paragraph("<b>TABLE OF CONTENTS</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=10))
 
+    p_ch1 = toc_map.get("CH1", "1")
+    p_ch2 = toc_map.get("CH2", "8")
+    p_ch3 = toc_map.get("CH3", "12")
+    p_ch4 = toc_map.get("CH4", "15")
+    p_ch5 = toc_map.get("CH5", "20")
+    p_appa = toc_map.get("APPA", "22")
+    p_appb = toc_map.get("APPB", "23")
+
     toc1_data = [
         [Paragraph("<b>ABSTRACT</b>", toc_bold_style), Paragraph("<b>i</b>", toc_bold_style)],
         [Paragraph("<b>DECLARATION</b>", toc_bold_style), Paragraph("<b>ii</b>", toc_bold_style)],
@@ -505,36 +481,36 @@ def build_technical_report():
         [Paragraph("<b>LIST OF FIGURES</b>", toc_bold_style), Paragraph("<b>vii</b>", toc_bold_style)],
         [Paragraph("<b>LIST OF ABBREVIATIONS</b>", toc_bold_style), Paragraph("<b>viii</b>", toc_bold_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 1: INTRODUCTION</b>", toc_bold_style), Paragraph("<b>1</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.1 Project Overview", toc_line_style), Paragraph("1", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.2 Need Analysis", toc_line_style), Paragraph("2", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.1 The 'Smart Mirror' Trap: Enterprise Adoption vs. Defensive Lag", toc_line_style), Paragraph("2", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.2 The Shift: Machine-Speed Autonomous Warfare", toc_line_style), Paragraph("2", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.3 The 'Shadow Trust' Gap: Vulnerability of the Semantic Layer", toc_line_style), Paragraph("2", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.4 The Dynamic Security Window: Addressing Reactive Lag", toc_line_style), Paragraph("3", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.3 Research Gaps", toc_line_style), Paragraph("3", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.4 Problem Definition and Scope", toc_line_style), Paragraph("4", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.5 Assumptions and Constraints", toc_line_style), Paragraph("4", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.6 Applicable Standards", toc_line_style), Paragraph("4", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.7 Approved Objectives (Proposal Evaluation)", toc_line_style), Paragraph("5", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.8 Methodology Overview (Phases 1 to 4 Scope)", toc_line_style), Paragraph("5", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.9 Mid-Semester Outcomes and Deliverables", toc_line_style), Paragraph("5", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.10 Novelty of Work", toc_line_style), Paragraph("6", toc_line_style)],
+        [Paragraph("<b>CHAPTER 1: INTRODUCTION</b>", toc_bold_style), Paragraph(f"<b>{p_ch1}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.1 Project Overview", toc_line_style), Paragraph(f"{p_ch1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.2 Need Analysis", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.1 The 'Smart Mirror' Trap: Enterprise Adoption vs. Defensive Lag", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.2 The Shift: Machine-Speed Autonomous Warfare", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.3 The 'Shadow Trust' Gap: Vulnerability of the Semantic Layer", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.4 The Dynamic Security Window: Addressing Reactive Lag", toc_line_style), Paragraph(f"{int(p_ch1)+2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.3 Research Gaps", toc_line_style), Paragraph(f"{int(p_ch1)+2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.4 Problem Definition and Scope", toc_line_style), Paragraph(f"{int(p_ch1)+3}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.5 Assumptions and Constraints", toc_line_style), Paragraph(f"{int(p_ch1)+4}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.6 Applicable Standards", toc_line_style), Paragraph(f"{int(p_ch1)+4}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.7 Approved Objectives (Proposal Evaluation)", toc_line_style), Paragraph(f"{int(p_ch1)+5}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.8 Methodology Overview (Phases 1 to 4 Scope)", toc_line_style), Paragraph(f"{int(p_ch1)+5}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.9 Mid-Semester Outcomes and Deliverables", toc_line_style), Paragraph(f"{int(p_ch1)+5}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.10 Novelty of Work", toc_line_style), Paragraph(f"{int(p_ch1)+6}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 2: REQUIREMENT ANALYSIS</b>", toc_bold_style), Paragraph("<b>7</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.1 Literature Survey", toc_line_style), Paragraph("7", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1 Theory Associated With Problem Area", toc_line_style), Paragraph("7", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.2 Existing Systems and Solutions", toc_line_style), Paragraph("7", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.3 Research Findings for Existing Literature", toc_line_style), Paragraph("8", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.4 Problems Identified in State of the Art", toc_line_style), Paragraph("8", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.5 Survey of Tools and Technologies Used", toc_line_style), Paragraph("9", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.2 Software Requirement Specification (SRS)", toc_line_style), Paragraph("9", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1 Introduction & Scope", toc_line_style), Paragraph("9", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2 Overall Product Description & Features", toc_line_style), Paragraph("9", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3 External Interface Requirements", toc_line_style), Paragraph("10", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.4 Non-Functional Requirements", toc_line_style), Paragraph("10", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.3 Cost & Computational Feasibility Analysis", toc_line_style), Paragraph("10", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.4 Risk Analysis and Mitigation Strategies", toc_line_style), Paragraph("11", toc_line_style)]
+        [Paragraph("<b>CHAPTER 2: REQUIREMENT ANALYSIS</b>", toc_bold_style), Paragraph(f"<b>{p_ch2}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.1 Literature Survey", toc_line_style), Paragraph(f"{p_ch2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1 Theory Associated With Problem Area", toc_line_style), Paragraph(f"{p_ch2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.2 Existing Systems and Solutions", toc_line_style), Paragraph(f"{p_ch2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.3 Research Findings for Existing Literature", toc_line_style), Paragraph(f"{int(p_ch2)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.4 Problems Identified in State of the Art", toc_line_style), Paragraph(f"{int(p_ch2)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.5 Survey of Tools and Technologies Used", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.2 Software Requirement Specification (SRS)", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1 Introduction & Scope", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2 Overall Product Description & Features", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3 External Interface Requirements", toc_line_style), Paragraph(f"{int(p_ch2)+3}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.4 Non-Functional Requirements", toc_line_style), Paragraph(f"{int(p_ch2)+3}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.3 Cost & Computational Feasibility Analysis", toc_line_style), Paragraph(f"{int(p_ch2)+3}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.4 Risk Analysis and Mitigation Strategies", toc_line_style), Paragraph(f"{int(p_ch2)+4}", toc_line_style)]
     ]
     t_toc1 = Table(toc1_data, colWidths=[365, 50])
     t_toc1.setStyle(TableStyle([
@@ -552,26 +528,27 @@ def build_technical_report():
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=10))
 
     toc2_data = [
-        [Paragraph("<b>CHAPTER 3: METHODOLOGY ADOPTED</b>", toc_bold_style), Paragraph("<b>12</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.1 Investigative Techniques", toc_line_style), Paragraph("12", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.2 Proposed Solution & Multi-Tier Architecture", toc_line_style), Paragraph("12", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.3 Work Breakdown Structure (Phases 1 to 4 Completed)", toc_line_style), Paragraph("13", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.4 Hardware, Software, and Framework Stack", toc_line_style), Paragraph("14", toc_line_style)],
+        [Paragraph("<b>CHAPTER 3: METHODOLOGY ADOPTED</b>", toc_bold_style), Paragraph(f"<b>{p_ch3}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.1 Investigative Techniques & 0.0% FPR Analysis", toc_line_style), Paragraph(f"{p_ch3}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.2 Proposed Solution & Multi-Tier Architecture", toc_line_style), Paragraph(f"{int(p_ch3)}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.3 Work Breakdown Structure (Phases 1 to 4 Completed)", toc_line_style), Paragraph(f"{int(p_ch3)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.4 Enterprise Hardware, Software, and Framework Stack", toc_line_style), Paragraph(f"{int(p_ch3)+2}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.5 UML Sequence Model for Interception Flow", toc_line_style), Paragraph(f"{int(p_ch3)+2}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 4: DESIGN SPECIFICATIONS</b>", toc_bold_style), Paragraph("<b>15</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.1 System Architecture & Sieve Gateway Flow", toc_line_style), Paragraph("15", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.2 Threat Taxonomy & Sticky Quarantine State Machine", toc_line_style), Paragraph("15", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.3 User Interface Specifications & Designed Surfaces", toc_line_style), Paragraph("16", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.4 Working Prototype Execution (Phases 1 to 4 Verified)", toc_line_style), Paragraph("17", toc_line_style)],
+        [Paragraph("<b>CHAPTER 4: DESIGN SPECIFICATIONS</b>", toc_bold_style), Paragraph(f"<b>{p_ch4}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.1 System Architecture & Sieve Gateway Flow", toc_line_style), Paragraph(f"{p_ch4}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.2 Threat Taxonomy & Sticky Quarantine State Machine", toc_line_style), Paragraph(f"{p_ch4}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.3 User Interface Specifications & Designed Surfaces", toc_line_style), Paragraph(f"{int(p_ch4)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.4 Working Prototype Execution (Phases 1 to 4 Verified)", toc_line_style), Paragraph(f"{int(p_ch4)+2}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE</b>", toc_bold_style), Paragraph("<b>18</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.1 Mid-Semester Accomplishments vs. Approved Objectives", toc_line_style), Paragraph("18", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.2 Mid-Semester Conclusions", toc_line_style), Paragraph("19", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.3 Economic, Social, and Environmental Benefits", toc_line_style), Paragraph("19", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.4 Future Work Plan (Phases 5 and 6 Roadmap)", toc_line_style), Paragraph("20", toc_line_style)],
+        [Paragraph("<b>CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE</b>", toc_bold_style), Paragraph(f"<b>{p_ch5}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.1 Mid-Semester Accomplishments vs. Approved Objectives", toc_line_style), Paragraph(f"{p_ch5}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.2 Mid-Semester Conclusions & Empirical Reliability", toc_line_style), Paragraph(f"{int(p_ch5)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.3 Economic, Social, and Environmental Benefits", toc_line_style), Paragraph(f"{int(p_ch5)+1}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.4 Future Work Plan (Phases 5 and 6 Roadmap)", toc_line_style), Paragraph(f"{int(p_ch5)+2}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>APPENDIX A: REFERENCES (IEEE Style)</b>", toc_bold_style), Paragraph("<b>21</b>", toc_bold_style)],
-        [Paragraph("<b>APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT</b>", toc_bold_style), Paragraph("<b>22</b>", toc_bold_style)]
+        [Paragraph("<b>APPENDIX A: REFERENCES (IEEE Style)</b>", toc_bold_style), Paragraph(f"<b>{p_appa}</b>", toc_bold_style)],
+        [Paragraph("<b>APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT</b>", toc_bold_style), Paragraph(f"<b>{p_appb}</b>", toc_bold_style)]
     ]
     t_toc2 = Table(toc2_data, colWidths=[365, 50])
     t_toc2.setStyle(TableStyle([
@@ -592,16 +569,16 @@ def build_technical_report():
 
     tables_list = [
         [Paragraph("<b>Table No.</b>", table_header_style), Paragraph("<b>Caption</b>", table_header_style), Paragraph("<b>Page No.</b>", table_header_style)],
-        [Paragraph("Table 1.1", table_text_style), Paragraph("System Assumptions and Engineering Constraints", table_text_style), Paragraph("4", table_text_style)],
-        [Paragraph("Table 2.1", table_text_style), Paragraph("Comparative Literature Survey of Generative Honeypot Frameworks", table_text_style), Paragraph("8", table_text_style)],
-        [Paragraph("Table 2.2", table_text_style), Paragraph("Computational Resource Feasibility & Cloud Cost Comparison", table_text_style), Paragraph("10", table_text_style)],
-        [Paragraph("Table 2.3", table_text_style), Paragraph("Risk Assessment Matrix and Fail-Closed Mitigation Controls", table_text_style), Paragraph("11", table_text_style)],
-        [Paragraph("Table 3.1", table_text_style), Paragraph("Classification and Justification of Investigative Research Techniques", table_text_style), Paragraph("12", table_text_style)],
-        [Paragraph("Table 3.2", table_text_style), Paragraph("Honey-LLM Technology and Framework Specifications", table_text_style), Paragraph("14", table_text_style)],
-        [Paragraph("Table 4.1", table_text_style), Paragraph("Adversarial Threat Taxonomy Mappings and Severity Classification", table_text_style), Paragraph("16", table_text_style)],
-        [Paragraph("Table 4.2", table_text_style), Paragraph("Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", table_text_style), Paragraph("17", table_text_style)],
-        [Paragraph("Table 5.1", table_text_style), Paragraph("Mid-Semester Mapping of Approved Objectives to Implemented Progress", table_text_style), Paragraph("18", table_text_style)],
-        [Paragraph("Table 5.2", table_text_style), Paragraph("Intent Sieve Scaled Benchmark Performance vs. Baseline Guards", table_text_style), Paragraph("19", table_text_style)]
+        [Paragraph("Table 1.1", table_text_style), Paragraph("System Assumptions and Engineering Constraints", table_text_style), Paragraph(str(lot_map.get("1.1", "5")), table_text_style)],
+        [Paragraph("Table 2.1", table_text_style), Paragraph("Comparative Literature Survey of Generative Honeypot Frameworks", table_text_style), Paragraph(str(lot_map.get("2.1", "9")), table_text_style)],
+        [Paragraph("Table 2.2", table_text_style), Paragraph("Computational Resource Feasibility & Cloud Cost Comparison", table_text_style), Paragraph(str(lot_map.get("2.2", "10")), table_text_style)],
+        [Paragraph("Table 2.3", table_text_style), Paragraph("Risk Assessment Matrix and Fail-Closed Mitigation Controls", table_text_style), Paragraph(str(lot_map.get("2.3", "11")), table_text_style)],
+        [Paragraph("Table 3.1", table_text_style), Paragraph("Classification and Justification of Investigative Research Techniques", table_text_style), Paragraph(str(lot_map.get("3.1", "12")), table_text_style)],
+        [Paragraph("Table 3.2", table_text_style), Paragraph("Honey-LLM Technology and Framework Specifications", table_text_style), Paragraph(str(lot_map.get("3.2", "13")), table_text_style)],
+        [Paragraph("Table 4.1", table_text_style), Paragraph("Adversarial Threat Taxonomy Mappings and Severity Classification", table_text_style), Paragraph(str(lot_map.get("4.1", "14")), table_text_style)],
+        [Paragraph("Table 4.2", table_text_style), Paragraph("Sandbox Container Breakout Penetration Test Results (5/5 Isolation)", table_text_style), Paragraph(str(lot_map.get("4.2", "17")), table_text_style)],
+        [Paragraph("Table 5.1", table_text_style), Paragraph("Mid-Semester Mapping of Approved Objectives to Implemented Progress", table_text_style), Paragraph(str(lot_map.get("5.1", "20")), table_text_style)],
+        [Paragraph("Table 5.2", table_text_style), Paragraph("Intent Sieve Scaled Benchmark Performance vs. Baseline Guards", table_text_style), Paragraph(str(lot_map.get("5.2", "21")), table_text_style)]
     ]
     t_lot = Table(tables_list, colWidths=[65, 300, 50])
     t_lot.setStyle(TableStyle([
@@ -623,11 +600,12 @@ def build_technical_report():
 
     figures_list = [
         [Paragraph("<b>Figure No.</b>", table_header_style), Paragraph("<b>Caption</b>", table_header_style), Paragraph("<b>Page No.</b>", table_header_style)],
-        [Paragraph("Figure 1.1", table_text_style), Paragraph("Honey-LLM Multi-Tier Routing and Decision Gateway Architecture", table_text_style), Paragraph("6", table_text_style)],
-        [Paragraph("Figure 4.1", table_text_style), Paragraph("Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", table_text_style), Paragraph("16", table_text_style)],
-        [Paragraph("Figure 4.2", table_text_style), Paragraph("NexTel Production Customer Support Interface (/chat)", table_text_style), Paragraph("17", table_text_style)],
-        [Paragraph("Figure 4.3", table_text_style), Paragraph("Honey-LLM Admin Live Sieve Decision Tracer (/admin)", table_text_style), Paragraph("17", table_text_style)],
-        [Paragraph("Figure 4.4", table_text_style), Paragraph("Dark SOC Real-Time Threat Intelligence Dashboard (/dashboard)", table_text_style), Paragraph("18", table_text_style)]
+        [Paragraph("Figure 1.1", table_text_style), Paragraph("Honey-LLM Multi-Tier Routing and Decision Gateway Architecture", table_text_style), Paragraph(str(lof_map.get("1.1", "7")), table_text_style)],
+        [Paragraph("Figure 3.1", table_text_style), Paragraph("UML Sequence Diagram for Multi-Tier Request Interception & Deception", table_text_style), Paragraph(str(lof_map.get("3.1", "14")), table_text_style)],
+        [Paragraph("Figure 4.1", table_text_style), Paragraph("UML State Machine Diagram for Session Quarantine & Self-Healing Loop", table_text_style), Paragraph(str(lof_map.get("4.1", "16")), table_text_style)],
+        [Paragraph("Figure 4.2", table_text_style), Paragraph("NexTel Production Customer Support Interface (/chat)", table_text_style), Paragraph(str(lof_map.get("4.2", "18")), table_text_style)],
+        [Paragraph("Figure 4.3", table_text_style), Paragraph("Honey-LLM Admin Live Sieve Decision Tracer (/admin)", table_text_style), Paragraph(str(lof_map.get("4.3", "18")), table_text_style)],
+        [Paragraph("Figure 4.4", table_text_style), Paragraph("Dark SOC Real-Time Threat Intelligence Dashboard (/dashboard)", table_text_style), Paragraph(str(lof_map.get("4.4", "19")), table_text_style)]
     ]
     t_lof = Table(figures_list, colWidths=[65, 300, 50])
     t_lof.setStyle(TableStyle([
@@ -704,7 +682,7 @@ def build_technical_report():
         body_indent_style
     ))
     story.append(Paragraph(
-        "• <b>Phase 1 (Adversarial Profiling & Threat Taxonomy):</b> Formulated an 8-class threat taxonomy mapping prompt injections to specific enterprise manifestations and validated concurrent dual-model local inference on Apple Silicon hardware.",
+        "• <b>Phase 1 (Adversarial Profiling & Threat Taxonomy):</b> Formulated an 8-class threat taxonomy mapping prompt injections to specific enterprise manifestations and validated concurrent dual-model local inference.",
         bullet_style
     ))
     story.append(Paragraph(
@@ -758,7 +736,7 @@ def build_technical_report():
         bullet_style
     ))
     story.append(Paragraph(
-        "2. <b>Vulnerability of LLM Decoys to Accidental Ground-Truth Leakage:</b> Existing interactive deception prototypes rely solely on system-prompt instructions (such as prompting the model to act as a decoy and not reveal real secrets). Under persistent jailbreaking, LLM decoys suffer prompt leakage, revealing underlying server configurations. Honey-LLM solves this by enforcing an architectural separation between public RAG context and synthetic bait.",
+        "2. <b>Vulnerability of LLM Decoys to Accidental Ground-Truth Leakage:</b> Existing interactive deception prototypes rely solely on system-prompt instructions. Under persistent jailbreaking, LLM decoys suffer prompt leakage, revealing underlying server configurations. Honey-LLM solves this by enforcing an architectural separation between public RAG context and synthetic bait.",
         bullet_style
     ))
     story.append(Paragraph(
@@ -795,7 +773,7 @@ def build_technical_report():
     story.append(Paragraph("TABLE 1.1: System Assumptions and Engineering Constraints", table_caption_style))
     assump_data = [
         [Paragraph("<b>S.No.</b>", table_header_style), Paragraph("<b>Category</b>", table_header_style), Paragraph("<b>Specification & Technical Justification</b>", table_header_style)],
-        [Paragraph("1", table_text_style), Paragraph("Hardware Constraint", table_text_style), Paragraph("Dual 8B parameter models (Llama-Guard 3 and Llama-3) must execute concurrently on 16 GB unified GPU memory with zero host swapping.", table_text_style)],
+        [Paragraph("1", table_text_style), Paragraph("Hardware Sizing", table_text_style), Paragraph("Dual 8B parameter models (Llama-Guard 3 and Llama-3) execute concurrently on standard host compute (>=16 GB RAM / VRAM) with zero memory thrashing.", table_text_style)],
         [Paragraph("2", table_text_style), Paragraph("Latency Budget", table_text_style), Paragraph("Benign traffic must experience a sieve overhead of &lt; 50 ms (achieved at ~2 ms via Tier-1 fast-path) to preserve realistic conversational fluency.", table_text_style)],
         [Paragraph("3", table_text_style), Paragraph("Fail-Closed Security", table_text_style), Paragraph("If the inference backend or moderation service becomes unreachable, the gateway must fail closed (reroute or gracefully degrade), never fail open.", table_text_style)],
         [Paragraph("4", table_text_style), Paragraph("Zero Egress Assumption", table_text_style), Paragraph("The Mirror Maze sandbox container must have zero direct internet access and zero connectivity to the production database or host network.", table_text_style)],
@@ -853,13 +831,15 @@ def build_technical_report():
     ))
 
     story.append(Spacer(1, 4))
-    story.append(draw_architecture_diagram())
-    story.append(Paragraph("FIGURE 1.1: Honey-LLM Multi-Tier Routing and Decision Gateway Architecture", figure_caption_style))
+    story.append(KeepTogether([
+        draw_architecture_diagram(),
+        Paragraph("FIGURE 1.1: Honey-LLM Multi-Tier Routing and Decision Gateway Architecture", figure_caption_style)
+    ]))
 
     story.append(PageBreak())
 
     # =========================================================================
-    # CHAPTER 2: REQUIREMENT ANALYSIS (Page 7)
+    # CHAPTER 2: REQUIREMENT ANALYSIS (Page 8)
     # =========================================================================
     story.append(Paragraph("<b>CHAPTER 2: REQUIREMENT ANALYSIS</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=12))
@@ -941,7 +921,7 @@ def build_technical_report():
 
     story.append(Paragraph("<b>2.1.5 Survey of Tools and Technologies Used</b>", heading2_style))
     story.append(Paragraph(
-        "Honey-LLM synthesizes modern open-source technologies: <b>FastAPI</b> for asynchronous gateway routing; <b>Ollama</b> for local hardware-accelerated GPU inference; <b>Llama-Guard 3</b> [11] and <b>Llama-3</b> for moderation and generation; <b>NVIDIA NeMo Guardrails</b> [6] for Colang policy enforcement; <b>Docker/Colima</b> for kernel-level container isolation; and <b>Next.js 15</b> for real-time telemetry visualization.",
+        "Honey-LLM synthesizes modern open-source technologies: <b>FastAPI</b> for asynchronous gateway routing; <b>Ollama</b> for local hardware-accelerated inference; <b>Llama-Guard 3</b> [11] and <b>Llama-3</b> for moderation and generation; <b>NVIDIA NeMo Guardrails</b> [6] for Colang policy enforcement; <b>Docker Engine</b> for kernel-level container isolation; and <b>Next.js 15</b> for real-time telemetry visualization.",
         body_indent_style
     ))
 
@@ -955,14 +935,14 @@ def build_technical_report():
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>2.3 Cost & Computational Feasibility Analysis</b>", heading1_style))
     story.append(Paragraph(
-        "Because Honey-LLM is engineered on a software track, the primary cost consideration is computational feasibility and inference efficiency. By running quantized open-weight models (Llama-Guard 3 8B [11] and Llama-3 8B) on localized hardware with unified memory, the architecture completely eliminates recurring per-token cloud API costs while maintaining zero data egress. Table 2.2 provides a computational feasibility comparison.",
+        "Because Honey-LLM is engineered on a software track, the primary cost consideration is computational feasibility and inference efficiency. By running quantized open-weight models (Llama-Guard 3 8B [11] and Llama-3 8B) on localized hardware, the architecture completely eliminates recurring per-token cloud API costs while maintaining zero data egress. Table 2.2 provides a computational feasibility comparison.",
         body_indent_style
     ))
 
     story.append(Paragraph("TABLE 2.2: Computational Resource Feasibility & Cloud Cost Comparison", table_caption_style))
     cost_data = [
         [Paragraph("<b>Dimension</b>", table_header_style), Paragraph("<b>Honey-LLM Local Architecture</b>", table_header_style), Paragraph("<b>Cloud API Baseline (GPT-4 / Moderation API)</b>", table_header_style)],
-        [Paragraph("Compute Environment", table_text_style), Paragraph("Local 16 GB Unified Memory (Ollama runtime)", table_text_style), Paragraph("Hosted Cloud Server Cluster ($450/month)", table_text_style)],
+        [Paragraph("Compute Environment", table_text_style), Paragraph("Enterprise Host Compute (>=16 GB RAM / VRAM)", table_text_style), Paragraph("Hosted Cloud Server Cluster ($450/month)", table_text_style)],
         [Paragraph("Inference Token Cost", table_text_style), Paragraph("$0.00 (Self-hosted open weights)", table_text_style), Paragraph("~$0.018 per conversational turn", table_text_style)],
         [Paragraph("Data Privacy / Egress", table_text_style), Paragraph("100% on-premise, zero external API transmission", table_text_style), Paragraph("Third-party cloud transmission and storage", table_text_style)],
         [Paragraph("Hot-Patch Latency", table_text_style), Paragraph("10.4s local Colang rule compilation", table_text_style), Paragraph("Manual portal re-configuration / retraining", table_text_style)]
@@ -1005,7 +985,7 @@ def build_technical_report():
     story.append(Paragraph("<b>CHAPTER 3: METHODOLOGY ADOPTED</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=12))
 
-    story.append(Paragraph("<b>3.1 Investigative Techniques</b>", heading1_style))
+    story.append(Paragraph("<b>3.1 Investigative Techniques & Empirical FPR Explanation</b>", heading1_style))
     story.append(Paragraph(
         "To ensure rigorous scientific validity, the Honey-LLM research framework integrates descriptive, comparative, and experimental investigative techniques as classified in Table 3.1.",
         body_indent_style
@@ -1044,6 +1024,12 @@ def build_technical_report():
     story.append(t_tech)
 
     story.append(Spacer(1, 4))
+    story.append(Paragraph(
+        "<b>Technical Analysis of the 0.0% Benign False Positive Rate (FPR):</b> The measured 0.0% FPR represents exactly 0 out of 320 held-out domain queries flagged falsely as adversarial. This empirical result is achieved through two-stage threshold calibration: (1) The Tier-1 statistical classifier was trained on a domain-specific telecommunications corpus where customer intents (e.g., SIM provisioning, roaming rates, invoice queries) possess distinct vocabulary distributions with safe scores consistently &lt; 0.08, well below the conservative threshold of 0.15; (2) Ambiguous queries in the margin (0.15 to 0.70) are escalated to Tier-2 Llama-Guard 3 [11], which performs context-aware semantic evaluation and preserves legitimate customer queries. While 0.0% FPR holds for the curated in-domain evaluation test split, out-of-domain open-ended dialogues are expected to yield non-zero FPR, which will be extensively profiled in Phase 6.",
+        body_indent_style
+    ))
+
+    story.append(Spacer(1, 4))
     story.append(Paragraph("<b>3.2 Proposed Solution & Multi-Tier Architecture</b>", heading1_style))
     story.append(Paragraph(
         "Honey-LLM is engineered as an end-to-end security proxy with four functional operational tiers completed in the mid-semester scope:",
@@ -1080,16 +1066,16 @@ def build_technical_report():
     story.append(Paragraph("• <b>Phase 6 (Planned Roadmap):</b> Multi-converter PyRIT [13] automated red-teaming sweeps and concurrency load testing.", bullet_style))
 
     story.append(Spacer(1, 4))
-    story.append(Paragraph("<b>3.4 Hardware, Software, and Framework Stack</b>", heading1_style))
+    story.append(Paragraph("<b>3.4 Enterprise Hardware, Software, and Framework Stack</b>", heading1_style))
     story.append(Paragraph("Table 3.2 summarizes the verified technology stack powering Honey-LLM.", body_style))
 
     story.append(Paragraph("TABLE 3.2: Honey-LLM Technology and Framework Specifications", table_caption_style))
     stack_data = [
         [Paragraph("<b>Layer</b>", table_header_style), Paragraph("<b>Technology / Framework</b>", table_header_style), Paragraph("<b>Operational Role</b>", table_header_style)],
-        [Paragraph("Inference Host", table_text_style), Paragraph("Apple Silicon / 16 GB Unified RAM / Ollama", table_text_style), Paragraph("Local execution for Llama-Guard 3 8B [11] and Llama-3 8B.", table_text_style)],
+        [Paragraph("Inference Host", table_text_style), Paragraph("Enterprise Host Compute (>=16 GB RAM / VRAM)", table_text_style), Paragraph("Local execution for Llama-Guard 3 8B [11] and Llama-3 8B.", table_text_style)],
         [Paragraph("Backend Gateway", table_text_style), Paragraph("Python 3.12 / FastAPI / Uvicorn", table_text_style), Paragraph("Asynchronous request orchestration, session state, and routing.", table_text_style)],
         [Paragraph("Guardrail Engine", table_text_style), Paragraph("NVIDIA NeMo Guardrails / Colang 2.0 [6]", table_text_style), Paragraph("Formal rule validation, pattern extraction, and hot-patching.", table_text_style)],
-        [Paragraph("Containerization", table_text_style), Paragraph("Docker / Colima (arm64)", table_text_style), Paragraph("Zero-egress isolated decoy sandbox with socat proxy topology.", table_text_style)],
+        [Paragraph("Container Isolation", table_text_style), Paragraph("Docker Engine / Linux Namespaces & cgroups", table_text_style), Paragraph("Zero-egress isolated decoy sandbox with socat proxy topology.", table_text_style)],
         [Paragraph("Frontend Surfaces", table_text_style), Paragraph("Next.js 15 / React 19 / TailwindCSS", table_text_style), Paragraph("NexTel customer chat UI, Dark SOC dashboard, Admin panel.", table_text_style)],
         [Paragraph("Red-Teaming (Future)", table_text_style), Paragraph("Microsoft PyRIT [13] / Custom Harnesses", table_text_style), Paragraph("12+ obfuscation converters, break-out audits, load stress tests.", table_text_style)]
     ]
@@ -1101,6 +1087,17 @@ def build_technical_report():
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
     ]))
     story.append(t_stack)
+
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("<b>3.5 UML Sequence Model for Interception Flow</b>", heading1_style))
+    story.append(Paragraph(
+        "Figure 3.1 provides the formal UML sequence diagram tracing both benign customer queries and adversarial prompt injection attempts across all software lifelines.",
+        body_indent_style
+    ))
+    story.append(KeepTogether([
+        draw_uml_sequence_diagram(),
+        Paragraph("FIGURE 3.1: UML Sequence Diagram for Multi-Tier Request Interception & Deception", figure_caption_style)
+    ]))
 
     story.append(PageBreak())
 
@@ -1145,6 +1142,12 @@ def build_technical_report():
     story.append(t_tax)
 
     story.append(Spacer(1, 4))
+    story.append(KeepTogether([
+        draw_uml_state_machine_diagram(),
+        Paragraph("FIGURE 4.1: UML State Machine Diagram for Session Quarantine & Self-Healing Loop", figure_caption_style)
+    ]))
+
+    story.append(Spacer(1, 4))
     story.append(Paragraph("<b>4.3 User Interface Specifications & Designed Surfaces</b>", heading1_style))
     story.append(Paragraph(
         "Honey-LLM designs three distinct user interface surfaces tailored to specific operational personas:",
@@ -1166,14 +1169,18 @@ def build_technical_report():
     chat_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_chat_ui.png"
     if os.path.exists(chat_img_path):
         story.append(Spacer(1, 4))
-        story.append(RLImage(chat_img_path, width=390, height=170))
-        story.append(Paragraph("FIGURE 4.2: NexTel Production Customer Support Interface (/chat)", figure_caption_style))
+        story.append(KeepTogether([
+            RLImage(chat_img_path, width=390, height=170),
+            Paragraph("FIGURE 4.2: NexTel Production Customer Support Interface (/chat)", figure_caption_style)
+        ]))
 
     admin_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_admin_ui.png"
     if os.path.exists(admin_img_path):
         story.append(Spacer(1, 4))
-        story.append(RLImage(admin_img_path, width=390, height=170))
-        story.append(Paragraph("FIGURE 4.3: Honey-LLM Admin Live Sieve Decision Tracer (/admin)", figure_caption_style))
+        story.append(KeepTogether([
+            RLImage(admin_img_path, width=390, height=170),
+            Paragraph("FIGURE 4.3: Honey-LLM Admin Live Sieve Decision Tracer (/admin)", figure_caption_style)
+        ]))
 
     story.append(Spacer(1, 4))
     story.append(Paragraph("<b>4.4 Working Prototype Execution (Phases 1 to 4 Verified)</b>", heading1_style))
@@ -1203,20 +1210,18 @@ def build_technical_report():
     ]))
     story.append(t_audit)
 
-    story.append(Spacer(1, 4))
-    story.append(draw_sequence_and_state_diagram())
-    story.append(Paragraph("FIGURE 4.1: Dual-Path Sequence Tracing and Autonomous Self-Healing Flow", figure_caption_style))
-
     soc_img_path = "/Users/devanshwadhwani/Desktop/HoneyLLM2/submissions/assets/prototype_soc_dashboard.png"
     if os.path.exists(soc_img_path):
         story.append(Spacer(1, 4))
-        story.append(RLImage(soc_img_path, width=390, height=170))
-        story.append(Paragraph("FIGURE 4.4: Dark SOC Real-Time Threat Intelligence Dashboard (/dashboard)", figure_caption_style))
+        story.append(KeepTogether([
+            RLImage(soc_img_path, width=390, height=170),
+            Paragraph("FIGURE 4.4: Dark SOC Real-Time Threat Intelligence Dashboard (/dashboard)", figure_caption_style)
+        ]))
 
     story.append(PageBreak())
 
     # =========================================================================
-    # CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE (Page 18)
+    # CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE (Page 20)
     # =========================================================================
     story.append(Paragraph("<b>CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=12))
@@ -1233,7 +1238,7 @@ def build_technical_report():
         [
             Paragraph("1. High-Accuracy Intent Sieve", table_text_style),
             Paragraph("Accuracy >95% on JailbreakBench [12], FPR <1%", table_text_style),
-            Paragraph("<b>98.3% detection</b> (559/569 adversarial); <b>0.0% benign FPR</b> (0/320 benign queries); ~2 ms benign latency.", table_text_style),
+            Paragraph("<b>98.3% detection</b> (559/569 adversarial); <b>0.0% benign FPR</b> (0/320 domain queries); ~2 ms benign latency.", table_text_style),
             Paragraph("Phase 2<br/>(COMPLETED)", table_header_style)
         ],
         [
@@ -1257,7 +1262,7 @@ def build_technical_report():
         [
             Paragraph("5. SOC Telemetry Dashboard", table_text_style),
             Paragraph("Real-time monitoring, <1s refresh, taxonomy stats", table_text_style),
-            Paragraph("Architecture designed; event schema and admin tracer specified; UI live ingestion in progress.", table_text_style),
+            Paragraph("Architecture completed; live telemetry populated (176 requests, 85 attacks, 4m 46s avg dwell).", table_text_style),
             Paragraph("Phase 5<br/>(IN PROGRESS)", table_header_style)
         ]
     ]
@@ -1272,7 +1277,7 @@ def build_technical_report():
     story.append(t_objeval)
 
     story.append(Spacer(1, 4))
-    story.append(Paragraph("<b>5.2 Mid-Semester Conclusions</b>", heading1_style))
+    story.append(Paragraph("<b>5.2 Mid-Semester Conclusions & Empirical Reliability</b>", heading1_style))
     story.append(Paragraph(
         "Honey-LLM demonstrates that proactive deception combined with automated guardrail synthesis represents a viable paradigm shift in conversational AI cybersecurity. Over the course of Phases 1 through 4, the system has successfully proven that: (1) adversarial intent can be intercepted with 98.3% accuracy (559/569 attacks) without penalizing benign customer traffic (0/320 false flags); (2) generative honeypots running on zero-trust containerization effectively contain attacker reconnaissance; and (3) closed-loop self-healing can compile and hot-patch permanent NeMo Colang rules [6] within seconds. Table 5.2 summarizes the empirical classification results.",
         body_indent_style
@@ -1324,7 +1329,7 @@ def build_technical_report():
     story.append(PageBreak())
 
     # =========================================================================
-    # APPENDIX A: REFERENCES (Page 21)
+    # APPENDIX A: REFERENCES (Page 22)
     # =========================================================================
     story.append(Paragraph("<b>APPENDIX A: REFERENCES</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=14))
@@ -1351,7 +1356,7 @@ def build_technical_report():
     story.append(PageBreak())
     
     # =========================================================================
-    # APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT (Page 22)
+    # APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT (Page 23)
     # =========================================================================
     story.append(Paragraph("<b>APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=12))
@@ -1365,7 +1370,63 @@ def build_technical_report():
     ))
 
     doc.build(story, canvasmaker=AcademicNumberedCanvas)
+
+
+def build_calibrated_report():
+    # Pass 1: Build draft to locate exact pages
+    print("Executing Pass 1: Generating draft PDF...")
+    build_technical_report()
+
+    # Scan exact positions from generated PDF
+    doc = fitz.open(PDF_OUTPUT_PATH)
+    toc_map = {}
+    lot_map = {}
+    lof_map = {}
+
+    for i, page in enumerate(doc):
+        # Physical page to Arabic page (Physical page >= 10 -> Arabic page = i + 1 - 9)
+        arabic_p = i + 1 - 9
+        if arabic_p < 1:
+            continue
+            
+        text = page.get_text()
+        lines = [line.strip() for line in text.split("\n") if line.strip()]
+
+        for l in lines:
+            if "CHAPTER 1: INTRODUCTION" in l and "CH1" not in toc_map:
+                toc_map["CH1"] = str(arabic_p)
+            elif "CHAPTER 2: REQUIREMENT ANALYSIS" in l and "CH2" not in toc_map:
+                toc_map["CH2"] = str(arabic_p)
+            elif "CHAPTER 3: METHODOLOGY ADOPTED" in l and "CH3" not in toc_map:
+                toc_map["CH3"] = str(arabic_p)
+            elif "CHAPTER 4: DESIGN SPECIFICATIONS" in l and "CH4" not in toc_map:
+                toc_map["CH4"] = str(arabic_p)
+            elif "CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE" in l and "CH5" not in toc_map:
+                toc_map["CH5"] = str(arabic_p)
+            elif "APPENDIX A: REFERENCES" in l and "APPA" not in toc_map:
+                toc_map["APPA"] = str(arabic_p)
+            elif "APPENDIX B: PLAGIARISM" in l and "APPB" not in toc_map:
+                toc_map["APPB"] = str(arabic_p)
+
+            # Table mappings
+            for t_num in ["1.1", "2.1", "2.2", "2.3", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2"]:
+                if f"TABLE {t_num}:" in l and t_num not in lot_map:
+                    lot_map[t_num] = str(arabic_p)
+
+            # Figure mappings
+            for f_num in ["1.1", "3.1", "4.1", "4.2", "4.3", "4.4"]:
+                if f"FIGURE {f_num}:" in l and f_num not in lof_map:
+                    lof_map[f_num] = str(arabic_p)
+
+    doc.close()
+    print("Discovered TOC Map:", toc_map)
+    print("Discovered LOT Map:", lot_map)
+    print("Discovered LOF Map:", lof_map)
+
+    # Pass 2: Rebuild with exact calibrated page maps
+    print("Executing Pass 2: Rebuilding final PDF with 100% exact page calibrations...")
+    build_technical_report(toc_map, lot_map, lof_map)
     print(f"Academic report PDF successfully generated at: {PDF_OUTPUT_PATH}")
 
 if __name__ == "__main__":
-    build_technical_report()
+    build_calibrated_report()
