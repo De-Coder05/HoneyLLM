@@ -745,7 +745,12 @@ Following the mid-semester evaluation, the project team will execute the final t
 \hrule height 1.2pt
 \vspace{0.18in}
 
-\begin{spacing}{1.0}
+\begingroup
+\renewcommand{\chapter}[2]{}
+\renewcommand{\clearpage}{}
+\renewcommand{\cleardoublepage}{}
+
+\begin{spacing}{1.1}
 \begin{thebibliography}{13}
 \bibitem{openai2023gpt4}
 OpenAI, ``GPT-4 Technical Report,'' \textit{arXiv preprint arXiv:2303.08774}, 2023.
@@ -787,6 +792,7 @@ P.~Chao, A.~Robey, E.~Dobriban, H.~Hassani, G.~J.~Pappas, and E.~Wong, ``Jailbre
 I.~Goodfellow, Y.~Bengio, and A.~Courville, \textit{Deep Learning}. Cambridge, MA, USA: MIT Press, 2016.
 \end{thebibliography}
 \end{spacing}
+\endgroup
 
 \newpage
 
