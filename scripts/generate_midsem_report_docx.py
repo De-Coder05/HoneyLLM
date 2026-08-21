@@ -206,7 +206,7 @@ def create_docx_report():
         p_sig = doc.add_paragraph()
         p_sig.add_run().add_picture(sig_path, width=Inches(1.2))
 
-    p = doc.add_paragraph("Dr. Saif Nalband\t\t\t\t\t\tDr. Neeraj Kumar\nAssistant Professor, CSED\t\t\t\tProfessor & Head, CSED\nTIET, Patiala\t\t\t\t\t\tTIET, Patiala")
+    p = doc.add_paragraph("Dr. Saif Nalband\nAssistant Professor, CSED\nTIET, Patiala")
     p.runs[0].font.size = Pt(11)
 
     doc.add_page_break()

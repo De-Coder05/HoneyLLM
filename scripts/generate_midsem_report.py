@@ -224,13 +224,13 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     sig_img = RLImage(sig_path, width=80, height=56) if os.path.exists(sig_path) else Spacer(1, 30)
 
     mentor_sign_data = [
-        [Paragraph("<b>Faculty Mentor:</b>", table_header_style), Paragraph("<b>Head of Department:</b>", table_header_style)],
-        [sig_img, Spacer(1, 56)],
-        [Paragraph("<b>Dr. Saif Nalband</b>", table_text_style), Paragraph("<b>Dr. Neeraj Kumar</b>", table_text_style)],
-        [Paragraph("Assistant Professor, CSED", table_text_style), Paragraph("Professor & Head, CSED", table_text_style)],
-        [Paragraph("TIET, Patiala", table_text_style), Paragraph("TIET, Patiala", table_text_style)]
+        [Paragraph("<b>Faculty Mentor:</b>", table_header_style)],
+        [sig_img],
+        [Paragraph("<b>Dr. Saif Nalband</b>", table_text_style)],
+        [Paragraph("Assistant Professor, CSED", table_text_style)],
+        [Paragraph("TIET, Patiala", table_text_style)]
     ]
-    t_msign = Table(mentor_sign_data, colWidths=[207, 208])
+    t_msign = Table(mentor_sign_data, colWidths=[207])
     t_msign.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'BOTTOM'),
         ('TOPPADDING', (0,0), (-1,-1), 1),
