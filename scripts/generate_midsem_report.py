@@ -77,33 +77,33 @@ def draw_architecture_diagram():
     d.add(String(41, 68, "Prompt Request", fontName="Times-Roman", fontSize=6.5, textAnchor="middle", fillColor=colors.HexColor("#334155")))
     
     # Arrow to Gateway
-    d.add(Line(74, 81, 92, 81, strokeColor=colors.HexColor("#475569"), strokeWidth=1.2))
-    d.add(Polygon([92, 81, 86, 84, 86, 78], fillColor=colors.HexColor("#475569"), strokeColor=colors.HexColor("#475569")))
-    d.add(String(83, 85, "HTTP", fontName="Times-Italic", fontSize=5.5, textAnchor="middle", fillColor=colors.HexColor("#64748B")))
+    d.add(Line(74, 81, 90, 81, strokeColor=colors.HexColor("#475569"), strokeWidth=1.2))
+    d.add(Polygon([90, 81, 84, 84, 84, 78], fillColor=colors.HexColor("#475569"), strokeColor=colors.HexColor("#475569")))
+    d.add(String(82, 85, "HTTP", fontName="Times-Italic", fontSize=5.5, textAnchor="middle", fillColor=colors.HexColor("#64748B")))
     
     # 2. Gateway Multi-Tier Sieve Container (Middle)
-    d.add(Rect(94, 24, 152, 112, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#2563EB"), strokeWidth=1.2, rx=4, ry=4))
-    d.add(String(170, 123, "Honey-LLM FastAPI Gateway", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#1E3A8A")))
+    d.add(Rect(92, 24, 150, 112, fillColor=colors.HexColor("#EFF6FF"), strokeColor=colors.HexColor("#2563EB"), strokeWidth=1.2, rx=4, ry=4))
+    d.add(String(167, 123, "Honey-LLM FastAPI Gateway", fontName="Times-Bold", fontSize=8, textAnchor="middle", fillColor=colors.HexColor("#1E3A8A")))
     
     # Tier-0 Sub-box
-    d.add(Rect(100, 88, 140, 24, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, rx=2, ry=2))
-    d.add(String(170, 102, "Tier-0: Guardrail Cache (10-20 ms)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
-    d.add(String(170, 92, "miniLM Semantic Vector Store", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
+    d.add(Rect(97, 88, 140, 24, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, rx=2, ry=2))
+    d.add(String(167, 102, "Tier-0: Guardrail Cache (10-20 ms)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
+    d.add(String(167, 92, "miniLM Semantic Vector Store", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
     
     # Tier-1 Sub-box
-    d.add(Rect(100, 58, 140, 24, fillColor=colors.HexColor("#DBEAFE"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=0.8, rx=2, ry=2))
-    d.add(String(170, 72, "Tier-1: Statistical Fast-Path (~2 ms)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
-    d.add(String(170, 62, "Calibrated TF-IDF + LogReg (tau=0.15)", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#2563EB")))
+    d.add(Rect(97, 58, 140, 24, fillColor=colors.HexColor("#DBEAFE"), strokeColor=colors.HexColor("#3B82F6"), strokeWidth=0.8, rx=2, ry=2))
+    d.add(String(167, 72, "Tier-1: Statistical Fast-Path (~2 ms)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#1E40AF")))
+    d.add(String(167, 62, "Calibrated TF-IDF + LogReg (tau=0.15)", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#2563EB")))
     
     # Tier-2 Sub-box
-    d.add(Rect(100, 28, 140, 24, fillColor=colors.HexColor("#FEF3C7"), strokeColor=colors.HexColor("#D97706"), strokeWidth=0.8, rx=2, ry=2))
-    d.add(String(170, 42, "Tier-2: Deep Moderation Sieve (8B)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#78350F")))
-    d.add(String(170, 32, "Llama-Guard 3 Custom Policy (~700 ms)", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#B45309")))
+    d.add(Rect(97, 28, 140, 24, fillColor=colors.HexColor("#FEF3C7"), strokeColor=colors.HexColor("#D97706"), strokeWidth=0.8, rx=2, ry=2))
+    d.add(String(167, 42, "Tier-2: Deep Moderation Sieve (8B)", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#78350F")))
+    d.add(String(167, 32, "Llama-Guard 3 Custom Policy (~700 ms)", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#B45309")))
 
     # 3. Branch Top: SAFE -> Production RAG Engine (Right Top)
-    d.add(Line(246, 92, 276, 108, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1.2))
+    d.add(Line(242, 92, 276, 108, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1.2))
     d.add(Polygon([276, 108, 269, 109, 272, 103], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
-    d.add(String(246, 108, "SAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#16A34A")))
+    d.add(String(249, 109, "SAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#16A34A")))
     
     d.add(Rect(278, 86, 128, 48, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
     d.add(String(342, 120, "Production RAG Engine", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
@@ -111,9 +111,9 @@ def draw_architecture_diagram():
     d.add(String(342, 95, "(Authentic Customer Responses)", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#166534")))
     
     # 4. Branch Bottom: UNSAFE -> Mirror Maze Sandbox (Right Bottom)
-    d.add(Line(246, 44, 276, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1.2))
+    d.add(Line(242, 44, 276, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1.2))
     d.add(Polygon([276, 28, 272, 34, 269, 28], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
-    d.add(String(242, 18, "UNSAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#DC2626")))
+    d.add(String(246, 21, "UNSAFE", fontName="Times-Bold", fontSize=6.8, fillColor=colors.HexColor("#DC2626")))
     
     d.add(Rect(278, 14, 128, 52, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#EF4444"), strokeWidth=1, rx=3, ry=3))
     d.add(String(342, 52, "Mirror Maze Sandbox", fontName="Times-Bold", fontSize=7.5, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
@@ -122,10 +122,10 @@ def draw_architecture_diagram():
 
     # 5. Feedback Loop from Sandbox to Gateway (Bottom dashed line)
     d.add(Line(342, 14, 342, 6, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
-    d.add(Line(342, 6, 170, 6, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
-    d.add(Line(170, 6, 170, 24, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
-    d.add(Polygon([170, 24, 167, 19, 173, 19], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
-    d.add(String(256, 8, "Autonomous NeMo Colang Rule Synthesis & Hot-Patch (10.4s)", fontName="Times-BoldItalic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
+    d.add(Line(342, 6, 167, 6, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
+    d.add(Line(167, 6, 167, 24, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=0.8, strokeDashArray=[2, 2]))
+    d.add(Polygon([167, 24, 164, 19, 170, 19], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
+    d.add(String(254, 8, "Autonomous NeMo Colang Rule Synthesis & Hot-Patch (10.4s)", fontName="Times-BoldItalic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
 
     return d
 
@@ -212,61 +212,61 @@ def draw_uml_sequence_diagram():
 # VECTOR DIAGRAM 3: UML State Machine Diagram (Figure 4.1)
 # =========================================================================
 def draw_uml_state_machine_diagram():
-    # Width: 415.27, Height: 130 (Clean layout, separated transition arrows, clear orthogonal lines)
+    # Width: 415.27, Height: 130 (Generous horizontal spacing, zero text-arrow collisions)
     d = Drawing(415, 130)
     d.add(Rect(0, 0, 415, 130, fillColor=colors.HexColor("#F8FAFC"), strokeColor=colors.HexColor("#CBD5E1"), strokeWidth=0.8, rx=5, ry=5))
     
-    # State 1: INITIAL / UNVERIFIED
-    d.add(Rect(8, 48, 68, 42, fillColor=colors.HexColor("#F1F5F9"), strokeColor=colors.HexColor("#475569"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(42, 73, "UNVERIFIED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
-    d.add(String(42, 60, "(Clean Session)", fontName="Times-Italic", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#475569")))
+    # State 1: INITIAL / UNVERIFIED (x: 8 to 68)
+    d.add(Rect(8, 46, 60, 42, fillColor=colors.HexColor("#F1F5F9"), strokeColor=colors.HexColor("#475569"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(38, 71, "UNVERIFIED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#0F172A")))
+    d.add(String(38, 58, "(Clean Session)", fontName="Times-Italic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#475569")))
 
-    # Transition 1->2 (Safe score)
-    d.add(Line(76, 76, 118, 98, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1))
-    d.add(Polygon([118, 98, 111, 98, 114, 93], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
-    d.add(String(82, 92, "Score < 0.15", fontName="Times-Bold", fontSize=5.6, fillColor=colors.HexColor("#16A34A")))
+    # Transition 1->2 (Safe score) - wide span, label placed in middle with 15pt margin to arrow head
+    d.add(Line(68, 74, 133, 98, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1))
+    d.add(Polygon([133, 98, 126, 98, 128, 93], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
+    d.add(String(78, 94, "Score < 0.15", fontName="Times-Bold", fontSize=5.8, fillColor=colors.HexColor("#16A34A")))
 
-    # State 2: BENIGN ACTIVE (Top middle)
-    d.add(Rect(120, 82, 82, 38, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(161, 105, "BENIGN_SERVED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
-    d.add(String(161, 92, "Production RAG Mode", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+    # State 2: BENIGN ACTIVE (x: 135 to 215)
+    d.add(Rect(135, 80, 80, 38, fillColor=colors.HexColor("#F0FDF4"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(175, 103, "BENIGN_SERVED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
+    d.add(String(175, 90, "Production RAG Mode", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
 
-    # Transition 1->3 (Unsafe score)
-    d.add(Line(76, 58, 118, 36, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1))
-    d.add(Polygon([118, 36, 114, 41, 111, 36], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
-    d.add(String(80, 42, "Score >= 0.15", fontName="Times-Bold", fontSize=5.6, fillColor=colors.HexColor("#DC2626")))
+    # Transition 1->3 (Unsafe score) - label placed below arrow with clear vertical buffer
+    d.add(Line(68, 56, 133, 35, strokeColor=colors.HexColor("#DC2626"), strokeWidth=1))
+    d.add(Polygon([133, 35, 128, 40, 126, 35], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
+    d.add(String(76, 35, "Score >= 0.15", fontName="Times-Bold", fontSize=5.8, fillColor=colors.HexColor("#DC2626")))
 
-    # State 3: STICKY QUARANTINED (Bottom middle)
-    d.add(Rect(120, 14, 96, 42, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#DC2626"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(168, 41, "STICKY_QUARANTINE", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
-    d.add(String(168, 28, "Trapped in Decoy Sandbox", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+    # State 3: STICKY QUARANTINED (x: 135 to 230)
+    d.add(Rect(135, 14, 95, 42, fillColor=colors.HexColor("#FEF2F2"), strokeColor=colors.HexColor("#DC2626"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(182, 41, "STICKY_QUARANTINE", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#7F1D1D")))
+    d.add(String(182, 28, "Trapped in Decoy Sandbox", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
 
     # Self loop on State 3 (Sticky quarantine persistence)
-    d.add(Line(168, 14, 168, 4, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
-    d.add(Line(168, 4, 226, 4, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
-    d.add(Line(226, 4, 226, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
-    d.add(Line(226, 28, 216, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
-    d.add(Polygon([216, 28, 221, 30, 221, 26], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
-    d.add(String(197, 7, "Subsequent turns retained", fontName="Times-Italic", fontSize=5.2, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
+    d.add(Line(182, 14, 182, 4, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Line(182, 4, 238, 4, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Line(238, 4, 238, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Line(238, 28, 230, 28, strokeColor=colors.HexColor("#DC2626"), strokeWidth=0.8))
+    d.add(Polygon([230, 28, 235, 30, 235, 26], fillColor=colors.HexColor("#DC2626"), strokeColor=colors.HexColor("#DC2626")))
+    d.add(String(210, 7, "Subsequent turns retained", fontName="Times-Italic", fontSize=5.2, textAnchor="middle", fillColor=colors.HexColor("#991B1B")))
 
     # Transition 3->4: Async Exploit Distillation
-    d.add(Line(216, 46, 252, 66, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=1))
-    d.add(Polygon([252, 66, 245, 65, 247, 60], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
-    d.add(String(222, 60, "Distill Pattern", fontName="Times-BoldItalic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
+    d.add(Line(230, 46, 265, 66, strokeColor=colors.HexColor("#7C3AED"), strokeWidth=1))
+    d.add(Polygon([265, 66, 258, 65, 260, 60], fillColor=colors.HexColor("#7C3AED"), strokeColor=colors.HexColor("#7C3AED")))
+    d.add(String(232, 62, "Distill Pattern", fontName="Times-BoldItalic", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#6D28D9")))
 
-    # State 4: SYNTHESIS GATE (Right middle)
-    d.add(Rect(254, 50, 88, 40, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(298, 74, "SYNTHESIS_GATE", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
-    d.add(String(298, 62, "NeMo Colang + Regress Gate", fontName="Times-Roman", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#5B21B6")))
+    # State 4: SYNTHESIS GATE (x: 267 to 350)
+    d.add(Rect(267, 50, 83, 40, fillColor=colors.HexColor("#EDE9FE"), strokeColor=colors.HexColor("#7C3AED"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(308, 74, "SYNTHESIS_GATE", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#4C1D95")))
+    d.add(String(308, 62, "NeMo Colang + Regress Gate", fontName="Times-Roman", fontSize=5.8, textAnchor="middle", fillColor=colors.HexColor("#5B21B6")))
 
     # Transition 4->5: Hot-Patch
-    d.add(Line(342, 70, 356, 70, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1))
-    d.add(Polygon([356, 70, 350, 72, 350, 68], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
+    d.add(Line(350, 70, 364, 70, strokeColor=colors.HexColor("#16A34A"), strokeWidth=1))
+    d.add(Polygon([364, 70, 358, 72, 358, 68], fillColor=colors.HexColor("#16A34A"), strokeColor=colors.HexColor("#16A34A")))
 
-    # State 5: LIVE IMMUNIZED (Far right)
-    d.add(Rect(358, 50, 50, 40, fillColor=colors.HexColor("#DCFCE7"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
-    d.add(String(383, 74, "IMMUNIZED", fontName="Times-Bold", fontSize=7, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
-    d.add(String(383, 62, "Live in 10.4s", fontName="Times-Bold", fontSize=6.2, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
+    # State 5: LIVE IMMUNIZED (x: 366 to 410)
+    d.add(Rect(366, 50, 44, 40, fillColor=colors.HexColor("#DCFCE7"), strokeColor=colors.HexColor("#16A34A"), strokeWidth=1, rx=3, ry=3))
+    d.add(String(388, 74, "IMMUNIZED", fontName="Times-Bold", fontSize=6.8, textAnchor="middle", fillColor=colors.HexColor("#14532D")))
+    d.add(String(388, 62, "Live in 10.4s", fontName="Times-Bold", fontSize=6, textAnchor="middle", fillColor=colors.HexColor("#15803D")))
 
     return d
 
