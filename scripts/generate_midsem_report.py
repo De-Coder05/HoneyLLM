@@ -465,14 +465,7 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     story.append(Paragraph("<b>TABLE OF CONTENTS</b>", chapter_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=10))
 
-    p_ch1 = toc_map.get("CH1", "1")
-    p_ch2 = toc_map.get("CH2", "8")
-    p_ch3 = toc_map.get("CH3", "12")
-    p_ch4 = toc_map.get("CH4", "15")
-    p_ch5 = toc_map.get("CH5", "20")
-    p_appa = toc_map.get("APPA", "22")
-    p_appb = toc_map.get("APPB", "23")
-
+    # Dynamic exact page mapping from calibration
     toc1_data = [
         [Paragraph("<b>ABSTRACT</b>", toc_bold_style), Paragraph("<b>i</b>", toc_bold_style)],
         [Paragraph("<b>DECLARATION</b>", toc_bold_style), Paragraph("<b>ii</b>", toc_bold_style)],
@@ -481,36 +474,36 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
         [Paragraph("<b>LIST OF FIGURES</b>", toc_bold_style), Paragraph("<b>vii</b>", toc_bold_style)],
         [Paragraph("<b>LIST OF ABBREVIATIONS</b>", toc_bold_style), Paragraph("<b>viii</b>", toc_bold_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 1: INTRODUCTION</b>", toc_bold_style), Paragraph(f"<b>{p_ch1}</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.1 Project Overview", toc_line_style), Paragraph(f"{p_ch1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.2 Need Analysis", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.1 The 'Smart Mirror' Trap: Enterprise Adoption vs. Defensive Lag", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.2 The Shift: Machine-Speed Autonomous Warfare", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.3 The 'Shadow Trust' Gap: Vulnerability of the Semantic Layer", toc_line_style), Paragraph(f"{int(p_ch1)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.4 The Dynamic Security Window: Addressing Reactive Lag", toc_line_style), Paragraph(f"{int(p_ch1)+2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.3 Research Gaps", toc_line_style), Paragraph(f"{int(p_ch1)+2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.4 Problem Definition and Scope", toc_line_style), Paragraph(f"{int(p_ch1)+3}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.5 Assumptions and Constraints", toc_line_style), Paragraph(f"{int(p_ch1)+4}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.6 Applicable Standards", toc_line_style), Paragraph(f"{int(p_ch1)+4}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.7 Approved Objectives (Proposal Evaluation)", toc_line_style), Paragraph(f"{int(p_ch1)+5}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.8 Methodology Overview (Phases 1 to 4 Scope)", toc_line_style), Paragraph(f"{int(p_ch1)+5}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.9 Mid-Semester Outcomes and Deliverables", toc_line_style), Paragraph(f"{int(p_ch1)+5}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.10 Novelty of Work", toc_line_style), Paragraph(f"{int(p_ch1)+6}", toc_line_style)],
+        [Paragraph("<b>CHAPTER 1: INTRODUCTION</b>", toc_bold_style), Paragraph(f"<b>{toc_map.get('CH1', '1')}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.1 Project Overview", toc_line_style), Paragraph(f"{toc_map.get('1.1', '1')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.2 Need Analysis", toc_line_style), Paragraph(f"{toc_map.get('1.2', '2')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.1 The 'Smart Mirror' Trap: Enterprise Adoption vs. Defensive Lag", toc_line_style), Paragraph(f"{toc_map.get('1.2.1', '2')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.2 The Shift: Machine-Speed Autonomous Warfare", toc_line_style), Paragraph(f"{toc_map.get('1.2.2', '3')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.3 The 'Shadow Trust' Gap: Vulnerability of the Semantic Layer", toc_line_style), Paragraph(f"{toc_map.get('1.2.3', '3')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.4 The Dynamic Security Window: Addressing Reactive Lag", toc_line_style), Paragraph(f"{toc_map.get('1.2.4', '3')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.3 Research Gaps", toc_line_style), Paragraph(f"{toc_map.get('1.3', '3')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.4 Problem Definition and Scope", toc_line_style), Paragraph(f"{toc_map.get('1.4', '4')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.5 Assumptions and Constraints", toc_line_style), Paragraph(f"{toc_map.get('1.5', '4')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.6 Applicable Standards", toc_line_style), Paragraph(f"{toc_map.get('1.6', '5')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.7 Approved Objectives (Proposal Evaluation)", toc_line_style), Paragraph(f"{toc_map.get('1.7', '5')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.8 Methodology Overview (Phases 1 to 4 Scope)", toc_line_style), Paragraph(f"{toc_map.get('1.8', '6')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.9 Mid-Semester Outcomes and Deliverables", toc_line_style), Paragraph(f"{toc_map.get('1.9', '6')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1.10 Novelty of Work", toc_line_style), Paragraph(f"{toc_map.get('1.10', '6')}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 2: REQUIREMENT ANALYSIS</b>", toc_bold_style), Paragraph(f"<b>{p_ch2}</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.1 Literature Survey", toc_line_style), Paragraph(f"{p_ch2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1 Theory Associated With Problem Area", toc_line_style), Paragraph(f"{p_ch2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.2 Existing Systems and Solutions", toc_line_style), Paragraph(f"{p_ch2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.3 Research Findings for Existing Literature", toc_line_style), Paragraph(f"{int(p_ch2)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.4 Problems Identified in State of the Art", toc_line_style), Paragraph(f"{int(p_ch2)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.5 Survey of Tools and Technologies Used", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.2 Software Requirement Specification (SRS)", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1 Introduction & Scope", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2 Overall Product Description & Features", toc_line_style), Paragraph(f"{int(p_ch2)+2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3 External Interface Requirements", toc_line_style), Paragraph(f"{int(p_ch2)+3}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.4 Non-Functional Requirements", toc_line_style), Paragraph(f"{int(p_ch2)+3}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.3 Cost & Computational Feasibility Analysis", toc_line_style), Paragraph(f"{int(p_ch2)+3}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.4 Risk Analysis and Mitigation Strategies", toc_line_style), Paragraph(f"{int(p_ch2)+4}", toc_line_style)]
+        [Paragraph("<b>CHAPTER 2: REQUIREMENT ANALYSIS</b>", toc_bold_style), Paragraph(f"<b>{toc_map.get('CH2', '8')}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.1 Literature Survey", toc_line_style), Paragraph(f"{toc_map.get('2.1', '8')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1 Theory Associated With Problem Area", toc_line_style), Paragraph(f"{toc_map.get('2.1.1', '8')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.2 Existing Systems and Solutions", toc_line_style), Paragraph(f"{toc_map.get('2.1.2', '8')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.3 Research Findings for Existing Literature", toc_line_style), Paragraph(f"{toc_map.get('2.1.3', '8')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.4 Problems Identified in State of the Art", toc_line_style), Paragraph(f"{toc_map.get('2.1.4', '9')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.5 Survey of Tools and Technologies Used", toc_line_style), Paragraph(f"{toc_map.get('2.1.5', '9')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.2 Software Requirement Specification (SRS)", toc_line_style), Paragraph(f"{toc_map.get('2.2', '9')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1 Introduction & Scope", toc_line_style), Paragraph(f"{toc_map.get('2.2.1', '9')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2 Overall Product Description & Features", toc_line_style), Paragraph(f"{toc_map.get('2.2.2', '9')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3 External Interface Requirements", toc_line_style), Paragraph(f"{toc_map.get('2.2.3', '10')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.4 Non-Functional Requirements", toc_line_style), Paragraph(f"{toc_map.get('2.2.4', '10')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.3 Cost & Computational Feasibility Analysis", toc_line_style), Paragraph(f"{toc_map.get('2.3', '10')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2.4 Risk Analysis and Mitigation Strategies", toc_line_style), Paragraph(f"{toc_map.get('2.4', '10')}", toc_line_style)]
     ]
     t_toc1 = Table(toc1_data, colWidths=[365, 50])
     t_toc1.setStyle(TableStyle([
@@ -528,27 +521,27 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0F172A"), spaceBefore=2, spaceAfter=10))
 
     toc2_data = [
-        [Paragraph("<b>CHAPTER 3: METHODOLOGY ADOPTED</b>", toc_bold_style), Paragraph(f"<b>{p_ch3}</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.1 Investigative Techniques & 0.0% FPR Analysis", toc_line_style), Paragraph(f"{p_ch3}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.2 Proposed Solution & Multi-Tier Architecture", toc_line_style), Paragraph(f"{int(p_ch3)}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.3 Work Breakdown Structure (Phases 1 to 4 Completed)", toc_line_style), Paragraph(f"{int(p_ch3)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.4 Enterprise Hardware, Software, and Framework Stack", toc_line_style), Paragraph(f"{int(p_ch3)+2}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.5 UML Sequence Model for Interception Flow", toc_line_style), Paragraph(f"{int(p_ch3)+2}", toc_line_style)],
+        [Paragraph("<b>CHAPTER 3: METHODOLOGY ADOPTED</b>", toc_bold_style), Paragraph(f"<b>{toc_map.get('CH3', '11')}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.1 Investigative Techniques & 0.0% FPR Analysis", toc_line_style), Paragraph(f"{toc_map.get('3.1', '11')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.2 Proposed Solution & Multi-Tier Architecture", toc_line_style), Paragraph(f"{toc_map.get('3.2', '11')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.3 Work Breakdown Structure (Phases 1 to 4 Completed)", toc_line_style), Paragraph(f"{toc_map.get('3.3', '12')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.4 Enterprise Hardware, Software, and Framework Stack", toc_line_style), Paragraph(f"{toc_map.get('3.4', '12')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3.5 UML Sequence Model for Interception Flow", toc_line_style), Paragraph(f"{toc_map.get('3.5', '13')}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 4: DESIGN SPECIFICATIONS</b>", toc_bold_style), Paragraph(f"<b>{p_ch4}</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.1 System Architecture & Sieve Gateway Flow", toc_line_style), Paragraph(f"{p_ch4}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.2 Threat Taxonomy & Sticky Quarantine State Machine", toc_line_style), Paragraph(f"{p_ch4}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.3 User Interface Specifications & Designed Surfaces", toc_line_style), Paragraph(f"{int(p_ch4)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.4 Working Prototype Execution (Phases 1 to 4 Verified)", toc_line_style), Paragraph(f"{int(p_ch4)+2}", toc_line_style)],
+        [Paragraph("<b>CHAPTER 4: DESIGN SPECIFICATIONS</b>", toc_bold_style), Paragraph(f"<b>{toc_map.get('CH4', '14')}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.1 System Architecture & Sieve Gateway Flow", toc_line_style), Paragraph(f"{toc_map.get('4.1', '14')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.2 Threat Taxonomy & Sticky Quarantine State Machine", toc_line_style), Paragraph(f"{toc_map.get('4.2', '14')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.3 User Interface Specifications & Designed Surfaces", toc_line_style), Paragraph(f"{toc_map.get('4.3', '15')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;4.4 Working Prototype Execution (Phases 1 to 4 Verified)", toc_line_style), Paragraph(f"{toc_map.get('4.4', '16')}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE</b>", toc_bold_style), Paragraph(f"<b>{p_ch5}</b>", toc_bold_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.1 Mid-Semester Accomplishments vs. Approved Objectives", toc_line_style), Paragraph(f"{p_ch5}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.2 Mid-Semester Conclusions & Empirical Reliability", toc_line_style), Paragraph(f"{int(p_ch5)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.3 Economic, Social, and Environmental Benefits", toc_line_style), Paragraph(f"{int(p_ch5)+1}", toc_line_style)],
-        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.4 Future Work Plan (Phases 5 and 6 Roadmap)", toc_line_style), Paragraph(f"{int(p_ch5)+2}", toc_line_style)],
+        [Paragraph("<b>CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE</b>", toc_bold_style), Paragraph(f"<b>{toc_map.get('CH5', '18')}</b>", toc_bold_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.1 Mid-Semester Accomplishments vs. Approved Objectives", toc_line_style), Paragraph(f"{toc_map.get('5.1', '18')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.2 Mid-Semester Conclusions & Empirical Reliability", toc_line_style), Paragraph(f"{toc_map.get('5.2', '18')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.3 Economic, Social, and Environmental Benefits", toc_line_style), Paragraph(f"{toc_map.get('5.3', '19')}", toc_line_style)],
+        [Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;5.4 Future Work Plan (Phases 5 and 6 Roadmap)", toc_line_style), Paragraph(f"{toc_map.get('5.4', '19')}", toc_line_style)],
         [Spacer(1, 2), Spacer(1, 2)],
-        [Paragraph("<b>APPENDIX A: REFERENCES (IEEE Style)</b>", toc_bold_style), Paragraph(f"<b>{p_appa}</b>", toc_bold_style)],
-        [Paragraph("<b>APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT</b>", toc_bold_style), Paragraph(f"<b>{p_appb}</b>", toc_bold_style)]
+        [Paragraph("<b>APPENDIX A: REFERENCES (IEEE Style)</b>", toc_bold_style), Paragraph(f"<b>{toc_map.get('APPA', '20')}</b>", toc_bold_style)],
+        [Paragraph("<b>APPENDIX B: PLAGIARISM & AUTHENTICITY STATEMENT</b>", toc_bold_style), Paragraph(f"<b>{toc_map.get('APPB', '21')}</b>", toc_bold_style)]
     ]
     t_toc2 = Table(toc2_data, colWidths=[365, 50])
     t_toc2.setStyle(TableStyle([
@@ -1373,7 +1366,6 @@ def build_technical_report(toc_map=None, lot_map=None, lof_map=None):
 
 
 def build_calibrated_report():
-    # Pass 1: Build draft to locate exact pages
     print("Executing Pass 1: Generating draft PDF...")
     build_technical_report()
 
@@ -1383,8 +1375,57 @@ def build_calibrated_report():
     lot_map = {}
     lof_map = {}
 
+    subsections = [
+        ('1.1', '1.1 Project Overview'),
+        ('1.2', '1.2 Need Analysis'),
+        ('1.2.1', "1.2.1 The 'Smart Mirror'"),
+        ('1.2.2', "1.2.2 The Shift: Machine-Speed"),
+        ('1.2.3', "1.2.3 The 'Shadow Trust'"),
+        ('1.2.4', "1.2.4 The Dynamic Security"),
+        ('1.3', '1.3 Research Gaps'),
+        ('1.4', '1.4 Problem Definition'),
+        ('1.5', '1.5 Assumptions and Constraints'),
+        ('1.6', '1.6 Applicable Standards'),
+        ('1.7', '1.7 Approved Objectives'),
+        ('1.8', '1.8 Methodology Overview'),
+        ('1.9', '1.9 Mid-Semester Outcomes'),
+        ('1.10', '1.10 Novelty of Work'),
+        ('2.1', '2.1 Literature Survey'),
+        ('2.1.1', '2.1.1 Theory Associated'),
+        ('2.1.2', '2.1.2 Existing Systems'),
+        ('2.1.3', '2.1.3 Research Findings'),
+        ('2.1.4', '2.1.4 Problems Identified'),
+        ('2.1.5', '2.1.5 Survey of Tools'),
+        ('2.2', '2.2 Software Requirement Specification'),
+        ('2.2.1', '2.2.1 Introduction & Scope'),
+        ('2.2.2', '2.2.2 Overall Product Description'),
+        ('2.2.3', '2.2.3 External Interface'),
+        ('2.2.4', '2.2.4 Non-Functional'),
+        ('2.3', '2.3 Cost & Computational'),
+        ('2.4', '2.4 Risk Analysis'),
+        ('3.1', '3.1 Investigative Techniques'),
+        ('3.2', '3.2 Proposed Solution'),
+        ('3.3', '3.3 Work Breakdown'),
+        ('3.4', '3.4 Enterprise Hardware'),
+        ('3.5', '3.5 UML Sequence'),
+        ('4.1', '4.1 System Architecture'),
+        ('4.2', '4.2 Threat Taxonomy'),
+        ('4.3', '4.3 User Interface Specifications'),
+        ('4.4', '4.4 Working Prototype Execution'),
+        ('5.1', '5.1 Mid-Semester Accomplishments'),
+        ('5.2', '5.2 Mid-Semester Conclusions'),
+        ('5.3', '5.3 Economic, Social'),
+        ('5.4', '5.4 Future Work Plan'),
+        ('CH1', 'CHAPTER 1: INTRODUCTION'),
+        ('CH2', 'CHAPTER 2: REQUIREMENT ANALYSIS'),
+        ('CH3', 'CHAPTER 3: METHODOLOGY ADOPTED'),
+        ('CH4', 'CHAPTER 4: DESIGN SPECIFICATIONS'),
+        ('CH5', 'CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE'),
+        ('APPA', 'APPENDIX A: REFERENCES'),
+        ('APPB', 'APPENDIX B: PLAGIARISM')
+    ]
+
     for i, page in enumerate(doc):
-        # Physical page to Arabic page (Physical page >= 10 -> Arabic page = i + 1 - 9)
         arabic_p = i + 1 - 9
         if arabic_p < 1:
             continue
@@ -1392,29 +1433,19 @@ def build_calibrated_report():
         text = page.get_text()
         lines = [line.strip() for line in text.split("\n") if line.strip()]
 
-        for l in lines:
-            if "CHAPTER 1: INTRODUCTION" in l and "CH1" not in toc_map:
-                toc_map["CH1"] = str(arabic_p)
-            elif "CHAPTER 2: REQUIREMENT ANALYSIS" in l and "CH2" not in toc_map:
-                toc_map["CH2"] = str(arabic_p)
-            elif "CHAPTER 3: METHODOLOGY ADOPTED" in l and "CH3" not in toc_map:
-                toc_map["CH3"] = str(arabic_p)
-            elif "CHAPTER 4: DESIGN SPECIFICATIONS" in l and "CH4" not in toc_map:
-                toc_map["CH4"] = str(arabic_p)
-            elif "CHAPTER 5: CONCLUSIONS AND FUTURE SCOPE" in l and "CH5" not in toc_map:
-                toc_map["CH5"] = str(arabic_p)
-            elif "APPENDIX A: REFERENCES" in l and "APPA" not in toc_map:
-                toc_map["APPA"] = str(arabic_p)
-            elif "APPENDIX B: PLAGIARISM" in l and "APPB" not in toc_map:
-                toc_map["APPB"] = str(arabic_p)
+        for key, search_str in subsections:
+            if search_str in text and key not in toc_map:
+                toc_map[key] = str(arabic_p)
 
-            # Table mappings
-            for t_num in ["1.1", "2.1", "2.2", "2.3", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2"]:
+        # Table mappings
+        for t_num in ["1.1", "2.1", "2.2", "2.3", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2"]:
+            for l in lines:
                 if f"TABLE {t_num}:" in l and t_num not in lot_map:
                     lot_map[t_num] = str(arabic_p)
 
-            # Figure mappings
-            for f_num in ["1.1", "3.1", "4.1", "4.2", "4.3", "4.4"]:
+        # Figure mappings
+        for f_num in ["1.1", "3.1", "4.1", "4.2", "4.3", "4.4"]:
+            for l in lines:
                 if f"FIGURE {f_num}:" in l and f_num not in lof_map:
                     lof_map[f_num] = str(arabic_p)
 
